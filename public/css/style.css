@@ -244,6 +244,31 @@ button {
   transition: all var(--transition);
 }
 
+.main-content {
+  margin-left: 220px;
+  padding-top: clamp(56px, 4vw, 72px);
+  min-height: 100vh;
+}
+
+@media (min-width: 1920px) {
+  .main-content {
+    margin-left: 260px;
+  }
+}
+
+@media (min-width: 2560px) {
+  .main-content {
+    margin-left: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding-top: 0;
+  }
+}
+
 .hidden {
   display: none !important;
 }
