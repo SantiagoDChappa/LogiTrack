@@ -10,12 +10,13 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/',              (req, res) => res.render('index'));
-app.get('/dashboard',     (req, res) => res.render('dashboard'));
-app.get('/envios/alta',   (req, res) => res.render('envio/alta'));
-app.get('/envios/detalle',(req, res) => res.render('envio/detalle'));
-app.get('/envios/listado',     (req, res) => res.render('envio/listado'));
+app.get('/',                 (req, res) => res.render('index'));
+app.get('/dashboard',        (req, res) => res.render('dashboard'));
+app.get('/shipments',        (req, res) => res.render('shipment/index'));
+app.get('/shipments/new',    (req, res) => res.render('shipment/new'));
+app.get('/shipments/detail', (req, res) => res.render('shipment/detail'));
+app.get('/users/new',        (req, res) => res.render('user/new'));
 
 app.listen(port, () => {
-    console.log(`LogiTrack corriendo en http://localhost:${port}`);
+    console.log(`LogiTrack running at http://localhost:${port}`);
 });

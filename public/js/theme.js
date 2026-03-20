@@ -10,7 +10,6 @@ applyTheme(saved);
 btn.addEventListener('click', () => {
     const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
 
-    // Animación de rotación al cambiar
     btn.classList.add('spinning');
     setTimeout(() => btn.classList.remove('spinning'), 400);
 
@@ -22,9 +21,9 @@ btn.addEventListener('click', () => {
 function applyTheme(theme) {
     if (theme === 'dark') {
         icon.textContent  = 'dark_mode';
-        label.textContent = 'Modo claro';     // opción: volver a claro
+        label.textContent = 'Modo claro';
     } else {
         icon.textContent  = 'light_mode';
-        label.textContent = 'Modo oscuro';    // opción: ir a oscuro
+        label.textContent = 'Modo oscuro';
     }
 }

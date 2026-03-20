@@ -4,16 +4,16 @@
             <img src="/images/logo.png" alt="LogiTrack logo">
             <h1>LogiTrack</h1>
         </div>
-        <div class="arbol">
+        <div class="nav">
             <li>
                 <a href="/dashboard"><ul><span class="material-symbols-outlined">dashboard</span>Dashboard</ul></a>
-                <a href="/envios/administrador"><ul><span class="material-symbols-outlined">local_shipping</span>Envios</ul></a>
-                <a href="/clientes/administrador"><ul><span class="material-symbols-outlined">person</span>Clientes</ul></a>
-                <a href="/reportes"><ul><span class="material-symbols-outlined">bar_chart</span>Reportes</ul></a>
-                <a href="/ajustes"><ul><span class="material-symbols-outlined">settings</span>Ajustes</ul></a>
+                <a href="/shipments"><ul><span class="material-symbols-outlined">local_shipping</span>Envios</ul></a>
+                <a href="/customers"><ul><span class="material-symbols-outlined">person</span>Clientes</ul></a>
+                <a href="/reports"><ul><span class="material-symbols-outlined">bar_chart</span>Reportes</ul></a>
+                <a href="/settings"><ul><span class="material-symbols-outlined">settings</span>Ajustes</ul></a>
             </li>
         </div>
-        <div class="theme-mode">
+        <div class="theme-toggle">
             <button id="btn-theme" aria-label="Cambiar tema">
                 <span class="material-symbols-outlined" id="theme-icon">light_mode</span>
                 <span id="theme-label">Modo oscuro</span>
@@ -22,7 +22,7 @@
     </div>
     <div class="top-header">
         <form action="" method="get">
-            <input type="text" name="buscador" id="" placeholder="Buscar envio por ID, DNI de destinatario, etc...">
+            <input type="text" name="search" id="" placeholder="Buscar envio por ID, DNI de destinatario, etc...">
         </form>
         <i><span class="material-symbols-outlined">notifications</span></i>
         <div class="user">
@@ -31,7 +31,7 @@
             <span class="user-role">Operador</span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </div>
-        <div class="user-btn" id="user-dropdown">
+        <div class="user-dropdown" id="user-dropdown">
             <li>
                 <ul><span class="material-symbols-outlined">manage_accounts</span>Configurar perfil</ul>
                 <div class="dropdown-divider"></div>
