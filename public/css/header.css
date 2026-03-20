@@ -1,6 +1,5 @@
 header {
   display: flex;
-  min-height: 100vh;
 }
 
 .left-header {
