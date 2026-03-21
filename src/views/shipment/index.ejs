@@ -26,57 +26,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>11234</td>
-                        <td>Jorge Perez</td>
-                        <td>45203948</td>
-                        <td>EN PROCESO</td>
-                        <td class="col-actions">
-                            <a href="#" class="action-btn modificar">
-                                <span class="material-symbols-outlined">edit</span>Modificar
-                            </a>
-                            <a href="#" class="action-btn detalle">
-                                <span class="material-symbols-outlined">info</span>Detalle
-                            </a>
-                            <a href="#" class="action-btn eliminar">
-                                <span class="material-symbols-outlined">delete</span>Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                      <tr>
-                        <td>11234</td>
-                        <td>Jorge Perez</td>
-                        <td>45203948</td>
-                        <td>EN PROCESO</td>
-                        <td class="col-actions">
-                            <a href="#" class="action-btn modificar">
-                                <span class="material-symbols-outlined">edit</span>Modificar
-                            </a>
-                            <a href="#" class="action-btn detalle">
-                                <span class="material-symbols-outlined">info</span>Detalle
-                            </a>
-                            <a href="#" class="action-btn eliminar">
-                                <span class="material-symbols-outlined">delete</span>Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                      <tr>
-                        <td>11234</td>
-                        <td>Jorge Perez</td>
-                        <td>45203948</td>
-                        <td>EN PROCESO</td>
-                        <td class="col-actions">
-                            <a href="#" class="action-btn modificar">
-                                <span class="material-symbols-outlined">edit</span>Modificar
-                            </a>
-                            <a href="#" class="action-btn detalle">
-                                <span class="material-symbols-outlined">info</span>Detalle
-                            </a>
-                            <a href="#" class="action-btn eliminar">
-                                <span class="material-symbols-outlined">delete</span>Eliminar
-                            </a>
-                        </td>
-                    </tr>
+                    <% shipments.forEach(shipment => { %>
+                        <tr>
+                            <td><%= shipment.id %></td>
+                            <td><%= shipment.remitente.nombre %></td>
+                            <td><%= shipment.remitente.telefono %></td>
+                            <td><%= shipment.estado %></td>
+                            <td class="col-actions">
+                                <a href="#" class="action-btn modificar">
+                                    <span class="material-symbols-outlined">edit</span>Modificar
+                                </a>
+                                <a href="#" class="action-btn detalle">
+                                    <span class="material-symbols-outlined">info</span>Detalle
+                                </a>
+                                <a href="#" class="action-btn eliminar">
+                                    <span class="material-symbols-outlined">delete</span>Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    <%  }); %>
                 </tbody>
             </table>
         </div>

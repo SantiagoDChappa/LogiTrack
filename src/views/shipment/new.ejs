@@ -2,12 +2,87 @@
 <html lang="es">
 <head>
     <%- include('../partials/head') %>
+    <link rel="stylesheet" href="/css/shipments.css">
     <title>Nuevo Envío - LogiTrack</title>
 </head>
 <%- include('../partials/header') %>
 <body>
+     <main class="main-content">
+        <div class="page-header">
+            <h1>Alta de envio</h1>
+        </div>
+        <div class="form-new">
+            <form action="" method="post">
+                <div class="remitente">
+                    <h3>Remitente</h3>
+                    <div class="field">
+                        <label for="remitente-nombre">Nombre y Apellido</label>
+                        <input id="remitente-nombre" type="text" name="remitente_nombre">
+                    </div>
+                    <div class="field">
+                        <label for="remitente-telefono">Teléfono</label>
+                        <input id="remitente-telefono" type="tel" name="remitente_telefono">
+                    </div>
+                    <div class="field">
+                        <label for="remitente-email">Email</label>
+                        <input id="remitente-email" type="email" name="remitente_email">
+                    </div>
+                </div>
 
+                <div class="destinatario">
+                    <h3>Destinatario</h3>
+                    <div class="field">
+                        <label for="destinatario-nombre">Nombre y Apellido</label>
+                        <input id="destinatario-nombre" type="text" name="destinatario_nombre" >
+                    </div>
+                    <div class="field">
+                        <label for="destinatario-telefono">Teléfono</label>
+                        <input id="destinatario-telefono" type="tel" name="destinatario_telefono">
+                    </div>
+                    <div class="field">
+                        <label for="destinatario-email">Email</label>
+                        <input id="destinatario-email" type="email" name="destinatario_email">
+                    </div>
+                </div>
+
+                <div class="direccion">
+                    <h3>Dirección de entrega</h3>
+                    <div class="field">
+                        <label for="calle">Calle</label>
+                        <input id="calle" type="text" name="calle">
+                    </div>
+                    <div class="field">
+                        <label for="numero">Número</label>
+                        <input id="numero" type="number" name="numero">
+                    </div>
+                    <div class="field">
+                        <label for="piso">Piso y/o Depto</label>
+                        <input id="piso" type="text" name="piso_depto">
+                    </div>
+                    <div class="field">
+                        <label for="provincia">Provincia</label>
+                        <input id="provincia" type="text" name="provincia">
+                    </div>
+                    <div class="field">
+                        <label for="codigo_postal">Código Postal</label>
+                        <input id="codigo_postal" type="number" name="codigo_postal">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/shipments" class="btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn-primary">Guardar envío</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    
 </body>
+/**
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>const serverErrors = <%- JSON.stringify(errors) %>;</script>
+<script src="/js/new_shipment.js" defer></script>
 <script src="/js/theme.js" defer></script>
 <script src="/js/ui.js" defer></script>
 </html>

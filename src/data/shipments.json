@@ -1,0 +1,68 @@
+[
+    {
+        "id": "a1b2c3d4-0001",
+        "estado": "en_transito",
+        "remitente": {
+            "nombre": "Santiago Chappa",
+            "telefono": "1123456789",
+            "email": "santiago@gmail.com"
+        },
+        "destinatario": {
+            "nombre": "Luca Corigliano",
+            "telefono": "1198765432",
+            "email": "luca@gmail.com"
+        },
+        "direccion": {
+            "calle": "Av. Corrientes",
+            "numero": "1234",
+            "piso_depto": "3B",
+            "provincia": "Buenos Aires",
+            "codigo_postal": "1043"
+        },
+        "fecha_creacion": "2026-03-15"
+    },
+    {
+        "id": "a1b2c3d4-0002",
+        "estado": "pendiente",
+        "remitente": {
+            "nombre": "Maximo Flores",
+            "telefono": "1145678901",
+            "email": "maximo@gmail.com"
+        },
+        "destinatario": {
+            "nombre": "Juan Perez",
+            "telefono": "1167890123",
+            "email": "juan@gmail.com"
+        },
+        "direccion": {
+            "calle": "Av. Santa Fe",
+            "numero": "5678",
+            "piso_depto": "",
+            "provincia": "Buenos Aires",
+            "codigo_postal": "1425"
+        },
+        "fecha_creacion": "2026-03-18"
+    },
+    {
+        "id": "a1b2c3d4-0003",
+        "estado": "entregado",
+        "remitente": {
+            "nombre": "Maria Lopez",
+            "telefono": "1156789012",
+            "email": "maria@gmail.com"
+        },
+        "destinatario": {
+            "nombre": "Carlos Garcia",
+            "telefono": "1178901234",
+            "email": "carlos@gmail.com"
+        },
+        "direccion": {
+            "calle": "Rivadavia",
+            "numero": "900",
+            "piso_depto": "1A",
+            "provincia": "Córdoba",
+            "codigo_postal": "5000"
+        },
+        "fecha_creacion": "2026-03-10"
+    }
+]
