@@ -10,12 +10,12 @@ const getDetail = (req, res) => {
 }
 
 const getNewShipmentForm = (req, res) => {
-    res.render('shipment/new', { errors: [] })
+    res.render('shipment/new', { errors: [], body: {} })
 }
 
 const createShipment = (req, res) => {
     shipmentModel.create(req.body)
-    res.redirect('/shipments')
+    res.redirect('/shipments?success=1')
 }
 
 module.exports = { getIndex, getDetail, getNewShipmentForm, createShipment }
