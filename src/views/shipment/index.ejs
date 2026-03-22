@@ -3,11 +3,69 @@
 <head>
     <%- include('../partials/head') %>
     <title>Envíos - LogiTrack</title>
+    <link rel="stylesheet" href="/css/shipments.css">
 </head>
-<%- include('../partials/header') %>
 <body>
-<div class="actions"></div>
+    <%- include('../partials/header') %>
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Administrador de envios</h1>
+            <a href="/shipments/new" class="btn-primary">
+                <span class="material-symbols-outlined">add</span>Alta
+            </a>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Tracking</th>
+                        <th>Nombre y apellido</th>
+                        <th>Documento</th>
+                        <th>Estado</th>
+                        <th class="col-actions">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% shipments.forEach(shipment => { %>
+                        <tr>
+                            <td><%= shipment.id %></td>
+                            <td><%= shipment.remitente.nombre %></td>
+                            <td><%= shipment.remitente.documento %></td>
+                            <td><%= shipment.estado %></td>
+                            <td class="col-actions">
+                                <a href="#" class="action-btn modificar">
+                                    <span class="material-symbols-outlined">edit</span>Modificar
+                                </a>
+                                <a href="#" class="action-btn detalle">
+                                    <span class="material-symbols-outlined">info</span>Detalle
+                                </a>
+                                <a href="#" class="action-btn eliminar">
+                                    <span class="material-symbols-outlined">delete</span>Eliminar
+                                </a>
+                            </td>
+                        </tr>
+                    <%  }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script>
+        if (new URLSearchParams(window.location.search).get('success') === '1') {
+            const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
+            Swal.fire({
+                icon: 'success',
+                title: '¡Envío creado con éxito!',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
+                background: isDark ? '#1e293b' : '#ffffff',
+                color: isDark ? '#f1f5f9' : '#1e293b',
+            }).then(() => {
+                history.replaceState(null, '', '/shipments');
+            });
+        }
+    </script>
 </body>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
