@@ -4,10 +4,106 @@
     <%- include('../partials/head') %>
     <title>Envíos - LogiTrack</title>
 </head>
-<%- include('../partials/header') %>
+
 <body>
-<div class="actions"></div>
+    <%- include('../partials/header') %>
+
+    <div class="content">
+        <main class="main-content">
+            <div class="page-wrapper">
+
+                <h1>Listado de Envíos</h1>
+
+                <form method="GET" action="/shipments" class="search-form">
+                    <div style="margin-bottom: 10px;">
+                        <label>
+                            <input 
+                                type="checkbox" 
+                                name="byTracking"
+                                <%= useTracking ? 'checked' : '' %>
+                            >
+                            Tracking ID
+                        </label>
+
+                        <label style="margin-left: 10px;">
+                            <input 
+                                type="checkbox" 
+                                name="byDestinatario"
+                                <%= useDestinatario ? 'checked' : '' %>
+                            >
+                            Destinatario
+                        </label>
+                    </div>
+                    <!-- <div style="margin-bottom: 10px;">
+                        <label>
+                            <input type="checkbox" name="byTracking" checked>
+                            Tracking ID
+                        </label>
+
+                        <label style="margin-left: 10px;">
+                            <input type="checkbox" name="byDestinatario" checked>
+                            Destinatario
+                        </label>
+                    </div> -->
+
+                    <!-- 🔍 input -->
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Buscar por tracking o destinatario"
+                        value="<%= search || '' %>"
+                        class="search-input"
+                    >
+
+                    <button type="submit" class="search-button">Buscar</button>
+                </form>
+                <!-- </form>
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Buscar por tracking o destinatario"
+                        value="<%= search || '' %>"
+                        class="search-input"
+                    >
+                    <button type="submit" class="search-button">Buscar</button>
+                </form> -->
+
+                <div class="table-wrapper">
+                    <table class="table shipments-table">
+                        <thead>
+                            <tr>
+                                <th>Tracking ID</th>
+                                <th>Destinatario</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (shipments.length === 0) { %>
+                                <tr>
+                                    <td colspan="3">No se encontraron resultados</td>
+                                </tr>
+                            <% } else { %>
+                                <% shipments.forEach(s => { %>
+                                    <tr>
+                                        <td><%= s.trackingId %></td>
+                                        <td><%= s.destinatario %></td>
+                                        <td>
+                                            <span class="status <%= s.estado.toLowerCase().replace(' ', '-') %>">
+                                            <%= s.estado %>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
 </body>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
