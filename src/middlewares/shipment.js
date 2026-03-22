@@ -18,7 +18,7 @@ const validateShipment = [
 const handleValidationErrors = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.render('shipment/new', { errors: errors.array() });
+        return res.render('shipment/new', { errors: errors.array(), body: req.body });
     }
     next();
 };

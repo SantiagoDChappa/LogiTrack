@@ -148,7 +148,7 @@
 
 .form-new {
   padding: var(--space-6) clamp(1.25rem, 2.5vw, 2rem);
-  max-width: 1100px;
+  width: 100%;
 }
 
 .form-new form {
@@ -165,9 +165,15 @@
   border-radius: var(--radius-md);
   padding: var(--space-6);
   box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4) var(--space-5);
+  align-items: start;
+}
+
+.form-new .remitente h3,
+.form-new .destinatario h3 {
+  grid-column: 1 / -1;
 }
 
 .form-new .direccion {
@@ -209,6 +215,68 @@
   padding-top: var(--space-2);
 }
 
+@media (min-width: 1440px) {
+  .form-new {
+    padding: var(--space-8) clamp(2rem, 3vw, 3rem);
+  }
+
+  .form-new form {
+    gap: var(--space-8);
+  }
+
+  .form-new .remitente,
+  .form-new .destinatario,
+  .form-new .direccion {
+    padding: var(--space-8);
+    gap: var(--space-5) var(--space-8);
+  }
+
+  .form-new h3 {
+    font-size: var(--font-size-lg);
+  }
+
+  .form-new .direccion {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .form-new .direccion h3 {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1920px) {
+  .form-new {
+    padding: var(--space-10) clamp(2.5rem, 4vw, 4rem);
+  }
+
+  .form-new .remitente,
+  .form-new .destinatario,
+  .form-new .direccion {
+    padding: var(--space-10);
+    gap: var(--space-6);
+    border-radius: var(--radius-lg);
+  }
+
+  .form-new h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  .form-new .field input {
+    padding: 0.75rem var(--space-4);
+    font-size: var(--font-size-base);
+  }
+
+  .form-new label {
+    font-size: var(--font-size-sm);
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: 0.65rem 1.5rem;
+    font-size: var(--font-size-base);
+  }
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -231,17 +299,39 @@
   text-decoration: none !important;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .form-new form {
     grid-template-columns: 1fr;
   }
 
+  .form-new .remitente,
+  .form-new .destinatario,
   .form-new .direccion {
     grid-column: 1;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-new .remitente h3,
+  .form-new .destinatario h3,
+  .form-new .direccion h3 {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .form-new .remitente,
+  .form-new .destinatario,
+  .form-new .direccion {
     grid-template-columns: 1fr;
   }
 
-  .form-new .direccion h3 {
-    grid-column: 1;
+  .form-new .form-actions {
+    flex-direction: column-reverse;
+  }
+
+  .form-new .form-actions .btn-primary,
+  .form-new .form-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }

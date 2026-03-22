@@ -17,15 +17,19 @@
                     <h3>Remitente</h3>
                     <div class="field">
                         <label for="remitente-nombre">Nombre y Apellido</label>
-                        <input id="remitente-nombre" type="text" name="remitente_nombre">
+                        <input id="remitente-nombre" type="text" name="remitente_nombre" value="<%= body.remitente_nombre || '' %>">
+                    </div>
+                     <div class="field">
+                        <label for="remitente-documento">Documento</label>
+                        <input id="remitente-documento" type="text" name="remitente_documento" value="<%= body.remitente_documento || '' %>">
                     </div>
                     <div class="field">
                         <label for="remitente-telefono">Teléfono</label>
-                        <input id="remitente-telefono" type="tel" name="remitente_telefono">
+                        <input id="remitente-telefono" type="tel" name="remitente_telefono" value="<%= body.remitente_telefono || '' %>">
                     </div>
                     <div class="field">
                         <label for="remitente-email">Email</label>
-                        <input id="remitente-email" type="email" name="remitente_email">
+                        <input id="remitente-email" type="email" name="remitente_email" value="<%= body.remitente_email || '' %>">
                     </div>
                 </div>
 
@@ -33,15 +37,19 @@
                     <h3>Destinatario</h3>
                     <div class="field">
                         <label for="destinatario-nombre">Nombre y Apellido</label>
-                        <input id="destinatario-nombre" type="text" name="destinatario_nombre" >
+                        <input id="destinatario-nombre" type="text" name="destinatario_nombre" value="<%= body.destinatario_nombre || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="destinatario-documento">Documento</label>
+                        <input id="destinatario-documento" type="text" name="destinatario_documento" value="<%= body.destinatario_documento || '' %>">
                     </div>
                     <div class="field">
                         <label for="destinatario-telefono">Teléfono</label>
-                        <input id="destinatario-telefono" type="tel" name="destinatario_telefono">
+                        <input id="destinatario-telefono" type="tel" name="destinatario_telefono" value="<%= body.destinatario_telefono || '' %>">
                     </div>
                     <div class="field">
                         <label for="destinatario-email">Email</label>
-                        <input id="destinatario-email" type="email" name="destinatario_email">
+                        <input id="destinatario-email" type="email" name="destinatario_email" value="<%= body.destinatario_email || '' %>">
                     </div>
                 </div>
 
@@ -49,23 +57,23 @@
                     <h3>Dirección de entrega</h3>
                     <div class="field">
                         <label for="calle">Calle</label>
-                        <input id="calle" type="text" name="calle">
+                        <input id="calle" type="text" name="calle" value="<%= body.calle || '' %>">
                     </div>
                     <div class="field">
                         <label for="numero">Número</label>
-                        <input id="numero" type="number" name="numero">
+                        <input id="numero" type="number" name="numero" value="<%= body.numero || '' %>">
                     </div>
                     <div class="field">
                         <label for="piso">Piso y/o Depto</label>
-                        <input id="piso" type="text" name="piso_depto">
+                        <input id="piso" type="text" name="piso_depto" value="<%= body.piso_depto || '' %>">
                     </div>
                     <div class="field">
                         <label for="provincia">Provincia</label>
-                        <input id="provincia" type="text" name="provincia">
+                        <input id="provincia" type="text" name="provincia" value="<%= body.provincia || '' %>">
                     </div>
                     <div class="field">
                         <label for="codigo_postal">Código Postal</label>
-                        <input id="codigo_postal" type="number" name="codigo_postal">
+                        <input id="codigo_postal" type="number" name="codigo_postal" value="<%= body.codigo_postal || '' %>">
                     </div>
                 </div>
 
