@@ -1,4 +1,9 @@
 const shipmentModel = require('../models/shipment')
+const path = require('path')
+const fs = require('fs')
+
+const provincesPath = path.join(__dirname, '../data/provinces.json')
+const getProvinces = () => JSON.parse(fs.readFileSync(provincesPath, 'utf8'))
 
 const getIndex = (req, res) => {
     const shipments = shipmentModel.getAll()
@@ -10,7 +15,7 @@ const getDetail = (req, res) => {
 }
 
 const getNewShipmentForm = (req, res) => {
-    res.render('shipment/new', { errors: [], body: {} })
+    res.render('shipment/new', { errors: [], body: {}, provinces: getProvinces() })
 }
 
 const createShipment = (req, res) => {
