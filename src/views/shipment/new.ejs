@@ -69,7 +69,12 @@
                     </div>
                     <div class="field">
                         <label for="provincia">Provincia</label>
-                        <input id="provincia" type="text" name="provincia" value="<%= body.provincia || '' %>">
+                        <select id="provincia" name="provincia">
+                            <option value="">Seleccione una provincia</option>
+                            <% provinces.forEach(prov => { %>
+                                <option value="<%= prov %>" <%= body.provincia === prov ? 'selected' : '' %>><%= prov %></option>
+                            <% }) %>
+                        </select>
                     </div>
                     <div class="field">
                         <label for="codigo_postal">Código Postal</label>
@@ -85,12 +90,10 @@
         </div>
     </main>
 
-    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>const serverErrors = <%- JSON.stringify(errors) %>;</script>
+    <script src="/js/new_shipment_popup.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
 </body>
-/**
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>const serverErrors = <%- JSON.stringify(errors) %>;</script>
-<script src="/js/new_shipment.js" defer></script>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
