@@ -1,7 +1,8 @@
 const express = require('express');
 const path    = require('path');
 const app     = express();
-const port    = 3000;
+const port    = process.env.PORT || 3000;
+const homeRoutes = require('./src/routes/home')
 const shipmentRoutes = require('./src/routes/shipment')
 require('dotenv').config();
 
@@ -12,10 +13,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/',          (req, res) => res.render('index'));
-app.get('/dashboard', (req, res) => res.render('dashboard'));
-app.get('/users/new', (req, res) => res.render('user/new'));
-
+app.use('/', homeRoutes);
 app.use('/shipments', shipmentRoutes);
 
 app.listen(port, () => {
