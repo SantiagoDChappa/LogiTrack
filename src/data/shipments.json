@@ -17,11 +17,11 @@
         "direccion": {
             "calle": "Av. Corrientes",
             "numero": "1234",
-            "piso_depto": "3B",
+            "pisoDepto": "3B",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1043"
+            "codigoPostal": "1043"
         },
-        "fecha_creacion": "2026-03-15"
+        "fechaCreacion": "2026-03-15"
     },
     {
         "id": "ENV-002",
@@ -41,11 +41,11 @@
         "direccion": {
             "calle": "Av. Santa Fe",
             "numero": "5678",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1425"
+            "codigoPostal": "1425"
         },
-        "fecha_creacion": "2026-03-18"
+        "fechaCreacion": "2026-03-18"
     },
     {
         "id": "ENV-003",
@@ -65,11 +65,11 @@
         "direccion": {
             "calle": "Rivadavia",
             "numero": "900",
-            "piso_depto": "1A",
+            "pisoDepto": "1A",
             "provincia": "Córdoba",
-            "codigo_postal": "5000"
+            "codigoPostal": "5000"
         },
-        "fecha_creacion": "2026-03-10"
+        "fechaCreacion": "2026-03-10"
     },
     {
         "id": "ENV-004",
@@ -89,11 +89,11 @@
         "direccion": {
             "calle": "Siempre Viva",
             "numero": "1234",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1665"
+            "codigoPostal": "1665"
         },
-        "fecha_creacion": "2026-03-21"
+        "fechaCreacion": "2026-03-21"
     },
     {
         "id": "ENV-005",
@@ -113,10 +113,10 @@
         "direccion": {
             "calle": "Calle",
             "numero": "123",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "11665"
+            "codigoPostal": "11665"
         },
-        "fecha_creacion": "2026-03-21"
+        "fechaCreacion": "2026-03-21"
     }
 ]
