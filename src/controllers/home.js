@@ -3,11 +3,11 @@ const shipmentModel = require('../models/shipment')
 const getIndex = (req, res) => {
     const shipments = shipmentModel.getAll()
 
-    const estadoNorm = (s) => s.estado.toLowerCase().replace(/\s/g, '_')
+    const normalizeStatus = (s) => s.estado.toLowerCase().replace(/\s/g, '_')
 
-    const enviosActivos  = shipments.filter(s => estadoNorm(s) === 'en_transito').length
-    const entregasHoy    = shipments.filter(s => estadoNorm(s) === 'entregado').length
-    const alertasDemora  = shipments.filter(s => estadoNorm(s) === 'retrasado').length
+    const enviosActivos   = shipments.filter(s => normalizeStatus(s) === 'en_transito').length
+    const entregasHoy     = shipments.filter(s => normalizeStatus(s) === 'entregado').length
+    const alertasDemora   = shipments.filter(s => normalizeStatus(s) === 'retrasado').length
     const registrosNuevos = shipments.length
 
     const ultimaActividad = shipments.slice(-5).reverse()

@@ -10,8 +10,17 @@ const home = (req, res) => {
 }
 
 const searchShipments = (req, res) => {
-    const { trackingId, nombre, documento, rol } = req.query
-    const query = { trackingId: trackingId?.trim(), nombre: nombre?.trim(), documento: documento?.trim(), rol }
+    const { trackingId, rol, nombre, documento, nombreRemitente, documentoRemitente, nombreDestinatario, documentoDestinatario } = req.query
+    const query = {
+        trackingId:           trackingId?.trim(),
+        rol,
+        nombre:               nombre?.trim(),
+        documento:            documento?.trim(),
+        nombreRemitente:      nombreRemitente?.trim(),
+        documentoRemitente:   documentoRemitente?.trim(),
+        nombreDestinatario:   nombreDestinatario?.trim(),
+        documentoDestinatario: documentoDestinatario?.trim()
+    }
     const shipments = shipmentModel.search(query)
     res.render('shipment/index', { shipments, query })
 }

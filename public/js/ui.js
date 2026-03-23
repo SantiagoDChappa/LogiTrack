@@ -1,4 +1,3 @@
-// ===== User dropdown =====
 const userSection  = document.querySelector('.top-header .user');
 const userDropdown = document.getElementById('user-dropdown');
 
@@ -14,7 +13,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// ===== Hamburger / mobile nav drawer =====
 const hamburgerBtn = document.getElementById('btn-hamburger');
 const leftHeader   = document.querySelector('.left-header');
 const navOverlay   = document.getElementById('nav-overlay');
@@ -39,12 +37,10 @@ if (hamburgerBtn && leftHeader && navOverlay) {
 
     navOverlay.addEventListener('click', closeNav);
 
-    // Close drawer on nav link click (mobile)
     leftHeader.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', closeNav);
     });
 
-    // Close button inside the drawer
     const navCloseBtn = document.getElementById('btn-nav-close');
     if (navCloseBtn) {
         navCloseBtn.addEventListener('click', closeNav);
