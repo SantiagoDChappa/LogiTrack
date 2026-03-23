@@ -1,3 +1,33 @@
+/* ===== SIDEBAR CLOSE BUTTON ===== */
+
+.nav-close-btn {
+  display: none;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: var(--radius-sm);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition);
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+.nav-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.nav-close-btn .material-symbols-outlined {
+  font-size: 1.2rem;
+}
+
 /* ===== HAMBURGER & MOBILE LOGO ===== */
 
 .hamburger-btn {
@@ -470,12 +500,16 @@ header {
 }
 
 @media (max-width: 1024px) {
-  /* Show hamburger and mobile logo */
+  /* Show hamburger, mobile logo and sidebar close button */
   .hamburger-btn {
     display: flex;
   }
 
   .logo-mobile {
+    display: flex;
+  }
+
+  .nav-close-btn {
     display: flex;
   }
 

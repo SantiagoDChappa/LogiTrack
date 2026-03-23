@@ -2,7 +2,7 @@
 
 .dashboard-wrapper {
     padding: clamp(1.25rem, 2.5vw, 2rem) clamp(1.25rem, 3vw, 2.5rem);
-    max-width: 1400px;
+    width: 100%;
 }
 
 .page-header {
@@ -154,6 +154,7 @@
     display: grid;
     grid-template-columns: 1fr 1.4fr;
     gap: 1rem;
+    align-items: start;
 }
 
 .card {
@@ -253,32 +254,42 @@
     white-space: nowrap;
 }
 
-.status-badge.pendiente,
-.status-badge.inicial {
-    background-color: var(--color-warning-bg);
-    color: var(--color-warning);
+.status-badge.pendiente {
+    background-color: var(--badge-pending-bg);
+    color: var(--badge-pending-text);
 }
 
 .status-badge.en_transito,
 .status-badge.en-tránsito,
 .status-badge.en-transito {
-    background-color: var(--color-info-bg);
-    color: var(--color-info);
+    background-color: var(--badge-transit-bg);
+    color: var(--badge-transit-text);
+}
+
+.status-badge.en_sucursal {
+    background-color: var(--badge-warehouse-bg);
+    color: var(--badge-warehouse-text);
 }
 
 .status-badge.entregado {
-    background-color: var(--color-success-bg);
-    color: var(--color-success);
+    background-color: var(--badge-delivered-bg);
+    color: var(--badge-delivered-text);
 }
 
 .status-badge.retrasado {
-    background-color: var(--color-warning-bg);
-    color: #ea580c;
+    background-color: var(--badge-delayed-bg);
+    color: var(--badge-delayed-text);
 }
 
-.status-badge.cancelado {
-    background-color: var(--color-danger-bg);
-    color: var(--color-danger);
+.status-badge.cancelado,
+.status-badge.cancelada {
+    background-color: var(--badge-cancelled-bg);
+    color: var(--badge-cancelled-text);
+}
+
+.status-badge.inicial {
+    background-color: var(--badge-initial-bg);
+    color: var(--badge-initial-text);
 }
 
 /* ===== BOTÓN VER DETALLE ===== */
@@ -333,7 +344,7 @@
     }
 
     .activity-table {
-        min-width: 480px;
+        min-width: 540px;
     }
 }
 

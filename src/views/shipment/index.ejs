@@ -15,6 +15,7 @@
             </a>
         </div>
 
+        <div class="shipments-wrapper">
         <form method="GET" action="/shipments/search" class="search-form">
             <div class="search-fields">
                 <div class="search-field">
@@ -77,8 +78,10 @@
                                 <td><%= shipment.destinatario.nombre %></td>
                                 <td><%= shipment.destinatario.documento %></td>
                                 <td>
-                                    <span class="status-badge <%= shipment.estado.toLowerCase().replace(' ', '-') %>">
-                                        <%= shipment.estado %>
+                                    <% const _sk = shipment.estado.toLowerCase().replace(/[\s-]+/g, '_'); %>
+                                    <% const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'}; %>
+                                    <span class="status-badge <%= _sk %>">
+                                        <%= _sl[_sk] || shipment.estado %>
                                     </span>
                                 </td>
                                 <td class="col-actions">
@@ -98,6 +101,7 @@
                 </tbody>
             </table>
         </div>
+        </div><!-- /.shipments-wrapper -->
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

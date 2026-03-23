@@ -43,4 +43,10 @@ if (hamburgerBtn && leftHeader && navOverlay) {
     leftHeader.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', closeNav);
     });
+
+    // Close button inside the drawer
+    const navCloseBtn = document.getElementById('btn-nav-close');
+    if (navCloseBtn) {
+        navCloseBtn.addEventListener('click', closeNav);
+    }
 }
