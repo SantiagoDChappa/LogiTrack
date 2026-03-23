@@ -5,8 +5,9 @@ const fs = require('fs')
 const provincesPath = path.join(__dirname, '../data/provinces.json')
 const getProvinces = () => JSON.parse(fs.readFileSync(provincesPath, 'utf8'))
 
-const getIndex = (req, res) => {
-    res.render('shipment/index', { shipments: [], query: {} })
+const home = (req, res) => {
+    const shipments = shipmentModel.getAll()
+    res.render('shipment/index', { shipments, query: {} })
 }
 
 const searchShipments = (req, res) => {
@@ -31,4 +32,4 @@ const createShipment = (req, res) => {
     res.redirect('/shipments?success=1')
 }
 
-module.exports = { getIndex, getDetail, getNewShipmentForm, createShipment, searchShipments }
+module.exports = { home, getDetail, getNewShipmentForm, createShipment, searchShipments }
