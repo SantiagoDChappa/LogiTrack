@@ -21,9 +21,9 @@ btn.addEventListener('click', () => {
 function applyTheme(theme) {
     if (theme === 'dark') {
         icon.textContent  = 'dark_mode';
-        label.textContent = 'Modo oscuro';
+        label.textContent = 'Modo claro';
     } else {
         icon.textContent  = 'light_mode';
-        label.textContent = 'Modo claro';
+        label.textContent = 'Modo oscuro';
     }
 }
