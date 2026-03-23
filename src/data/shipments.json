@@ -1,7 +1,7 @@
 [
     {
         "id": "ENV-001",
-        "estado": "en_transito",
+        "estado": "Cancelado",
         "remitente": {
             "nombre": "Santiago Chappa",
             "documento": "38456789",
@@ -25,7 +25,7 @@
     },
     {
         "id": "ENV-002",
-        "estado": "pendiente",
+        "estado": "En Sucursal",
         "remitente": {
             "nombre": "Maximo Flores",
             "documento": "35789012",
@@ -49,7 +49,7 @@
     },
     {
         "id": "ENV-003",
-        "estado": "entregado",
+        "estado": "Entregado",
         "remitente": {
             "nombre": "Maria Lopez",
             "documento": "27654321",
@@ -73,7 +73,7 @@
     },
     {
         "id": "ENV-004",
-        "estado": "pendiente",
+        "estado": "En Transito",
         "remitente": {
             "nombre": "Angelito Di Maria",
             "documento": "45202393",
@@ -97,7 +97,7 @@
     },
     {
         "id": "ENV-005",
-        "estado": "pendiente",
+        "estado": "Pendiente",
         "remitente": {
             "nombre": "Flaco Pepe",
             "documento": "45023948",

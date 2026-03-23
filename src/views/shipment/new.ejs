@@ -25,7 +25,7 @@
                     </div>
                     <div class="field">
                         <label for="remitente-telefono">Teléfono</label>
-                        <input id="remitente-telefono" type="tel" name="remitente_telefono" value="<%= body.remitente_telefono || '' %>">
+                        <input id="remitente-telefono" type="tel" name="remitente_telefono"  maxlength="10" value="<%= body.remitente_telefono || '' %>">
                     </div>
                     <div class="field">
                         <label for="remitente-email">Email</label>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="field">
                         <label for="destinatario-telefono">Teléfono</label>
-                        <input id="destinatario-telefono" type="tel" name="destinatario_telefono" value="<%= body.destinatario_telefono || '' %>">
+                        <input id="destinatario-telefono" type="tel" name="destinatario_telefono" maxlength="10" value="<%= body.destinatario_telefono || '' %>">
                     </div>
                     <div class="field">
                         <label for="destinatario-email">Email</label>

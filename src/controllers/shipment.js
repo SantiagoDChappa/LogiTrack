@@ -6,8 +6,7 @@ const provincesPath = path.join(__dirname, '../data/provinces.json')
 const getProvinces = () => JSON.parse(fs.readFileSync(provincesPath, 'utf8'))
 
 const home = (req, res) => {
-    const shipments = shipmentModel.getAll()
-    res.render('shipment/index', { shipments, query: {} })
+    res.render('shipment/index', { shipments: [], query: {} })
 }
 
 const searchShipments = (req, res) => {

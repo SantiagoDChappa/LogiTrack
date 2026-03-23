@@ -40,7 +40,6 @@
 /* ── Table ── */
 
 .table-wrapper {
-  padding: var(--space-4) clamp(1.25rem, 2.5vw, 2rem);
   background: transparent;
 }
 
@@ -401,11 +400,23 @@
   }
 }
 
+/* ── Shipments wrapper ── */
+
+.shipments-wrapper {
+  padding: 1.25rem clamp(1.25rem, 2.5vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 /* ── Search form ── */
 
 .search-form {
-  padding: var(--space-4) clamp(1.25rem, 2.5vw, 2rem);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .search-fields {
@@ -488,17 +499,22 @@
 
 .status-badge {
   display: inline-block;
-  padding: 0.35rem 0.9rem;
-  border-radius: var(--radius-sm);
-  font-size: var(--font-size-sm);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
 }
 
-.status-badge.pendiente    { background-color: #fef3c7; color: #92400e; }
+.status-badge.pendiente    { background-color: var(--badge-pending-bg);   color: var(--badge-pending-text);   }
 .status-badge.en_transito,
-.status-badge.en-transito  { background-color: #dbeafe; color: #1e40af; }
-.status-badge.entregado    { background-color: #dcfce7; color: #166534; }
-.status-badge.inicial      { background-color: #f3f4f6; color: #6b7280; }
+.status-badge.en-transito  { background-color: var(--badge-transit-bg);    color: var(--badge-transit-text);    }
+.status-badge.entregado    { background-color: var(--badge-delivered-bg);  color: var(--badge-delivered-text);  }
+.status-badge.retrasado    { background-color: var(--badge-delayed-bg);    color: var(--badge-delayed-text);    }
+.status-badge.cancelado,
+.status-badge.cancelada    { background-color: var(--badge-cancelled-bg);  color: var(--badge-cancelled-text);  }
+.status-badge.en_sucursal  { background-color: var(--badge-warehouse-bg);  color: var(--badge-warehouse-text);  }
+.status-badge.inicial      { background-color: var(--badge-initial-bg);    color: var(--badge-initial-text);    }
 
 /* ── Detail view ── */
 
@@ -614,18 +630,22 @@
     min-width: 680px;
   }
 
-  /* Search: stack fields */
+  /* Search: 2-column grid */
   .search-fields {
-    flex-direction: column;
-    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+    gap: var(--space-3);
   }
 
-  .search-field {
-    min-width: unset;
-    flex: none;
+  /* "Buscar en" select — full width */
+  .search-field:first-child {
+    grid-column: 1 / -1;
   }
 
+  /* Buscar button — pairs with Documento field */
   .search-btn {
+    align-self: end;
     width: 100%;
     justify-content: center;
   }
@@ -635,12 +655,20 @@
     flex-wrap: wrap;
     gap: var(--space-3);
   }
+}
 
-  /* Detail */
-  .detail-top {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
+@media (max-width: 480px) {
+  /* Search: single column on very small screens */
+  .search-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .search-field:first-child {
+    grid-column: 1;
+  }
+
+  .search-btn {
+    grid-column: 1;
   }
 }
 
