@@ -3,11 +3,120 @@
 <head>
     <%- include('../partials/head') %>
     <title>Envíos - LogiTrack</title>
+    <link rel="stylesheet" href="/css/shipments.css">
 </head>
-<%- include('../partials/header') %>
 <body>
-<div class="actions"></div>
+    <%- include('../partials/header') %>
+    <main class="main-content">
+        <div class="page-header">
+            <h1>Administrador de envios</h1>
+            <a href="/shipments/new" class="btn-primary">
+                <span class="material-symbols-outlined">add</span>Alta
+            </a>
+        </div>
+
+        <form method="GET" action="/shipments/search" class="search-form">
+            <div class="search-fields">
+                <div class="search-field">
+                    <label for="rol">Buscar en</label>
+                    <select id="rol" name="rol" class="search-input">
+                        <option value="ambos"        <%= (!query.rol || query.rol === 'ambos')        ? 'selected' : '' %>>Remitente y Destinatario</option>
+                        <option value="remitente"    <%= query.rol === 'remitente'                    ? 'selected' : '' %>>Solo Remitente</option>
+                        <option value="destinatario" <%= query.rol === 'destinatario'                 ? 'selected' : '' %>>Solo Destinatario</option>
+                    </select>
+                </div>
+                <div class="search-field">
+                    <label for="trackingId">ID Tracking</label>
+                    <input type="text" id="trackingId" name="trackingId" placeholder="Ej: abc-123" value="<%= query.trackingId || '' %>" class="search-input">
+                </div>
+                <div class="search-field">
+                    <label for="nombre">Nombre y apellido</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" value="<%= query.nombre || '' %>" class="search-input">
+                </div>
+                <div class="search-field">
+                    <label for="documento">Documento</label>
+                    <input type="text" id="documento" name="documento" placeholder="Ej: 38456789" value="<%= query.documento || '' %>" class="search-input">
+                </div>
+                <button type="submit" class="btn-primary search-btn">
+                    <span class="material-symbols-outlined">search</span>Buscar
+                </button>
+            </div>
+        </form>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th rowspan="2">ID Tracking</th>
+                        <th colspan="2" class="group-header">Remitente</th>
+                        <th colspan="2" class="group-header">Destinatario</th>
+                        <th rowspan="2">Estado</th>
+                        <th rowspan="2" class="col-actions">Acciones</th>
+                    </tr>
+                    <tr>
+                        <th>Nombre y apellido</th>
+                        <th>Documento</th>
+                        <th>Nombre y apellido</th>
+                        <th>Documento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (shipments.length === 0) { %>
+                        <tr>
+                            <td colspan="7" class="empty-row">
+                                <span class="material-symbols-outlined">search</span>
+                                No se encontraron resultados para esa búsqueda
+                            </td>
+                        </tr>
+                    <% } else { %>
+                        <% shipments.forEach(shipment => { %>
+                            <tr>
+                                <td class="tracking-id"><%= shipment.id %></td>
+                                <td><%= shipment.remitente.nombre %></td>
+                                <td><%= shipment.remitente.documento %></td>
+                                <td><%= shipment.destinatario.nombre %></td>
+                                <td><%= shipment.destinatario.documento %></td>
+                                <td>
+                                    <span class="status-badge <%= shipment.estado.toLowerCase().replace(' ', '-') %>">
+                                        <%= shipment.estado %>
+                                    </span>
+                                </td>
+                                <td class="col-actions">
+                                    <a href="/shipments/update" class="action-btn modificar" data-tooltip="Modificar">
+                                        <span class="material-symbols-outlined">edit</span>
+                                    </a>
+                                    <a href="/shipments/detail?id=<%= shipment.id %>" class="action-btn detalle" data-tooltip="Detalle">
+                                        <span class="material-symbols-outlined">info</span>
+                                    </a>
+                                    <a href="/shipments/delete" class="action-btn eliminar" data-tooltip="Eliminar">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script>
+        if (new URLSearchParams(window.location.search).get('success') === '1') {
+            const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
+            Swal.fire({
+                icon: 'success',
+                title: '¡Envío creado con éxito!',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
+                background: isDark ? '#1e293b' : '#ffffff',
+                color: isDark ? '#f1f5f9' : '#1e293b',
+            }).then(() => {
+                history.replaceState(null, '', '/shipments');
+            });
+        }
+    </script>
 </body>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
