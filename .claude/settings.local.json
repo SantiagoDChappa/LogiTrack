@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(git branch:*)",
-      "Bash(ls -la C:/Users/santi_1inznlf/Desktop/Proyectos/LogiTrack/.env*)",
-      "Bash(git checkout:*)"
-    ]
-  }
-}
