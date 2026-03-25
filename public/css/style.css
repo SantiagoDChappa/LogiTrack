@@ -27,6 +27,28 @@
   --color-info:           #0284c7;
   --color-info-bg:        #e0f2fe;
 
+  --badge-pending-bg:      #fef3c7;
+  --badge-pending-text:    #92400e;
+  --badge-transit-bg:      #dbeafe;
+  --badge-transit-text:    #1d4ed8;
+  --badge-delivered-bg:    #dcfce7;
+  --badge-delivered-text:  #166534;
+  --badge-cancelled-bg:    #fee2e2;
+  --badge-cancelled-text:  #991b1b;
+  --badge-warehouse-bg:    #ede9fe;
+  --badge-warehouse-text:  #6d28d9;
+  --badge-delayed-bg:      #ffedd5;
+  --badge-delayed-text:    #9a3412;
+  --badge-initial-bg:      #f1f5f9;
+  --badge-initial-text:    #475569;
+
+  --btn-modificar-bg:      #fef3c7;
+  --btn-modificar-text:    #b45309;
+  --btn-detalle-bg:        #dcfce7;
+  --btn-detalle-text:      #15803d;
+  --btn-eliminar-bg:       #fee2e2;
+  --btn-eliminar-text:     #b91c1c;
+
   --font-family:     'Inter', system-ui, -apple-system, sans-serif;
   --font-size-xs:    0.75rem;
   --font-size-sm:    0.875rem;
@@ -90,13 +112,37 @@
   --color-danger-bg:      #450a0a;
   --color-info-bg:        #0c4a6e;
 
+  --badge-pending-bg:      #451a03;
+  --badge-pending-text:    #fcd34d;
+  --badge-transit-bg:      #172554;
+  --badge-transit-text:    #93c5fd;
+  --badge-delivered-bg:    #052e16;
+  --badge-delivered-text:  #86efac;
+  --badge-cancelled-bg:    #450a0a;
+  --badge-cancelled-text:  #fca5a5;
+  --badge-warehouse-bg:    #2e1065;
+  --badge-warehouse-text:  #c4b5fd;
+  --badge-delayed-bg:      #431407;
+  --badge-delayed-text:    #fdba74;
+  --badge-initial-bg:      #1e293b;
+  --badge-initial-text:    #94a3b8;
+
+  --btn-modificar-bg:      #451a03;
+  --btn-modificar-text:    #fcd34d;
+  --btn-detalle-bg:        #052e16;
+  --btn-detalle-text:      #86efac;
+  --btn-eliminar-bg:       #450a0a;
+  --btn-eliminar-text:     #fca5a5;
+
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
 
-*, *::before, *::after {
-  transition: background-color 0.25s ease, color 0.2s ease, border-color 0.2s ease;
+.theme-animated *,
+.theme-animated *::before,
+.theme-animated *::after {
+  transition: background-color 0.25s ease, color 0.2s ease, border-color 0.2s ease !important;
 }
 
 *, *::before, *::after {
@@ -265,7 +311,7 @@ button {
 @media (max-width: 1024px) {
   .main-content {
     margin-left: 0;
-    padding-top: 0;
+    padding-top: clamp(56px, 10vw, 68px);
   }
 }
 
