@@ -21,8 +21,10 @@
                     <span class="detail-tracking-label">ID Tracking</span>
                     <span class="detail-tracking-id"><%= shipment.id %></span>
                 </div>
-                <span class="status-badge <%= shipment.estado.toLowerCase().replace(' ', '-') %>">
-                    <%= shipment.estado %>
+                <% const _sk = shipment.estado.toLowerCase().replace(/[\s-]+/g, '_'); %>
+                <% const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'}; %>
+                <span class="status-badge <%= _sk %>">
+                    <%= _sl[_sk] || shipment.estado %>
                 </span>
             </div>
 
@@ -71,7 +73,7 @@
                     <h3>Dirección de entrega</h3>
                     <div class="detail-field">
                         <span class="detail-label">Calle y número</span>
-                        <span class="detail-value"><%= shipment.direccion.calle %> <%= shipment.direccion.numero %><%= shipment.direccion.piso_depto ? ', ' + shipment.direccion.piso_depto : '' %></span>
+                        <span class="detail-value"><%= shipment.direccion.calle %> <%= shipment.direccion.numero %><%= shipment.direccion.pisoDepto ? ', ' + shipment.direccion.pisoDepto : '' %></span>
                     </div>
                     <div class="detail-field">
                         <span class="detail-label">Provincia</span>
@@ -79,7 +81,7 @@
                     </div>
                     <div class="detail-field">
                         <span class="detail-label">Código postal</span>
-                        <span class="detail-value"><%= shipment.direccion.codigo_postal %></span>
+                        <span class="detail-value"><%= shipment.direccion.codigoPostal %></span>
                     </div>
                 </div>
             </div>

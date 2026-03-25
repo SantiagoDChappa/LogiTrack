@@ -4,12 +4,11 @@ const path = require('path');
 const dataPath = path.join(__dirname, '../data/shipments.json')
 
 const getAll = () => {
-    const data =  JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-    return data;
+    return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
 }
 
 const getById = (id) => {
-    return getAll().find(shipment => shipment.id === id)
+    return getAll().find(s => s.id === id)
 }
 
 const generateId = (shipments) => {
@@ -26,58 +25,55 @@ const create = (data) => {
         id: generateId(shipments),
         estado: 'Pendiente',
         remitente: {
-            nombre: data.remitente_nombre,
-            documento: data.remitente_documento,
-            telefono: data.remitente_telefono,
-            email: data.remitente_email
+            nombre: data.remitenteNombre,
+            documento: data.remitenteDocumento,
+            telefono: data.remitenteTelefono,
+            email: data.remitenteEmail
         },
         destinatario: {
-            nombre: data.destinatario_nombre,
-            documento: data.destinatario_documento,
-            telefono: data.destinatario_telefono,
-            email: data.destinatario_email
+            nombre: data.destinatarioNombre,
+            documento: data.destinatarioDocumento,
+            telefono: data.destinatarioTelefono,
+            email: data.destinatarioEmail
         },
-         direccion: {
+        direccion: {
             calle: data.calle,
             numero: data.numero,
-            piso_depto: data.piso_depto,
+            pisoDepto: data.pisoDepto,
             provincia: data.provincia,
-            codigo_postal: data.codigo_postal
+            codigoPostal: data.codigoPostal
         },
-        fechaCreacion: new Date().toISOString().split('T'), 
+        fechaCreacion: new Date().toISOString().split('T')[0],
     };
     shipments.push(newShipment);
     fs.writeFileSync(dataPath, JSON.stringify(shipments, null, 4));
     return newShipment;
 }
 
-const deleteFromId = (id) => {
-    let shipment = getAll().find(shipment => shipment.id === id)
-}
-
-const search = ({ trackingId, nombre, documento, rol }) => {
-    const hasFilter = (trackingId || nombre || documento)
+const search = ({ trackingId, rol, nombre, documento, nombreRemitente, documentoRemitente, nombreDestinatario, documentoDestinatario }) => {
+    const hasFilter = trackingId || nombre || documento || nombreRemitente || documentoRemitente || nombreDestinatario || documentoDestinatario
     if (!hasFilter) return getAll()
 
-    const checkRemitente = !rol || rol === 'ambos' || rol === 'remitente'
-    const checkDestinatario = !rol || rol === 'ambos' || rol === 'destinatario'
+    const isAmbos        = !rol || rol === 'ambos'
+    const isRemitente    = rol === 'remitente'
+    const isDestinatario = rol === 'destinatario'
 
     return getAll().filter(s => {
         if (!s.remitente || !s.destinatario) return false
 
         if (trackingId && !s.id.toLowerCase().includes(trackingId.toLowerCase())) return false
 
-        if (documento) {
-            const matchDoc = (checkRemitente && s.remitente.documento.includes(documento)) ||
-                             (checkDestinatario && s.destinatario.documento.includes(documento))
-            if (!matchDoc) return false
-        }
-
-        if (nombre) {
-            const n = nombre.toLowerCase()
-            const matchNombre = (checkRemitente && s.remitente.nombre.toLowerCase().includes(n)) ||
-                                (checkDestinatario && s.destinatario.nombre.toLowerCase().includes(n))
-            if (!matchNombre) return false
+        if (isAmbos) {
+            if (nombreRemitente    && !s.remitente.nombre.toLowerCase().includes(nombreRemitente.toLowerCase()))       return false
+            if (documentoRemitente && !s.remitente.documento.includes(documentoRemitente))                            return false
+            if (nombreDestinatario && !s.destinatario.nombre.toLowerCase().includes(nombreDestinatario.toLowerCase())) return false
+            if (documentoDestinatario && !s.destinatario.documento.includes(documentoDestinatario))                   return false
+        } else if (isRemitente) {
+            if (nombre    && !s.remitente.nombre.toLowerCase().includes(nombre.toLowerCase())) return false
+            if (documento && !s.remitente.documento.includes(documento))                       return false
+        } else if (isDestinatario) {
+            if (nombre    && !s.destinatario.nombre.toLowerCase().includes(nombre.toLowerCase())) return false
+            if (documento && !s.destinatario.documento.includes(documento))                       return false
         }
 
         return true

@@ -15,6 +15,7 @@
             </a>
         </div>
 
+        <div class="shipments-wrapper">
         <form method="GET" action="/shipments/search" class="search-form">
             <div class="search-fields">
                 <div class="search-field">
@@ -27,16 +28,37 @@
                 </div>
                 <div class="search-field">
                     <label for="trackingId">ID Tracking</label>
-                    <input type="text" id="trackingId" name="trackingId" placeholder="Ej: abc-123" value="<%= query.trackingId || '' %>" class="search-input">
+                    <input type="text" id="trackingId" name="trackingId" placeholder="Ej: ENV-001" value="<%= query.trackingId || '' %>" class="search-input">
                 </div>
-                <div class="search-field">
-                    <label for="nombre">Nombre y apellido</label>
+
+                <%/* Campos para Solo Remitente / Solo Destinatario */%>
+                <div class="search-field campos-simples">
+                    <label for="nombre">Nombre y Apellido</label>
                     <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" value="<%= query.nombre || '' %>" class="search-input">
                 </div>
-                <div class="search-field">
+                <div class="search-field campos-simples">
                     <label for="documento">Documento</label>
                     <input type="text" id="documento" name="documento" placeholder="Ej: 38456789" value="<%= query.documento || '' %>" class="search-input">
                 </div>
+
+                <%/* Campos para Remitente y Destinatario */%>
+                <div class="search-field campos-ambos">
+                    <label for="nombreRemitente">Nombre Remitente</label>
+                    <input type="text" id="nombreRemitente" name="nombreRemitente" placeholder="Ej: Juan Pérez" value="<%= query.nombreRemitente || '' %>" class="search-input">
+                </div>
+                <div class="search-field campos-ambos">
+                    <label for="documentoRemitente">Doc. Remitente</label>
+                    <input type="text" id="documentoRemitente" name="documentoRemitente" placeholder="Ej: 38456789" value="<%= query.documentoRemitente || '' %>" class="search-input">
+                </div>
+                <div class="search-field campos-ambos">
+                    <label for="nombreDestinatario">Nombre Destinatario</label>
+                    <input type="text" id="nombreDestinatario" name="nombreDestinatario" placeholder="Ej: Pedro García" value="<%= query.nombreDestinatario || '' %>" class="search-input">
+                </div>
+                <div class="search-field campos-ambos">
+                    <label for="documentoDestinatario">Doc. Destinatario</label>
+                    <input type="text" id="documentoDestinatario" name="documentoDestinatario" placeholder="Ej: 45034934" value="<%= query.documentoDestinatario || '' %>" class="search-input">
+                </div>
+
                 <button type="submit" class="btn-primary search-btn">
                     <span class="material-symbols-outlined">search</span>Buscar
                 </button>
@@ -77,8 +99,10 @@
                                 <td><%= shipment.destinatario.nombre %></td>
                                 <td><%= shipment.destinatario.documento %></td>
                                 <td>
-                                    <span class="status-badge <%= shipment.estado.toLowerCase().replace(' ', '-') %>">
-                                        <%= shipment.estado %>
+                                    <% const _sk = shipment.estado.toLowerCase().replace(/[\s-]+/g, '_'); %>
+                                    <% const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'}; %>
+                                    <span class="status-badge <%= _sk %>">
+                                        <%= _sl[_sk] || shipment.estado %>
                                     </span>
                                 </td>
                                 <td class="col-actions">
@@ -98,12 +122,27 @@
                 </tbody>
             </table>
         </div>
+        </div>
+
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/theme.js" defer></script>
     <script src="/js/ui.js" defer></script>
     <script>
+        const rolSelect      = document.getElementById('rol');
+        const camposSimples  = document.querySelectorAll('.campos-simples');
+        const camposAmbos    = document.querySelectorAll('.campos-ambos');
+
+        function actualizarCampos() {
+            const iEsAmbos = rolSelect.value === 'ambos';
+            camposSimples.forEach(el => el.style.display = iEsAmbos ? 'none' : '');
+            camposAmbos.forEach(el => el.style.display   = iEsAmbos ? ''     : 'none');
+        }
+
+        rolSelect.addEventListener('change', actualizarCampos);
+        actualizarCampos();
+
         if (new URLSearchParams(window.location.search).get('success') === '1') {
             const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
             Swal.fire({

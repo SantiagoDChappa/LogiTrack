@@ -1,7 +1,7 @@
 [
     {
         "id": "ENV-001",
-        "estado": "en_transito",
+        "estado": "Cancelado",
         "remitente": {
             "nombre": "Santiago Chappa",
             "documento": "38456789",
@@ -17,15 +17,15 @@
         "direccion": {
             "calle": "Av. Corrientes",
             "numero": "1234",
-            "piso_depto": "3B",
+            "pisoDepto": "3B",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1043"
+            "codigoPostal": "1043"
         },
-        "fecha_creacion": "2026-03-15"
+        "fechaCreacion": "2026-03-15"
     },
     {
         "id": "ENV-002",
-        "estado": "pendiente",
+        "estado": "En Sucursal",
         "remitente": {
             "nombre": "Maximo Flores",
             "documento": "35789012",
@@ -41,15 +41,15 @@
         "direccion": {
             "calle": "Av. Santa Fe",
             "numero": "5678",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1425"
+            "codigoPostal": "1425"
         },
-        "fecha_creacion": "2026-03-18"
+        "fechaCreacion": "2026-03-18"
     },
     {
         "id": "ENV-003",
-        "estado": "entregado",
+        "estado": "Entregado",
         "remitente": {
             "nombre": "Maria Lopez",
             "documento": "27654321",
@@ -65,15 +65,15 @@
         "direccion": {
             "calle": "Rivadavia",
             "numero": "900",
-            "piso_depto": "1A",
+            "pisoDepto": "1A",
             "provincia": "Córdoba",
-            "codigo_postal": "5000"
+            "codigoPostal": "5000"
         },
-        "fecha_creacion": "2026-03-10"
+        "fechaCreacion": "2026-03-10"
     },
     {
         "id": "ENV-004",
-        "estado": "pendiente",
+        "estado": "En Transito",
         "remitente": {
             "nombre": "Angelito Di Maria",
             "documento": "45202393",
@@ -89,15 +89,15 @@
         "direccion": {
             "calle": "Siempre Viva",
             "numero": "1234",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "1665"
+            "codigoPostal": "1665"
         },
-        "fecha_creacion": "2026-03-21"
+        "fechaCreacion": "2026-03-21"
     },
     {
         "id": "ENV-005",
-        "estado": "pendiente",
+        "estado": "Pendiente",
         "remitente": {
             "nombre": "Flaco Pepe",
             "documento": "45023948",
@@ -113,10 +113,10 @@
         "direccion": {
             "calle": "Calle",
             "numero": "123",
-            "piso_depto": "",
+            "pisoDepto": "",
             "provincia": "Buenos Aires",
-            "codigo_postal": "11665"
+            "codigoPostal": "11665"
         },
-        "fecha_creacion": "2026-03-21"
+        "fechaCreacion": "2026-03-21"
     }
 ]
