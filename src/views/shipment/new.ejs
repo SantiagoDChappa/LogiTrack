@@ -16,74 +16,74 @@
                 <div class="remitente">
                     <h3>Remitente</h3>
                     <div class="field">
-                        <label for="remitente-nombre">Nombre y Apellido</label>
-                        <input id="remitente-nombre" type="text" name="remitenteNombre" value="<%= body.remitenteNombre || '' %>">
+                        <label for="sender-name">Nombre y Apellido</label>
+                        <input id="sender-name" type="text" name="senderName" value="<%= body.senderName || '' %>">
                     </div>
                      <div class="field">
-                        <label for="remitente-documento">Documento</label>
-                        <input id="remitente-documento" type="text" name="remitenteDocumento" value="<%= body.remitenteDocumento || '' %>">
+                        <label for="sender-document">Documento</label>
+                        <input id="sender-document" type="text" name="senderDocument" value="<%= body.senderDocument || '' %>">
                     </div>
                     <div class="field">
-                        <label for="remitente-telefono">Teléfono</label>
-                        <input id="remitente-telefono" type="tel" name="remitenteTelefono"  maxlength="10" value="<%= body.remitenteTelefono || '' %>">
+                        <label for="sender-phone">Teléfono</label>
+                        <input id="sender-phone" type="tel" name="senderPhone" maxlength="10" value="<%= body.senderPhone || '' %>">
                     </div>
                     <div class="field">
-                        <label for="remitente-email">Email</label>
-                        <input id="remitente-email" type="email" name="remitenteEmail" value="<%= body.remitenteEmail || '' %>">
+                        <label for="sender-email">Email</label>
+                        <input id="sender-email" type="email" name="senderEmail" value="<%= body.senderEmail || '' %>">
                     </div>
                 </div>
 
                 <div class="destinatario">
                     <h3>Destinatario</h3>
                     <div class="field">
-                        <label for="destinatario-nombre">Nombre y Apellido</label>
-                        <input id="destinatario-nombre" type="text" name="destinatarioNombre" value="<%= body.destinatarioNombre || '' %>">
+                        <label for="recipient-name">Nombre y Apellido</label>
+                        <input id="recipient-name" type="text" name="recipientName" value="<%= body.recipientName || '' %>">
                     </div>
                     <div class="field">
-                        <label for="destinatario-documento">Documento</label>
-                        <input id="destinatario-documento" type="text" name="destinatarioDocumento" value="<%= body.destinatarioDocumento || '' %>">
+                        <label for="recipient-document">Documento</label>
+                        <input id="recipient-document" type="text" name="recipientDocument" value="<%= body.recipientDocument || '' %>">
                     </div>
                     <div class="field">
-                        <label for="destinatario-telefono">Teléfono</label>
-                        <input id="destinatario-telefono" type="tel" name="destinatarioTelefono" maxlength="10" value="<%= body.destinatarioTelefono || '' %>">
+                        <label for="recipient-phone">Teléfono</label>
+                        <input id="recipient-phone" type="tel" name="recipientPhone" maxlength="10" value="<%= body.recipientPhone || '' %>">
                     </div>
                     <div class="field">
-                        <label for="destinatario-email">Email</label>
-                        <input id="destinatario-email" type="email" name="destinatarioEmail" value="<%= body.destinatarioEmail || '' %>">
+                        <label for="recipient-email">Email</label>
+                        <input id="recipient-email" type="email" name="recipientEmail" value="<%= body.recipientEmail || '' %>">
                     </div>
                 </div>
 
                 <div class="direccion">
                     <h3>Dirección de entrega</h3>
                     <div class="field">
-                        <label for="calle">Calle</label>
-                        <input id="calle" type="text" name="calle" value="<%= body.calle || '' %>">
+                        <label for="street">Calle</label>
+                        <input id="street" type="text" name="street" value="<%= body.street || '' %>">
                     </div>
                     <div class="field">
-                        <label for="numero">Número</label>
-                        <input id="numero" type="number" name="numero" value="<%= body.numero || '' %>">
+                        <label for="number">Número</label>
+                        <input id="number" type="number" name="number" value="<%= body.number || '' %>">
                     </div>
                     <div class="field">
-                        <label for="piso">Piso y/o Depto</label>
-                        <input id="piso" type="text" name="pisoDepto" value="<%= body.pisoDepto || '' %>">
+                        <label for="floor-apartment">Piso y/o Depto</label>
+                        <input id="floor-apartment" type="text" name="floorApartment" value="<%= body.floorApartment || '' %>">
                     </div>
                     <div class="field">
-                        <label for="provincia">Provincia</label>
-                        <select id="provincia" name="provincia">
+                        <label for="province">Provincia</label>
+                        <select id="province" name="province">
                             <option value="">Seleccione una provincia</option>
                             <% provinces.forEach(prov => { %>
-                                <option value="<%= prov %>" <%= body.provincia === prov ? 'selected' : '' %>><%= prov %></option>
+                                <option value="<%= prov.id %>" <%= body.province == prov.id ? 'selected' : '' %>><%= prov.description %></option>
                             <% }) %>
                         </select>
                     </div>
                     <div class="field">
-                        <label for="codigoPostal">Código Postal</label>
-                        <input id="codigoPostal" type="number" name="codigoPostal" value="<%= body.codigoPostal || '' %>">
+                        <label for="postal-code">Código Postal</label>
+                        <input id="postal-code" type="number" name="postalCode" value="<%= body.postalCode || '' %>">
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <a href="/shipments" class="btn-secondary">Cancelar</a>
+                    <a href="/shipment" class="btn-secondary">Cancelar</a>
                     <button type="submit" class="btn-primary">Guardar envío</button>
                 </div>
             </form>

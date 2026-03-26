@@ -31,7 +31,7 @@
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-semibold);
     text-decoration: none;
-    border: none;
+    border: 1.5px solid transparent;
     cursor: pointer;
     transition: background-color var(--transition), transform var(--transition);
 }
@@ -183,8 +183,8 @@
 .quick-btn {
     width: 100%;
     justify-content: center;
-    padding: 0.85rem 1rem;
-    font-size: var(--font-size-base);
+    padding: 0.6rem 1rem;
+    font-size: var(--font-size-sm);
 }
 
 /* ===== ÚLTIMA ACTIVIDAD ===== */
