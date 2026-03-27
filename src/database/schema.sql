@@ -101,3 +101,25 @@ ALTER TABLE "logitrack"."shipment"
 ALTER TABLE "logitrack"."shipment"
     ADD CONSTRAINT "fk_shipment_addressId_address_id"
     FOREIGN KEY ("addressId") REFERENCES "logitrack"."address" ("id");
+
+CREATE TABLE "logitrack"."shipment_history" (
+    "id"           SERIAL,
+    "shipmentId"   int       NOT NULL,
+    "fromStatusId" int,
+    "toStatusId"   int       NOT NULL,
+    "comment"      text,
+    "changedAt"    timestamp NOT NULL,
+    PRIMARY KEY ("id")
+);
+
+ALTER TABLE "logitrack"."shipment_history"
+    ADD CONSTRAINT "fk_history_shipmentId"
+    FOREIGN KEY ("shipmentId") REFERENCES "logitrack"."shipment" ("id");
+
+ALTER TABLE "logitrack"."shipment_history"
+    ADD CONSTRAINT "fk_history_fromStatusId"
+    FOREIGN KEY ("fromStatusId") REFERENCES "logitrack"."status" ("id");
+
+ALTER TABLE "logitrack"."shipment_history"
+    ADD CONSTRAINT "fk_history_toStatusId"
+    FOREIGN KEY ("toStatusId") REFERENCES "logitrack"."status" ("id");
