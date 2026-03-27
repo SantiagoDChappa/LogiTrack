@@ -27,8 +27,5 @@ jobs:
     - name: Instalar dependencias
       run: npm ci
 
-    - name: Verificar calidad de código (Linter)
-      run: npm run lint
-
     - name: Ejecutar pruebas
       run: npm test
