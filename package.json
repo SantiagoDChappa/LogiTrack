@@ -21,7 +21,8 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "db:setup": "node src/database/setup.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -43,7 +44,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "eslint": "^9.39.4"
   },
   "engines": {
     "node": ">=18.0.0"
