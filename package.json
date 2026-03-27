@@ -21,7 +21,8 @@
     "start": "node app.js",
     "dev": "nodemon app.js",
     "db:setup": "node src/database/setup.js",
-    "test": "jest --forceExit --detectOpenHandles"
+    "test": "jest --forceExit --detectOpenHandles",
+    "lint": "eslint ."
   },
   "jest": {
     "testEnvironment": "node",
@@ -51,7 +52,8 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.14",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.0",
+    "eslint": "^9.39.4"
   },
   "engines": {
     "node": ">=18.0.0"
