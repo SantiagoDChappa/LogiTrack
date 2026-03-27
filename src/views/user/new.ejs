@@ -6,7 +6,42 @@
 </head>
 <%- include('../partials/header') %>
 <body>
-
+<main class="main-content">
+        <div class="page-header">
+            <h1>Alta de usuario</h1>
+        </div>
+        <div class="form-new">
+            <form action="" method="post">
+                <div class="user">
+                    <h3>Usuario</h3>
+                    <div class="field">
+                        <label for="user-name">Nombre y Apellido</label>
+                        <input id="user-name" type="text" name="userName" value="<%= body.userName || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="user-email">Email</label>
+                        <input id="user-email" type="email" name="userEmail" value="<%= body.userEmail || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="user-email">Contraseña</label>
+                        <input id="user-email" type="password" name="userEmail" value="<%= body.userEmail || '' %>">
+                    </div>
+                     <div class="field">
+                        <label for="user-document">Documento</label>
+                        <input id="user-document" type="text" name="userDocument" value="<%= body.userDocument || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="user-phone">Teléfono</label>
+                        <input id="user-phone" type="tel" name="userPhone" maxlength="10" value="<%= body.userPhone || '' %>">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <a href="/shipment" class="btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn-primary">Guardar envío</button>
+                </div>
+            </form>
+        </div>
+    </main>
 </body>
 <script src="/js/theme.js" defer></script>
 <script src="/js/ui.js" defer></script>
