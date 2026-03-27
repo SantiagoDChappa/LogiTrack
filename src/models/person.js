@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Op } = require('sequelize');
 const sequelize = require('../database/connection');
 
 // Defino la tabla persona
@@ -19,7 +19,7 @@ const Person = sequelize.define('person', {
 
 const getAll = async () => {
     return await Person.findAll();
-}
+};
 
 const create = async (data) => {
     return await Person.create({
@@ -28,19 +28,19 @@ const create = async (data) => {
         phone:        data.phone,
         email:        data.email,
         personTypeId: data.personTypeId
-    })
-}
+    });
+};
 
 const search = async ({ senderName, senderDocument, recipientName, recipientDocument }) => {
-    const where = {}
+    const where = {};
 
-    if (senderName)    where.fullName    = { [Op.iLike]: `%${senderName}%` }
-    if (senderDocument) where.document = senderDocument
-    if (recipientName)    where.fullName    = { [Op.iLike]: `%${recipientName}%` }
-    if (recipientDocument) where.document = recipientDocument
+    if (senderName)    where.fullName    = { [Op.iLike]: `%${senderName}%` };
+    if (senderDocument) where.document = senderDocument;
+    if (recipientName)    where.fullName    = { [Op.iLike]: `%${recipientName}%` };
+    if (recipientDocument) where.document = recipientDocument;
 
-    return await Person.findAll({ where })
-}
+    return await Person.findAll({ where });
+};
 
 
-module.exports = { Person, getAll, create, search }
+module.exports = { Person, getAll, create, search };
