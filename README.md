@@ -1,74 +1,32 @@
 # LogiTrack
 
-Sistema de gestión de envíos enfocado en la automatización y agilización del proceso logístico.
+## Visión
+
+LogiTrack es un sistema de gestión de envíos orientado al registro y seguimiento de paquetes dentro de una organización. El sistema busca centralizar la información relacionada con los envíos y su estado a lo largo del proceso de distribución, permitiendo mejorar la visibilidad y el control sobre cada envío desde su registro hasta su entrega. Además, el proyecto contempla el desarrollo de un prototipo de Machine Learning que permita analizar datos logísticos a partir de un dataset y evaluar su desempeño mediante métricas de precisión.
 
 ---
 
-## Tecnologías utilizadas
+## ¿Qué es LogiTrack?
 
-| Tecnología | Rol |
-|---|---|
-| Node.js + Express | Servidor web y routing |
-| EJS | Motor de plantillas para las vistas |
-| express-validator | Validación de formularios server-side |
-| uuid | Generación de IDs únicos por envío |
-| bcryptjs + jsonwebtoken | Base para autenticación (en desarrollo) |
-| helmet + cors | Seguridad HTTP |
-| morgan | Logging de requests |
-| SweetAlert2 | Alertas y feedback visual al usuario |
-| nodemon | Reinicio automático en desarrollo |
-| JSON files | Persistencia de datos (shipments.json, provinces.json) |
+LogiTrack es una aplicación web que permite a los operadores logísticos registrar, consultar y hacer seguimiento de envíos en tiempo real. Desde el momento en que se registra un paquete hasta su entrega final, el sistema mantiene un historial completo del estado de cada envío.
 
 ---
 
-## Arquitectura
+## ¿Para qué sirve?
 
-El proyecto sigue el patrón **MVC**:
-
-```
-src/
-├── controllers/     # Lógica de negocio y manejo de requests
-├── models/          # Acceso y persistencia de datos (JSON)
-├── middlewares/     # Validaciones de formularios
-├── routes/          # Definición de rutas Express
-├── views/           # Plantillas EJS
-│   ├── partials/    # Componentes reutilizables (head, header)
-│   └── shipment/    # Vistas del módulo de envíos
-└── data/            # Archivos JSON de datos
-    ├── shipments.json
-    └── provinces.json
-```
+- **Registrar envíos** con los datos del remitente, destinatario y dirección de entrega, obteniendo un código de seguimiento único (Tracking ID).
+- **Consultar el estado** de cualquier envío en cualquier momento, desde *Pendiente* hasta *Entregado*.
+- **Buscar envíos** por Tracking ID, nombre o documento del remitente o destinatario.
+- **Actualizar el estado** de un envío a medida que avanza en el proceso de distribución, dejando registro de cada cambio.
+- **Visualizar un dashboard** con un resumen general de los envíos activos, entregas del día y alertas.
 
 ---
 
-## Instalación y ejecución
+## ¿Cómo ingresar?
 
-```bash
-npm install
-npm start
-```
+El sistema está disponible en línea, sin necesidad de instalar nada. Ingresá desde cualquier navegador web a través del siguiente enlace:
 
-El servidor inicia con `nodemon` y escucha en el puerto configurado.
-
----
-
-## Funcionalidades implementadas
-
-### Alta de envío (SCRUM-80)
-- Formulario para registrar un nuevo envío con datos de remitente, destinatario y dirección de entrega.
-- Selector de provincia cargado dinámicamente desde `provinces.json`.
-- Validaciones server-side con `express-validator`:
-  - Campos obligatorios (nombre, email, teléfono, documento, calle, número, provincia, código postal).
-  - Formato de email válido.
-  - Control de duplicados: no se permite crear un envío si ya existe uno con el mismo documento de remitente o destinatario.
-- Feedback visual de errores mediante SweetAlert2.
-- Persistencia del envío en `shipments.json` con UUID autogenerado y estado inicial `Pendiente`.
-
-### Listado y búsqueda de envíos (SCRUM-91 / US-07)
-- Tabla con todos los envíos registrados (Tracking ID, Destinatario, Estado).
-- Buscador con filtro por **Tracking ID** y/o **Destinatario** mediante checkboxes.
-- Búsqueda case-insensitive con substring matching.
-- Si no hay resultados, se muestra el mensaje "No se encontraron resultados".
+**`[URL del sistema — completar cuando esté disponible]`**
 
 ---
 
