@@ -3,46 +3,264 @@
 <head>
     <%- include('../partials/head') %>
     <title>Nuevo Usuario - LogiTrack</title>
+    <link rel="stylesheet" href="/css/shipments.css">
+    <style>
+        .password-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .password-input-row {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-input-row input {
+            width: 100%;
+            padding-right: 2.75rem !important;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+            padding: 0;
+            transition: color var(--transition);
+        }
+
+        .toggle-password:hover {
+            color: var(--color-text);
+        }
+
+        .toggle-password .material-symbols-outlined {
+            font-size: 1.1rem;
+        }
+
+        /* Barra de fortaleza */
+        .strength-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .strength-segments {
+            display: flex;
+            gap: 4px;
+        }
+
+        .strength-segment {
+            flex: 1;
+            height: 4px;
+            border-radius: 99px;
+            background-color: var(--color-border);
+            transition: background-color 0.3s ease;
+        }
+
+        .strength-label {
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-secondary);
+            transition: color 0.3s ease;
+            min-height: 1em;
+        }
+
+        /* niveles */
+        .strength-1 .strength-segment:nth-child(1)                    { background-color: #dc2626; }
+        .strength-2 .strength-segment:nth-child(1),
+        .strength-2 .strength-segment:nth-child(2)                    { background-color: #d97706; }
+        .strength-3 .strength-segment:nth-child(1),
+        .strength-3 .strength-segment:nth-child(2),
+        .strength-3 .strength-segment:nth-child(3)                    { background-color: #16a34a; }
+
+        .strength-1 .strength-label { color: #dc2626; }
+        .strength-2 .strength-label { color: #d97706; }
+        .strength-3 .strength-label { color: #16a34a; }
+
+        /* Reglas */
+        .password-rules {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-top: 0.15rem;
+        }
+
+        .rule {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: var(--font-size-xs);
+            color: var(--color-text-secondary);
+            transition: color 0.2s ease;
+        }
+
+        .rule .material-symbols-outlined {
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .rule.ok {
+            color: #16a34a;
+        }
+
+        .rule.ok .material-symbols-outlined {
+            color: #16a34a;
+        }
+    </style>
 </head>
-<%- include('../partials/header') %>
 <body>
-<main class="main-content">
+    <%- include('../partials/header') %>
+    <main class="main-content">
         <div class="page-header">
             <h1>Alta de usuario</h1>
         </div>
         <div class="form-new">
-            <form action="" method="post">
-                <div class="user">
+            <form action="/user/new" method="POST">
+                <div class="usuario">
                     <h3>Usuario</h3>
                     <div class="field">
-                        <label for="user-name">Nombre y Apellido</label>
-                        <input id="user-name" type="text" name="userName" value="<%= body.userName || '' %>">
+                        <label for="fullName">Nombre y Apellido</label>
+                        <input id="fullName" type="text" name="fullName" value="<%= body.fullName || '' %>">
                     </div>
                     <div class="field">
-                        <label for="user-email">Email</label>
-                        <input id="user-email" type="email" name="userEmail" value="<%= body.userEmail || '' %>">
+                        <label for="document">Documento</label>
+                        <input id="document" type="number" name="document" value="<%= body.document || '' %>">
                     </div>
                     <div class="field">
-                        <label for="user-email">Contraseña</label>
-                        <input id="user-email" type="password" name="userEmail" value="<%= body.userEmail || '' %>">
+                        <label for="email">Email</label>
+                        <input id="email" type="email" name="email" value="<%= body.email || '' %>">
                     </div>
-                     <div class="field">
-                        <label for="user-document">Documento</label>
-                        <input id="user-document" type="text" name="userDocument" value="<%= body.userDocument || '' %>">
-                    </div>
+
                     <div class="field">
-                        <label for="user-phone">Teléfono</label>
-                        <input id="user-phone" type="tel" name="userPhone" maxlength="10" value="<%= body.userPhone || '' %>">
+                        <label for="password">Contraseña</label>
+                        <div class="password-wrapper">
+                            <div class="password-input-row">
+                                <input id="password" type="password" name="password" autocomplete="new-password">
+                                <button type="button" class="toggle-password" id="togglePassword" tabindex="-1">
+                                    <span class="material-symbols-outlined" id="toggleIcon">visibility</span>
+                                </button>
+                            </div>
+
+                            <div class="strength-bar-wrapper" id="strengthBar">
+                                <div class="strength-segments" id="strengthSegments">
+                                    <div class="strength-segment"></div>
+                                    <div class="strength-segment"></div>
+                                    <div class="strength-segment"></div>
+                                </div>
+                                <span class="strength-label" id="strengthLabel"></span>
+                            </div>
+
+                            <div class="password-rules" id="passwordRules">
+                                <div class="rule" id="rule-length">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                    Mínimo 10 caracteres
+                                </div>
+                                <div class="rule" id="rule-upper">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                    Al menos una mayúscula
+                                </div>
+                                <div class="rule" id="rule-number">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                    Al menos un número
+                                </div>
+                                <div class="rule" id="rule-symbol">
+                                    <span class="material-symbols-outlined">cancel</span>
+                                    Al menos un símbolo (!@#$%...)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label for="roleId">Rol</label>
+                        <select id="roleId" name="roleId">
+                            <option value="">Seleccione un rol</option>
+                            <% roleTypes.forEach(role => { %>
+                                <option value="<%= role.id %>" <%= body.roleId == role.id ? 'selected' : '' %>>
+                                    <%= role.description %>
+                                </option>
+                            <% }); %>
+                        </select>
                     </div>
                 </div>
+
                 <div class="form-actions">
-                    <a href="/shipment" class="btn-secondary">Cancelar</a>
-                    <button type="submit" class="btn-primary">Guardar envío</button>
+                    <a href="/user" class="btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn-primary">Guardar usuario</button>
                 </div>
             </form>
         </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>const serverErrors = <%- JSON.stringify(errors) %>;</script>
+    <script src="/js/new_shipment_popup.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
+    <script>
+        const passwordInput  = document.getElementById('password');
+        const toggleBtn      = document.getElementById('togglePassword');
+        const toggleIcon     = document.getElementById('toggleIcon');
+        const strengthBar    = document.getElementById('strengthBar');
+        const strengthSegs   = document.getElementById('strengthSegments');
+        const strengthLabel  = document.getElementById('strengthLabel');
+        const rulesContainer = document.getElementById('passwordRules');
+
+        const rules = {
+            length: { el: document.getElementById('rule-length'), test: v => v.length >= 10 },
+            upper:  { el: document.getElementById('rule-upper'),  test: v => /[A-Z]/.test(v) },
+            number: { el: document.getElementById('rule-number'), test: v => /[0-9]/.test(v) },
+            symbol: { el: document.getElementById('rule-symbol'), test: v => /[^A-Za-z0-9]/.test(v) },
+        };
+
+        const levels = [
+            { label: '',           cls: ''          },
+            { label: 'Insegura',   cls: 'strength-1' },
+            { label: 'Segura',     cls: 'strength-2' },
+            { label: 'Muy segura', cls: 'strength-3' },
+        ];
+
+        function updateRule(key, value) {
+            const { el, test } = rules[key];
+            const ok = test(value);
+            el.classList.toggle('ok', ok);
+            el.querySelector('.material-symbols-outlined').textContent = ok ? 'check_circle' : 'cancel';
+        }
+
+        function updateStrength(passed) {
+            strengthSegs.className = 'strength-segments';
+            if (passed === 0) {
+                strengthLabel.textContent = '';
+                return;
+            }
+            const lvl = passed <= 1 ? 1 : passed <= 3 ? 2 : 3;
+            strengthSegs.classList.add(levels[lvl].cls);
+            strengthLabel.textContent  = levels[lvl].label;
+            strengthLabel.className    = `strength-label ${levels[lvl].cls}`;
+        }
+
+        passwordInput.addEventListener('input', () => {
+            const val = passwordInput.value;
+
+            let passed = 0;
+            for (const key of Object.keys(rules)) {
+                updateRule(key, val);
+                if (rules[key].test(val)) passed++;
+            }
+            updateStrength(passed);
+        });
+
+        toggleBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.type === 'password';
+            passwordInput.type    = isPassword ? 'text' : 'password';
+            toggleIcon.textContent = isPassword ? 'visibility_off' : 'visibility';
+        });
+    </script>
 </body>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
