@@ -2,12 +2,98 @@
 <html lang="es">
 <head>
     <%- include('../partials/head') %>
+    <link rel="stylesheet" href="/css/shipments.css">
     <title>Nuevo Envío - LogiTrack</title>
 </head>
-<%- include('../partials/header') %>
 <body>
+    <%- include('../partials/header') %>
+     <main class="main-content">
+        <div class="page-header">
+            <h1>Alta de envio</h1>
+        </div>
+        <div class="form-new">
+            <form action="" method="post">
+                <div class="remitente">
+                    <h3>Remitente</h3>
+                    <div class="field">
+                        <label for="sender-name">Nombre y Apellido</label>
+                        <input id="sender-name" type="text" name="senderName" value="<%= body.senderName || '' %>">
+                    </div>
+                     <div class="field">
+                        <label for="sender-document">Documento</label>
+                        <input id="sender-document" type="text" name="senderDocument" value="<%= body.senderDocument || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="sender-phone">Teléfono</label>
+                        <input id="sender-phone" type="tel" name="senderPhone" maxlength="10" value="<%= body.senderPhone || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="sender-email">Email</label>
+                        <input id="sender-email" type="email" name="senderEmail" value="<%= body.senderEmail || '' %>">
+                    </div>
+                </div>
 
+                <div class="destinatario">
+                    <h3>Destinatario</h3>
+                    <div class="field">
+                        <label for="recipient-name">Nombre y Apellido</label>
+                        <input id="recipient-name" type="text" name="recipientName" value="<%= body.recipientName || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="recipient-document">Documento</label>
+                        <input id="recipient-document" type="text" name="recipientDocument" value="<%= body.recipientDocument || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="recipient-phone">Teléfono</label>
+                        <input id="recipient-phone" type="tel" name="recipientPhone" maxlength="10" value="<%= body.recipientPhone || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="recipient-email">Email</label>
+                        <input id="recipient-email" type="email" name="recipientEmail" value="<%= body.recipientEmail || '' %>">
+                    </div>
+                </div>
+
+                <div class="direccion">
+                    <h3>Dirección de entrega</h3>
+                    <div class="field">
+                        <label for="street">Calle</label>
+                        <input id="street" type="text" name="street" value="<%= body.street || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="number">Número</label>
+                        <input id="number" type="number" name="number" value="<%= body.number || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="floor-apartment">Piso y/o Depto</label>
+                        <input id="floor-apartment" type="text" name="floorApartment" value="<%= body.floorApartment || '' %>">
+                    </div>
+                    <div class="field">
+                        <label for="province">Provincia</label>
+                        <select id="province" name="province">
+                            <option value="">Seleccione una provincia</option>
+                            <% provinces.forEach(prov => { %>
+                                <option value="<%= prov.id %>" <%= body.province == prov.id ? 'selected' : '' %>><%= prov.description %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="postal-code">Código Postal</label>
+                        <input id="postal-code" type="number" name="postalCode" value="<%= body.postalCode || '' %>">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/shipment" class="btn-secondary">Cancelar</a>
+                    <button type="submit" class="btn-primary">Guardar envío</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>const serverErrors = <%- JSON.stringify(errors) %>;</script>
+    <script src="/js/new_shipment_popup.js" defer></script>
+    <script src="/js/theme.js" defer></script>
+    <script src="/js/ui.js" defer></script>
 </body>
-<script src="/js/theme.js" defer></script>
-<script src="/js/ui.js" defer></script>
 </html>
