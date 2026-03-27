@@ -111,4 +111,26 @@ const deleteById = async (id) => {
     })
 }
 
-module.exports = { Shipment, getAll, getById, create, deleteById, search }
+const existsByDocument = async (document) => {
+    if (!document) return false;
+
+    const person = await Person.findOne({ where: { document } });
+    if (!person) return false;
+
+    const result = await Shipment.findOne({
+        where: {
+            [Op.or]: [
+                { senderId:    person.id },
+                { recipientId: person.id },
+            ]
+        }
+    });
+    return result !== null;
+}
+
+
+const updateStatus = async (id, newStatusId) => {
+    return await Shipment.update({ statusId: newStatusId }, { where: { id } });
+}
+
+module.exports = { Shipment, getAll, getById, create, deleteById, search, existsByDocument, updateStatus }
