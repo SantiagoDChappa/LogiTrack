@@ -1,0 +1,34 @@
+name: LogiTrack - CI (Integración Continua)
+
+on:
+  push:
+    branches: [ "develop", "trunk" ]
+  pull_request:
+    branches: [ "develop", "trunk" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Instalar dependencias
+      run: npm ci
+
+    - name: Verificar calidad de código (Linter)
+      run: npm run lint
+
+    - name: Ejecutar pruebas
+      run: npm test
