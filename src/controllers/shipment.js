@@ -89,6 +89,7 @@ const getUpdateShipment = async (req, res) => {
 const updateShipment = async (req, res) => {
   try {
     const body = req.body;
+    console.log("BODY:" + body)
     //Creo el envio
     await shipmentModel.update({ senderId: sender.id, recipientId: recipient.id, addressId: address.id })
     
