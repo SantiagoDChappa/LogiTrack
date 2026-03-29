@@ -9,6 +9,6 @@ const Status = sequelize.define('status', {
 
 const getAll = async () => {
     return await Status.findAll({ order: [['id', 'ASC']] });
-}
+};
 
-module.exports = { Status, getAll }
+module.exports = { Status, getAll };
