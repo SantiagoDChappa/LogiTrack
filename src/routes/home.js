@@ -4,4 +4,4 @@ const { getIndex, getLogin } = require('../controllers/home.js');
 
 router.get('/login', getLogin)
 
-module.exports = router
+module.exports = router;
