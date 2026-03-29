@@ -22,7 +22,7 @@ const create = async (data) => {
         provinceId:     data.provinceId,
         postalCode:     data.postalCode,
         floorApartment: data.floorApartment
-    });
-};
+    })
+}
 
-module.exports = { Address, create };
+module.exports = { Address, create }
