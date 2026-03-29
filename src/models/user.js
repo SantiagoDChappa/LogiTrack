@@ -48,6 +48,18 @@ const deleteById = async (id) => {
     return await User.destroy({ where: { id } });
 }
 
+const update = async (data) => {
+    return await User.update(
+        {
+            fullName: data.fullName,
+            email:    data.email,
+            document: data.document,
+            roleId:   data.roleId
+        },
+        { where: { id: data.id } }
+    );
+}
+
 const existsByDocument = async (document) => {
     const result = await User.findOne({
         where: { document: document }
@@ -65,4 +77,4 @@ const existsByEmail = async (email) => {
 }
 
 
-module.exports = { User, getAll, getById, create, deleteById, search, existsByDocument, existsByEmail }
+module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail }
