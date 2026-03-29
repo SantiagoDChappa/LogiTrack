@@ -69,4 +69,15 @@ const createShipment = async (req, res) => {
   }
 }
 
-module.exports = { home, getDetail, getNewShipmentForm, createShipment, searchShipments }
+const deleteShipment = async (req, res) => {
+  try {
+    const { id } = req.params
+    await shipmentModel.deleteById(id)
+    res.redirect('/shipment?success=3')
+  } catch (err) {
+    console.error('ERROR eliminar envio:', err.message)
+    res.status(500).send(err.message)
+  }
+}
+
+module.exports = { home, getDetail, getNewShipmentForm, createShipment, deleteShipment, searchShipments }
