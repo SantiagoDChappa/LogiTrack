@@ -35,13 +35,14 @@ const getDetail = async (req, res) => {
 }
 
 const getNewShipmentForm = async (req, res) => {
-    const provinces = await provinceModel.getAll()
+    const provinces = await provinceModel.getAll()    
     res.render('shipment/new', { errors: [], body: {}, provinces })
 }
 
 const createShipment = async (req, res) => {
   try {
-    const body = req.body
+    const body = req.body;
+    //Creo el remitente
     const sender = await personModel.create({
         name:         body.senderName,
         document:     body.senderDocument,
@@ -49,6 +50,8 @@ const createShipment = async (req, res) => {
         email:        body.senderEmail,
         personTypeId: PersonType.SENDER.id
     })
+
+    //Creo el destinatario
     const recipient = await personModel.create({
         name:         body.recipientName,
         document:     body.recipientDocument,
@@ -56,6 +59,7 @@ const createShipment = async (req, res) => {
         email:        body.recipientEmail,
         personTypeId: PersonType.RECIPIENT.id
     })
+    //Creo la direccion del envio
     const address = await addressModel.create({
         street:         body.street,
         number:         body.number,
@@ -63,21 +67,13 @@ const createShipment = async (req, res) => {
         postalCode:     body.postalCode,
         floorApartment: body.floorApartment
     })
+
+    //Creo el envio
     await shipmentModel.create({ senderId: sender.id, recipientId: recipient.id, addressId: address.id })
+    
     res.redirect('/shipment?success=1')
   } catch (err) {
     console.error('ERROR createShipment:', err.message)
-    res.status(500).send(err.message)
-  }
-}
-
-const deleteShipment = async (req, res) => {
-  try {
-    const { id } = req.params
-    await shipmentModel.deleteById(id)
-    res.redirect('/shipment?success=3')
-  } catch (err) {
-    console.error('ERROR eliminar envio:', err.message)
     res.status(500).send(err.message)
   }
 }
@@ -93,11 +89,26 @@ const getUpdateShipment = async (req, res) => {
 
 const updateShipment = async (req, res) => {
   try {
-    const body = req.body
-    await shipmentModel.update(body)
+    const body = req.body;
+    console.log("BODY:" + body)
+    //Creo el envio
+    await shipmentModel.update({ senderId: sender.id, recipientId: recipient.id, addressId: address.id })
+    
     res.redirect('/shipment?success=2')
   } catch (err) {
     console.error('ERROR updateShipment:', err.message)
+    res.status(500).send(err.message)
+  }
+}
+
+const deleteShipment = async (req, res) => {
+  try {
+    const { id } = req.params
+    await shipmentModel.deleteById(id)
+    
+    res.redirect('/shipment?success=3')
+  } catch (err) {
+    console.error('ERROR eliminar envio:', err.message)
     res.status(500).send(err.message)
   }
 }
@@ -113,9 +124,10 @@ const updateShipmentStatus = async (req, res) => {
         fromStatusId: shipment.statusId,
         toStatusId:   Number(newStatusId),
         comment:      comment || null
-    })
+    });
 
-    await shipmentModel.updateStatus(id, Number(newStatusId))
+    await shipmentModel.updateStatus(id, Number(newStatusId));
+
     res.redirect(`/shipment/update/${id}`)
   } catch (err) {
     console.error('ERROR updateShipmentStatus:', err.message)
@@ -123,4 +135,4 @@ const updateShipmentStatus = async (req, res) => {
   }
 }
 
-module.exports = { home, getDetail, getNewShipmentForm, createShipment, getUpdateShipment, updateShipment, updateShipmentStatus, deleteShipment, searchShipments }
+module.exports = { home, getDetail, getNewShipmentForm, getUpdateShipment, createShipment, updateShipment, updateShipmentStatus, deleteShipment, searchShipments }
