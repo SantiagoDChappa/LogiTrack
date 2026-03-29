@@ -48,6 +48,18 @@ const deleteById = async (id) => {
     return await User.destroy({ where: { id } });
 }
 
+const update = async (data) => {
+    return await User.update(
+        {
+            fullName: data.fullName,
+            email:    data.email,
+            document: data.document,
+            roleId:   data.roleId
+        },
+        { where: { id: data.id } }
+    );
+}
+
 const existsByDocument = async (document) => {
     const result = await User.findOne({
         where: { document: document }
@@ -56,7 +68,6 @@ const existsByDocument = async (document) => {
     return result !== null;
 }
 
-
 const existsByEmail = async (email) => {
     const result = await User.findOne({
         where: { email: email }
@@ -64,5 +75,19 @@ const existsByEmail = async (email) => {
     return result !== null;
 }
 
+const existsByDocumentExcluding = async (document, excludeId) => {
+    const result = await User.findOne({
+        where: { document: document, id: { [Op.ne]: excludeId } }
+    });
+    return result !== null;
+}
 
-module.exports = { User, getAll, getById, create, deleteById, search, existsByDocument, existsByEmail }
+const existsByEmailExcluding = async (email, excludeId) => {
+    const result = await User.findOne({
+        where: { email: email, id: { [Op.ne]: excludeId } }
+    });
+    return result !== null;
+}
+
+
+module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail, existsByDocumentExcluding, existsByEmailExcluding }
