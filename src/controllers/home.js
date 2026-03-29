@@ -1,4 +1,4 @@
-const shipmentModel = require('../models/shipment')
+const shipmentModel = require('../models/shipment');
 
 const getIndex = async (req, res) => {
     const shipments = await shipmentModel.getAll()
@@ -15,4 +15,4 @@ const getIndex = async (req, res) => {
     res.render('dashboard', { activeShipments, deliveriesToday, delayAlerts, newRecords, lastActivity })
 }
 
-module.exports = { getIndex }
+module.exports = { getIndex };
