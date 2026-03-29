@@ -36,4 +36,39 @@ const handleValidationErrors = async (req, res, next) => {
     next();
 };
 
-module.exports = { validateUser, handleValidationErrors };
+const validateUpdateUser = [
+    body('fullName').notEmpty().trim().withMessage('El nombre y apellido es obligatorio'),
+    body('email').isEmail().normalizeEmail().withMessage('El email es inválido'),
+    body('document').isInt({ min: 1000000 }).withMessage('El documento es inválido'),
+    body('roleId').notEmpty().withMessage('El rol es obligatorio'),
+];
+
+const handleUpdateValidationErrors = async (req, res, next) => {
+    const errors   = validationResult(req);
+    const { id }   = req.params;
+    const document = req.body.document;
+    const email    = req.body.email;
+
+    const errorsArray = errors.array();
+
+    if (!errorsArray.some(e => e.path === 'document') && await userModel.existsByDocumentExcluding(document, id)) {
+        errorsArray.push({ msg: 'Ya existe un usuario con ese documento' });
+    }
+
+    if (!errorsArray.some(e => e.path === 'email') && await userModel.existsByEmailExcluding(email, id)) {
+        errorsArray.push({ msg: 'Ya existe un usuario con ese correo electronico' });
+    }
+
+    if (errorsArray.length > 0) {
+        const user = { ...req.body, id };
+        return res.render('user/update', {
+            errors:   errorsArray,
+            user,
+            RoleType: require('../constants/enums').RoleType
+        });
+    }
+
+    next();
+};
+
+module.exports = { validateUser, handleValidationErrors, validateUpdateUser, handleUpdateValidationErrors };
