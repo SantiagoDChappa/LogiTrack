@@ -4,8 +4,8 @@ const app     = express();
 const port    = process.env.PORT || 3000;
 const sequelize = require('./src/database/connection');
 
-const homeRoutes = require('./src/routes/home')
-const shipmentRoutes = require('./src/routes/shipment')
+const homeRoutes = require('./src/routes/home');
+const shipmentRoutes = require('./src/routes/shipment');
 
 // Conecto la base de datos con el sistema
 sequelize.sync({ alter: true }) 
