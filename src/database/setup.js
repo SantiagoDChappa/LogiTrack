@@ -15,7 +15,7 @@ const runFile = async (filePath) => {
     const sql = fs.readFileSync(filePath, 'utf8');
     await sequelize.query(sql);
     console.log(`✓ ${path.basename(filePath)}`);
-};
+}
 
 const setup = async () => {
     try {
@@ -36,6 +36,6 @@ const setup = async () => {
     } finally {
         await sequelize.close();
     }
-};
+}
 
 setup();
