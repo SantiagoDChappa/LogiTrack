@@ -9,6 +9,6 @@ const Province = sequelize.define('province', {
 
 const getAll = async () => {
     return await Province.findAll();
-}
+};
 
-module.exports = { Province, getAll }
+module.exports = { Province, getAll };
