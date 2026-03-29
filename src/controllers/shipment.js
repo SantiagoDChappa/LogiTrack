@@ -5,8 +5,9 @@ const addressModel  = require('../models/address')
 const { PersonType } = require('../constants/enums')
 
 
-const home = (req, res) => {
-    res.render('shipment/index', { shipments: [], query: {} })
+const home = async (req, res) => {
+    const shipments = await shipmentModel.getAll()
+    res.render('shipment/index', { shipments, query: {} })
 }
 
 const searchShipments = async (req, res) => {
