@@ -20,6 +20,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
+    "db:setup": "node src/database/setup.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -34,6 +35,9 @@
     "jsonwebtoken": "^9.0.3",
     "lodash": "^4.17.23",
     "morgan": "^1.10.1",
+    "pg": "^8.20.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.8",
     "sweetalert2": "^11.26.24",
     "uuid": "^13.0.0"
   },
