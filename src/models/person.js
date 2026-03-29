@@ -42,4 +42,5 @@ const search = async ({ senderName, senderDocument, recipientName, recipientDocu
     return await Person.findAll({ where })
 }
 
+
 module.exports = { Person, getAll, create, search }

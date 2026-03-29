@@ -7,4 +7,8 @@ const Status = sequelize.define('status', {
 },
 { tableName: 'status', timestamps: false });
 
-module.exports = { Status }
+const getAll = async () => {
+    return await Status.findAll({ order: [['id', 'ASC']] });
+}
+
+module.exports = { Status, getAll }
