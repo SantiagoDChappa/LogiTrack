@@ -50,17 +50,17 @@ const getCreateUserForm = (req, res) => {
 }
 
 const getUpdateUser = async (req, res) => {
-  const { id }    = req.params
+  const { id } = req.params
   const user   = await userModel.getById(id)
-  res.render('user/update', { errors: [], user})
+  res.render('user/update', { errors: [], user, RoleType })
 }
 
 const updateUser = async (req, res) => {
   try {
-    const body = req.body;
-    //Creo el envio
-    await userModel.update({ body })
-    
+    const { id } = req.params
+    const body   = req.body;
+    await userModel.update({ id, ...body })
+
     res.redirect('/user?success=2')
   } catch (err) {
     console.error('ERROR updateUser:', err.message)
@@ -80,4 +80,4 @@ const deleteUser = async (req, res) => {
   }
 }
 
-module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, deleteUser }
+module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, getUpdateUser, updateUser, deleteUser }
