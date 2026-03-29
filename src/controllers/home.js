@@ -1,4 +1,4 @@
-const shipmentModel = require('../models/shipment')
+const shipmentModel = require('../models/shipment');
 
 const getIndex = async (req, res) => {
     const shipments = await shipmentModel.getAll()
