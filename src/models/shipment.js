@@ -123,8 +123,25 @@ const existsByDocument = async (document) => {
 };
 
 
+const update = async (data) => {
+    const shipment = await Shipment.findOne({ where: { id: data.id } });
+    if (!shipment) return null;
+
+    await Person.update(
+        { fullName: data.recipientName, document: data.recipientDocument, phone: data.recipientPhone, email: data.recipientEmail },
+        { where: { id: shipment.recipientId } }
+    );
+
+    await Address.update(
+        { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment },
+        { where: { id: shipment.addressId } }
+    );
+
+    return shipment;
+};
+
 const updateStatus = async (id, newStatusId) => {
     return await Shipment.update({ statusId: newStatusId }, { where: { id } });
 };
 
-module.exports = { Shipment, getAll, getById, create, search, existsByDocument, updateStatus };
+module.exports = { Shipment, getAll, getById, create, update, search, existsByDocument, updateStatus };
