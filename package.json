@@ -22,7 +22,8 @@
     "dev": "nodemon app.js",
     "db:setup": "node src/database/setup.js",
     "test": "jest --forceExit --detectOpenHandles",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "prepare": "husky"
   },
   "jest": {
     "testEnvironment": "node",
@@ -32,6 +33,7 @@
     "clearMocks": true
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -50,12 +52,17 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "eslint": "^9.39.4",
+    "husky": "^9.1.7",
     "jest": "^29.7.0",
+    "lint-staged": "^16.4.0",
     "nodemon": "^3.1.14",
-    "supertest": "^7.1.0",
-    "eslint": "^9.39.4"
+    "supertest": "^7.1.0"
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "lint-staged": {
+    "*.js": "eslint --fix"
   }
 }
