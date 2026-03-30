@@ -69,4 +69,5 @@ const updateUser = async (req, res) => {
   }
 };
 
+
 module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, getUpdateUser, updateUser };
