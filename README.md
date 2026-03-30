@@ -20,11 +20,7 @@ LogiTrack es una aplicación web que permite a los operadores logísticos regist
 - **Actualizar el estado** de un envío a medida que avanza en el proceso de distribución, dejando registro de cada cambio.
 - **Visualizar un dashboard** con un resumen general de los envíos activos, entregas del día y alertas.
 
-### Alta de envío
-- Formulario con datos de remitente, destinatario y dirección de entrega.
-- Selector de provincia cargado desde la base de datos.
-- Validaciones server-side con `express-validator`.
-- Feedback visual mediante SweetAlert2.
+---
 
 ## ¿Cómo ingresar?
 
