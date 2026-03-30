@@ -41,3 +41,5 @@ app.use('/api-docs',  requireAuth, swaggerUi.serve, swaggerUi.setup(swaggerSpec)
 app.listen(port, () => {
     console.log(`LogiTrack running at http://localhost:${port}`);
 });
+
+module.exports = app;
