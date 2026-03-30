@@ -6,7 +6,6 @@ const sequelize = require('./src/database/connection');
 
 const homeRoutes = require('./src/routes/home')
 const shipmentRoutes = require('./src/routes/shipment')
-const userRoutes = require('./src/routes/user')
 
 // Conecto la base de datos con el sistema
 sequelize.sync({ alter: true }) 
