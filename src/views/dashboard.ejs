@@ -16,7 +16,7 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <span class="stat-label">Envíos Activos</span>
-                        <span class="stat-value"><%= enviosActivos %></span>
+                        <span class="stat-value"><%= activeShipments %></span>
                     </div>
                     <div class="stat-icon icon-blue">
                         <span class="material-symbols-outlined">local_shipping</span>
@@ -25,7 +25,7 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <span class="stat-label">Entregas Hoy</span>
-                        <span class="stat-value"><%= entregasHoy %></span>
+                        <span class="stat-value"><%= deliveriesToday %></span>
                     </div>
                     <div class="stat-icon icon-green">
                         <span class="material-symbols-outlined">inventory_2</span>
@@ -34,7 +34,7 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <span class="stat-label">Alertas de Demora</span>
-                        <span class="stat-value"><%= alertasDemora %></span>
+                        <span class="stat-value"><%= delayAlerts %></span>
                     </div>
                     <div class="stat-icon icon-orange">
                         <span class="material-symbols-outlined">warning</span>
@@ -43,7 +43,7 @@
                 <div class="stat-card">
                     <div class="stat-info">
                         <span class="stat-label">Registros Nuevos</span>
-                        <span class="stat-value"><%= registrosNuevos %></span>
+                        <span class="stat-value"><%= newRecords %></span>
                     </div>
                     <div class="stat-icon icon-teal">
                         <span class="material-symbols-outlined">note_add</span>
@@ -54,11 +54,11 @@
                 <div class="card acceso-rapido">
                     <h2>Acceso Rápido</h2>
                     <div class="quick-actions">
-                        <a href="/shipments/new" class="btn-primary quick-btn">
+                        <a href="/shipment/new" class="btn-primary quick-btn">
                             <span class="material-symbols-outlined">add_box</span>
                             Crear Nuevo Envío
                         </a>
-                        <a href="/shipments" class="btn-outline quick-btn">
+                        <a href="/shipment" class="btn-outline quick-btn">
                             <span class="material-symbols-outlined">search</span>
                             Buscar Envío por ID/DNI
                         </a>
@@ -76,27 +76,27 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (ultimaActividad.length === 0) { %>
+                            <% if (lastActivity.length === 0) { %>
                                 <tr>
                                     <td colspan="4" class="empty-row">Sin actividad reciente</td>
                                 </tr>
                             <% } else { %>
-                                <% ultimaActividad.forEach(s => { %>
+                                <% lastActivity.forEach(s => { %>
                                     <tr>
-                                        <td class="tracking-id"><%= s.id.substring(0, 8) %>...</td>
+                                        <td class="tracking-id"><%= s.trackingId %></td>
                                         <td>
-                                            <span class="dest-nombre"><%= s.destinatario.nombre %></span>
-                                            <span class="dest-dni">DNI: <%= s.destinatario.documento %></span>
+                                            <span class="dest-nombre"><%= s.recipient.fullName %></span>
+                                            <span class="dest-dni">DNI: <%= s.recipient.document %></span>
                                         </td>
                                         <td>
-                                            <% const _sk = s.estado.toLowerCase().replace(/[\s-]+/g, '_'); %>
+                                            <% const _sk = s.status.description.toLowerCase().replace(/[\s-]+/g, '_'); %>
                                             <% const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'}; %>
                                             <span class="status-badge <%= _sk %>">
-                                                <%= _sl[_sk] || s.estado %>
+                                                <%= _sl[_sk] || s.status.description %>
                                             </span>
                                         </td>
                                         <td>
-                                            <a href="/shipments/detail?id=<%= s.id %>" class="btn-ver-detalle">Ver Detalle</a>
+                                            <a href="/shipment/detail/<%= s.id %>" class="btn-ver-detalle">Ver Detalle</a>
                                         </td>
                                     </tr>
                                 <% }) %>

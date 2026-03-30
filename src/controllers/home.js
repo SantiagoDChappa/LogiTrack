@@ -1,18 +1,18 @@
-const shipmentModel = require('../models/shipment')
+const shipmentModel = require('../models/shipment');
 
-const getIndex = (req, res) => {
-    const shipments = shipmentModel.getAll()
+const getIndex = async (req, res) => {
+    const shipments = await shipmentModel.getAll();
 
-    const normalizeStatus = (s) => s.estado.toLowerCase().replace(/\s/g, '_')
+    const normalizeStatus = (s) => s.status.description.toLowerCase().replace(/[\s-]+/g, '_');
 
-    const enviosActivos   = shipments.filter(s => normalizeStatus(s) === 'en_transito').length
-    const entregasHoy     = shipments.filter(s => normalizeStatus(s) === 'entregado').length
-    const alertasDemora   = shipments.filter(s => normalizeStatus(s) === 'retrasado').length
-    const registrosNuevos = shipments.length
+    const activeShipments  = shipments.filter(s => normalizeStatus(s) === 'en_transito').length;
+    const deliveriesToday  = shipments.filter(s => normalizeStatus(s) === 'entregado').length;
+    const delayAlerts      = shipments.filter(s => normalizeStatus(s) === 'retrasado').length;
+    const newRecords       = shipments.length;
 
-    const ultimaActividad = shipments.slice(-5).reverse()
+    const lastActivity = shipments.slice(-5).reverse();
 
-    res.render('dashboard', { enviosActivos, entregasHoy, alertasDemora, registrosNuevos, ultimaActividad })
-}
+    res.render('dashboard', { activeShipments, deliveriesToday, delayAlerts, newRecords, lastActivity });
+};
 
-module.exports = { getIndex }
+module.exports = { getIndex };

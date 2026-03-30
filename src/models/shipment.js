@@ -1,83 +1,147 @@
-const fs = require('fs');
-const path = require('path');
+const { DataTypes, Op } = require('sequelize');
+const sequelize = require('../database/connection');
+const { Person }  = require('./person');
+const { Status }  = require('./status');
+const { Address } = require('./address');
 
-const dataPath = path.join(__dirname, '../data/shipments.json')
+const Shipment = sequelize.define('shipment', {
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    trackingId:  { type: DataTypes.STRING },
+    statusId:    { type: DataTypes.INTEGER },
+    createdAt:   { type: DataTypes.DATE },
+    senderId:    { type: DataTypes.INTEGER },
+    recipientId: { type: DataTypes.INTEGER },
+    addressId:   { type: DataTypes.INTEGER }
+},
+{ timestamps: true, tableName: 'shipment' });
 
-const getAll = () => {
-    return JSON.parse(fs.readFileSync(dataPath, 'utf8'));
-}
+Shipment.belongsTo(Person,  { as: 'sender',    foreignKey: 'senderId'    });
+Shipment.belongsTo(Person,  { as: 'recipient', foreignKey: 'recipientId' });
+Shipment.belongsTo(Status,  { as: 'status',    foreignKey: 'statusId'    });
+Shipment.belongsTo(Address, { as: 'address',   foreignKey: 'addressId'   });
 
-const getById = (id) => {
-    return getAll().find(s => s.id === id)
-}
+const defaultIncludes = [
+    { model: Person,  as: 'sender'    },
+    { model: Person,  as: 'recipient' },
+    { model: Status,  as: 'status'    },
+    { model: Address, as: 'address'   },
+];
 
-const generateId = (shipments) => {
-    const nums = shipments
-        .map(s => parseInt(s.id?.replace('ENV-', '')) || 0)
-        .filter(n => !isNaN(n))
-    const next = nums.length > 0 ? Math.max(...nums) + 1 : 1
-    return `ENV-${String(next).padStart(3, '0')}`
-}
+const getAll = async () => {
+    return await Shipment.findAll({ include: defaultIncludes });
+};
 
-const create = (data) => {
-    const shipments = getAll();
-    const newShipment = {
-        id: generateId(shipments),
-        estado: 'Pendiente',
-        remitente: {
-            nombre: data.remitenteNombre,
-            documento: data.remitenteDocumento,
-            telefono: data.remitenteTelefono,
-            email: data.remitenteEmail
-        },
-        destinatario: {
-            nombre: data.destinatarioNombre,
-            documento: data.destinatarioDocumento,
-            telefono: data.destinatarioTelefono,
-            email: data.destinatarioEmail
-        },
-        direccion: {
-            calle: data.calle,
-            numero: data.numero,
-            pisoDepto: data.pisoDepto,
-            provincia: data.provincia,
-            codigoPostal: data.codigoPostal
-        },
-        fechaCreacion: new Date().toISOString().split('T')[0],
-    };
-    shipments.push(newShipment);
-    fs.writeFileSync(dataPath, JSON.stringify(shipments, null, 4));
-    return newShipment;
-}
+const getById = async (id) => {
+    return await Shipment.findOne({
+        where: { id },
+        include: defaultIncludes
+    });
+};
 
-const search = ({ trackingId, rol, nombre, documento, nombreRemitente, documentoRemitente, nombreDestinatario, documentoDestinatario }) => {
-    const hasFilter = trackingId || nombre || documento || nombreRemitente || documentoRemitente || nombreDestinatario || documentoDestinatario
-    if (!hasFilter) return getAll()
+const generateTrackingId = async () => {
+    const last = await Shipment.findOne({ order: [['id', 'DESC']] });
+    const next = last ? last.id + 1 : 1;
+    return `ENV-${String(next).padStart(3, '0')}`;
+};
 
-    const isAmbos        = !rol || rol === 'ambos'
-    const isRemitente    = rol === 'remitente'
-    const isDestinatario = rol === 'destinatario'
+const create = async (data) => {
+    const trackingId = await generateTrackingId();
+    return await Shipment.create({
+        trackingId,
+        statusId:    1,
+        senderId:    data.senderId,
+        recipientId: data.recipientId,
+        addressId:   data.addressId,
+        createdAt:   new Date().toISOString().split('T')[0]
+    });
+};
 
-    return getAll().filter(s => {
-        if (!s.remitente || !s.destinatario) return false
+const search = async ({ trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument }) => {
+    const shipmentWhere  = {};
+    const senderWhere    = {};
+    const recipientWhere = {};
 
-        if (trackingId && !s.id.toLowerCase().includes(trackingId.toLowerCase())) return false
+    if (trackingId) shipmentWhere.trackingId = { [Op.iLike]: `%${trackingId}%` };
 
-        if (isAmbos) {
-            if (nombreRemitente    && !s.remitente.nombre.toLowerCase().includes(nombreRemitente.toLowerCase()))       return false
-            if (documentoRemitente && !s.remitente.documento.includes(documentoRemitente))                            return false
-            if (nombreDestinatario && !s.destinatario.nombre.toLowerCase().includes(nombreDestinatario.toLowerCase())) return false
-            if (documentoDestinatario && !s.destinatario.documento.includes(documentoDestinatario))                   return false
-        } else if (isRemitente) {
-            if (nombre    && !s.remitente.nombre.toLowerCase().includes(nombre.toLowerCase())) return false
-            if (documento && !s.remitente.documento.includes(documento))                       return false
-        } else if (isDestinatario) {
-            if (nombre    && !s.destinatario.nombre.toLowerCase().includes(nombre.toLowerCase())) return false
-            if (documento && !s.destinatario.documento.includes(documento))                       return false
+    const isBoth      = !role || role === 'both';
+    const isSender    = role === 'sender';
+    const isRecipient = role === 'recipient';
+
+    if (isBoth) {
+        if (senderName)        senderWhere.fullName    = { [Op.iLike]: `%${senderName}%` };
+        if (senderDocument)    senderWhere.document    = senderDocument;
+        if (recipientName)     recipientWhere.fullName = { [Op.iLike]: `%${recipientName}%` };
+        if (recipientDocument) recipientWhere.document = recipientDocument;
+    } else if (isSender) {
+        if (name)     senderWhere.fullName = { [Op.iLike]: `%${name}%` };
+        if (document) senderWhere.document = document;
+    } else if (isRecipient) {
+        if (name)     recipientWhere.fullName = { [Op.iLike]: `%${name}%` };
+        if (document) recipientWhere.document = document;
+    }
+
+    return await Shipment.findAll({
+        where: shipmentWhere,
+        include: [
+            {
+                model:    Person,
+                as:       'sender',
+                where:    Object.keys(senderWhere).length    ? senderWhere    : undefined,
+                required: Object.keys(senderWhere).length    ? true           : false,
+            },
+            {
+                model:    Person,
+                as:       'recipient',
+                where:    Object.keys(recipientWhere).length ? recipientWhere : undefined,
+                required: Object.keys(recipientWhere).length ? true           : false,
+            },
+            { model: Status,  as: 'status'  },
+            { model: Address, as: 'address' },
+        ]
+    });
+};
+
+const existsByDocument = async (document) => {
+    if (!document) return false;
+
+    const person = await Person.findOne({ where: { document } });
+    if (!person) return false;
+
+    const result = await Shipment.findOne({
+        where: {
+            [Op.or]: [
+                { senderId:    person.id },
+                { recipientId: person.id },
+            ]
         }
+    });
+    return result !== null;
+};
 
-        return true
-    })
-}
 
-module.exports = { getAll, getById, create, search }
+const update = async (data) => {
+    const shipment = await Shipment.findOne({ where: { id: data.id } });
+    if (!shipment) return null;
+
+    await Person.update(
+        { fullName: data.recipientName, document: data.recipientDocument, phone: data.recipientPhone, email: data.recipientEmail },
+        { where: { id: shipment.recipientId } }
+    );
+
+    await Address.update(
+        { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment },
+        { where: { id: shipment.addressId } }
+    );
+
+    return shipment;
+};
+
+const updateStatus = async (id, newStatusId) => {
+    return await Shipment.update({ statusId: newStatusId }, { where: { id } });
+};
+
+module.exports = { Shipment, getAll, getById, create, update, search, existsByDocument, updateStatus };

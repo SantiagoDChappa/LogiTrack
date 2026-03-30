@@ -10,20 +10,20 @@
     <main class="main-content">
         <div class="page-header">
             <h1>Administrador de envios</h1>
-            <a href="/shipments/new" class="btn-primary">
+            <a href="/shipment/new" class="btn-primary">
                 <span class="material-symbols-outlined">add</span>Alta
             </a>
         </div>
 
         <div class="shipments-wrapper">
-        <form method="GET" action="/shipments/search" class="search-form">
+        <form method="GET" action="/shipment/search" class="search-form">
             <div class="search-fields">
                 <div class="search-field">
-                    <label for="rol">Buscar en</label>
-                    <select id="rol" name="rol" class="search-input">
-                        <option value="ambos"        <%= (!query.rol || query.rol === 'ambos')        ? 'selected' : '' %>>Remitente y Destinatario</option>
-                        <option value="remitente"    <%= query.rol === 'remitente'                    ? 'selected' : '' %>>Solo Remitente</option>
-                        <option value="destinatario" <%= query.rol === 'destinatario'                 ? 'selected' : '' %>>Solo Destinatario</option>
+                    <label for="role">Buscar en</label>
+                    <select id="role" name="role" class="search-input">
+                        <option value="both"      <%= (!query.role || query.role === 'both')      ? 'selected' : '' %>>Remitente y Destinatario</option>
+                        <option value="sender"    <%= query.role === 'sender'                     ? 'selected' : '' %>>Solo Remitente</option>
+                        <option value="recipient" <%= query.role === 'recipient'                  ? 'selected' : '' %>>Solo Destinatario</option>
                     </select>
                 </div>
                 <div class="search-field">
@@ -33,30 +33,30 @@
 
                 <%/* Campos para Solo Remitente / Solo Destinatario */%>
                 <div class="search-field campos-simples">
-                    <label for="nombre">Nombre y Apellido</label>
-                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Pérez" value="<%= query.nombre || '' %>" class="search-input">
+                    <label for="name">Nombre y Apellido</label>
+                    <input type="text" id="name" name="name" placeholder="Ej: Juan Pérez" value="<%= query.name || '' %>" class="search-input">
                 </div>
                 <div class="search-field campos-simples">
-                    <label for="documento">Documento</label>
-                    <input type="text" id="documento" name="documento" placeholder="Ej: 38456789" value="<%= query.documento || '' %>" class="search-input">
+                    <label for="document">Documento</label>
+                    <input type="text" id="document" name="document" placeholder="Ej: 38456789" value="<%= query.document || '' %>" class="search-input">
                 </div>
 
                 <%/* Campos para Remitente y Destinatario */%>
                 <div class="search-field campos-ambos">
-                    <label for="nombreRemitente">Nombre Remitente</label>
-                    <input type="text" id="nombreRemitente" name="nombreRemitente" placeholder="Ej: Juan Pérez" value="<%= query.nombreRemitente || '' %>" class="search-input">
+                    <label for="senderName">Nombre Remitente</label>
+                    <input type="text" id="senderName" name="senderName" placeholder="Ej: Juan Pérez" value="<%= query.senderName || '' %>" class="search-input">
                 </div>
                 <div class="search-field campos-ambos">
-                    <label for="documentoRemitente">Doc. Remitente</label>
-                    <input type="text" id="documentoRemitente" name="documentoRemitente" placeholder="Ej: 38456789" value="<%= query.documentoRemitente || '' %>" class="search-input">
+                    <label for="senderDocument">Doc. Remitente</label>
+                    <input type="text" id="senderDocument" name="senderDocument" placeholder="Ej: 38456789" value="<%= query.senderDocument || '' %>" class="search-input">
                 </div>
                 <div class="search-field campos-ambos">
-                    <label for="nombreDestinatario">Nombre Destinatario</label>
-                    <input type="text" id="nombreDestinatario" name="nombreDestinatario" placeholder="Ej: Pedro García" value="<%= query.nombreDestinatario || '' %>" class="search-input">
+                    <label for="recipientName">Nombre Destinatario</label>
+                    <input type="text" id="recipientName" name="recipientName" placeholder="Ej: Pedro García" value="<%= query.recipientName || '' %>" class="search-input">
                 </div>
                 <div class="search-field campos-ambos">
-                    <label for="documentoDestinatario">Doc. Destinatario</label>
-                    <input type="text" id="documentoDestinatario" name="documentoDestinatario" placeholder="Ej: 45034934" value="<%= query.documentoDestinatario || '' %>" class="search-input">
+                    <label for="recipientDocument">Doc. Destinatario</label>
+                    <input type="text" id="recipientDocument" name="recipientDocument" placeholder="Ej: 45034934" value="<%= query.recipientDocument || '' %>" class="search-input">
                 </div>
 
                 <button type="submit" class="btn-primary search-btn">
@@ -91,29 +91,27 @@
                             </td>
                         </tr>
                     <% } else { %>
+                                                        <% console.log("ultimo envios: " + shipments) %>
                         <% shipments.forEach(shipment => { %>
                             <tr>
-                                <td class="tracking-id"><%= shipment.id %></td>
-                                <td><%= shipment.remitente.nombre %></td>
-                                <td><%= shipment.remitente.documento %></td>
-                                <td><%= shipment.destinatario.nombre %></td>
-                                <td><%= shipment.destinatario.documento %></td>
+                                <td class="tracking-id"><%= shipment.trackingId %></td>
+                                <td><%= shipment.sender.fullName %></td>
+                                <td><%= shipment.sender.document %></td>
+                                <td><%= shipment.recipient.fullName %></td>
+                                <td><%= shipment.recipient.document %></td>
                                 <td>
-                                    <% const _sk = shipment.estado.toLowerCase().replace(/[\s-]+/g, '_'); %>
+                                    <% const _sk = shipment.status.description.toLowerCase().replace(/[\s-]+/g, '_'); %>
                                     <% const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'}; %>
                                     <span class="status-badge <%= _sk %>">
-                                        <%= _sl[_sk] || shipment.estado %>
+                                        <%= _sl[_sk] || shipment.status.description %>
                                     </span>
                                 </td>
                                 <td class="col-actions">
-                                    <a href="/shipments/update" class="action-btn modificar" data-tooltip="Modificar">
+                                    <a href="/shipment/update/<%= shipment.id %>" class="action-btn modificar" data-tooltip="Modificar">
                                         <span class="material-symbols-outlined">edit</span>
                                     </a>
-                                    <a href="/shipments/detail?id=<%= shipment.id %>" class="action-btn detalle" data-tooltip="Detalle">
+                                    <a href="/shipment/detail/<%= shipment.id %>" class="action-btn detalle" data-tooltip="Detalle">
                                         <span class="material-symbols-outlined">info</span>
-                                    </a>
-                                    <a href="/shipments/delete" class="action-btn eliminar" data-tooltip="Eliminar">
-                                        <span class="material-symbols-outlined">delete</span>
                                     </a>
                                 </td>
                             </tr>
@@ -130,24 +128,36 @@
     <script src="/js/theme.js" defer></script>
     <script src="/js/ui.js" defer></script>
     <script>
-        const rolSelect      = document.getElementById('rol');
-        const camposSimples  = document.querySelectorAll('.campos-simples');
-        const camposAmbos    = document.querySelectorAll('.campos-ambos');
+        const roleSelect   = document.getElementById('role');
+        const simpleFields = document.querySelectorAll('.campos-simples');
+        const bothFields   = document.querySelectorAll('.campos-ambos');
 
-        function actualizarCampos() {
-            const iEsAmbos = rolSelect.value === 'ambos';
-            camposSimples.forEach(el => el.style.display = iEsAmbos ? 'none' : '');
-            camposAmbos.forEach(el => el.style.display   = iEsAmbos ? ''     : 'none');
+        function updateFields() {
+            const isBoth = roleSelect.value === 'both';
+            simpleFields.forEach(el => el.style.display = isBoth ? 'none' : '');
+            bothFields.forEach(el =>   el.style.display = isBoth ? ''     : 'none');
         }
 
-        rolSelect.addEventListener('change', actualizarCampos);
-        actualizarCampos();
+        roleSelect.addEventListener('change', updateFields);
+        updateFields();
 
         if (new URLSearchParams(window.location.search).get('success') === '1') {
             const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
             Swal.fire({
                 icon: 'success',
                 title: '¡Envío creado con éxito!',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
+                background: isDark ? '#1e293b' : '#ffffff',
+                color: isDark ? '#f1f5f9' : '#1e293b',
+            }).then(() => {
+                history.replaceState(null, '', '/shipments');
+            });
+        }else if(new URLSearchParams(window.location.search).get('success') === '2'){
+             const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
+            Swal.fire({
+                icon: 'success',
+                title: '¡Envío modificado con éxito!',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
                 background: isDark ? '#1e293b' : '#ffffff',
