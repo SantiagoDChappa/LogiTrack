@@ -22,7 +22,7 @@ const create = async ({ shipmentId, fromStatusId, toStatusId, comment }) => {
         comment:      comment || null,
         changedAt:    new Date()
     });
-}
+};
 
 const getByShipmentId = async (shipmentId) => {
     return await ShipmentHistory.findAll({
@@ -33,6 +33,6 @@ const getByShipmentId = async (shipmentId) => {
         ],
         order: [['changedAt', 'DESC']]
     });
-}
+};
 
 module.exports = { ShipmentHistory, create, getByShipmentId };

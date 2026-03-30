@@ -15,7 +15,6 @@ jest.mock('../../src/database/connection', () => {
                 findAll:  jest.fn(),
                 create:   jest.fn(),
                 update:   jest.fn(),
-                destroy:  jest.fn(),
                 belongsTo: jest.fn(),
             };
             return instances[name];
@@ -126,20 +125,6 @@ describe('Modelo Shipment - funciones', () => {
             expect(db.__getInstance('shipment').update).toHaveBeenCalledWith(
                 { statusId: 3 },
                 { where: { id: 5 } }
-            );
-        });
-    });
-
-    // ── deleteById ──────────────────────────────────────────────────────────
-
-    describe('deleteById()', () => {
-        test('debe llamar a Shipment.destroy con el id correcto', async () => {
-            db.__getInstance('shipment').destroy.mockResolvedValue(1);
-
-            await shipmentModel.deleteById(7);
-
-            expect(db.__getInstance('shipment').destroy).toHaveBeenCalledWith(
-                { where: { id: 7 } }
             );
         });
     });

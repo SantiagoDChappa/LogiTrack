@@ -7,21 +7,16 @@ on:
     branches: [ "develop", "trunk" ]
 
 jobs:
-  build-and-test:
+  Linter:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [20.x]
-
     steps:
     - name: Checkout del código
       uses: actions/checkout@v4
 
-    - name: Configurar Node.js ${{ matrix.node-version }}
+    - name: Configurar Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 20.x
         cache: 'npm'
 
     - name: Instalar dependencias
@@ -29,6 +24,22 @@ jobs:
 
     - name: Verificar calidad de código (Linter)
       run: npm run lint
+
+  test:
+    runs-on: ubuntu-latest
+    needs: Linter
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+
+    - name: Instalar dependencias
+      run: npm ci
 
     - name: Ejecutar pruebas
       run: npm test

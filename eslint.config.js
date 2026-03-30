@@ -7,13 +7,13 @@ module.exports = [
             ecmaVersion: 2022,
             sourceType:  'commonjs',
             globals: {
-                require:   'readonly',
-                module:    'readonly',
-                exports:   'readonly',
-                __dirname: 'readonly',
-                __filename:'readonly',
-                process:   'readonly',
-                console:   'readonly',
+                require:    'readonly',
+                module:     'readonly',
+                exports:    'readonly',
+                __dirname:  'readonly',
+                __filename: 'readonly',
+                process:    'readonly',
+                console:    'readonly',
             },
         },
         rules: {
@@ -23,6 +23,22 @@ module.exports = [
             'eqeqeq':          ['error', 'always'],
             'no-var':           'error',
             'prefer-const':    'warn',
+        },
+    },
+    {
+        files: ['Test/**/*.test.js'],
+        languageOptions: {
+            globals: {
+                jest:        'readonly',
+                describe:    'readonly',
+                test:        'readonly',
+                it:          'readonly',
+                expect:      'readonly',
+                beforeAll:   'readonly',
+                beforeEach:  'readonly',
+                afterAll:    'readonly',
+                afterEach:   'readonly',
+            },
         },
     },
     {
