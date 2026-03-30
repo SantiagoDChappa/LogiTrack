@@ -10,7 +10,7 @@ jest.mock('../../src/models/shipment', () => ({
     getAll:           jest.fn(),
     getById:          jest.fn(),
     create:           jest.fn(),
-    deleteById:       jest.fn(),
+
     search:           jest.fn(),
     existsByDocument: jest.fn(),
     updateStatus:     jest.fn(),

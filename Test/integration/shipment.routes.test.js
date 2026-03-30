@@ -10,7 +10,7 @@ jest.mock('../../src/models/shipment', () => ({
     getAll:           jest.fn(),
     getById:          jest.fn(),
     create:           jest.fn(),
-    deleteById:       jest.fn(),
+
     search:           jest.fn(),
     existsByDocument: jest.fn().mockResolvedValue(false),
     updateStatus:     jest.fn(),
@@ -256,25 +256,5 @@ describe('Rutas /shipment', () => {
         });
     });
 
-    // ── GET /shipment/delete/:id ───────────────────────────────────────────
 
-    describe('GET /shipment/delete/:id', () => {
-        test('elimina el envío y redirige con success=3', async () => {
-            shipmentModel.deleteById.mockResolvedValue(1);
-
-            const res = await request(app).get('/shipment/delete/1');
-
-            expect(res.status).toBe(302);
-            expect(res.headers.location).toBe('/shipment?success=3');
-            expect(shipmentModel.deleteById).toHaveBeenCalledWith('1');
-        });
-
-        test('responde 500 si el modelo lanza un error al eliminar', async () => {
-            shipmentModel.deleteById.mockRejectedValue(new Error('DB error'));
-
-            const res = await request(app).get('/shipment/delete/99');
-
-            expect(res.status).toBe(500);
-        });
-    });
 });
