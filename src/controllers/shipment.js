@@ -89,9 +89,8 @@ const getUpdateShipment = async (req, res) => {
 const updateShipment = async (req, res) => {
   try {
     const body = req.body;
-    //Creo el envio
     await shipmentModel.update(body);
-    
+
     res.redirect('/shipment?success=2');
   } catch (err) {
     console.error('ERROR updateShipment:', err.message);
