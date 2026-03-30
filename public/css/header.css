@@ -309,15 +309,27 @@ header {
   height: 100%;
 }
 
-.top-header .user img {
+.top-header .user img,
+.top-header .user .user-avatar {
   grid-column: 1;
   grid-row: 1 / 3;
   width: clamp(30px, 2.2vw, 42px);
   height: clamp(30px, 2.2vw, 42px);
   border-radius: 50%;
-  object-fit: cover;
-  background-color: var(--color-primary);
   align-self: center;
+}
+
+.top-header .user .user-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-primary);
+  color: #fff;
+  font-size: clamp(0.6rem, 0.75vw, 0.85rem);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+  user-select: none;
 }
 
 .top-header .user .user-name {

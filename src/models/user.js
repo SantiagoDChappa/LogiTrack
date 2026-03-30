@@ -89,4 +89,9 @@ const existsByEmailExcluding = async (email, excludeId) => {
 };
 
 
-module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail, existsByDocumentExcluding, existsByEmailExcluding };
+const findByEmail = async (email) => {
+    return await User.findOne({ where: { email } });
+};
+
+
+module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail, existsByDocumentExcluding, existsByEmailExcluding, findByEmail };
