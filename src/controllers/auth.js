@@ -22,15 +22,21 @@ const login = async (req, res) => {
     const token = JWT.sign(
         {id: user.id, email: user.email, roleId: user.roleId, fullName: user.fullName},
         process.env.JWT_SECRET,
-        {expiresIn: '8h'}
+        {expiresIn: req.body.remember ? '30d' : '8h'}
     );
 
-    res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 8*60*60*1000 // 8HS
-    });
+    const cookieOptions = { httpOnly: true };
+    if (req.body.remember) {
+        cookieOptions.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 días
+    }
+    res.cookie('token', token, cookieOptions);
 
     res.redirect('/');
 };
 
-module.exports = { getLogin, login };
+const logout = async (req, res) => {
+    res.clearCookie('token');
+    return res.redirect('/login');
+};
+
+module.exports = { getLogin, login, logout };

@@ -12,6 +12,7 @@ const requireAuth = async (req, res, next) => {
         const payload = JWT.verify(token, process.env.JWT_SECRET);
         req.user = payload;
         res.locals.currentUser = await userModel.getById(payload.id);
+        res.setHeader('Cache-Control', 'no-store');
         next();
     } catch (err) {
         res.clearCookie('token');
