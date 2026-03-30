@@ -15,11 +15,11 @@ const User = sequelize.define('user', {
 
 const getAll = async () => {
     return await User.findAll({ order: [['id', 'ASC']] });
-}
+};
 
 const getById = async (id) => {
     return await User.findOne({ where: { id } });
-}
+};
 
 const create = async (data) => {
     const password =  await bcrypt.hash(data.password, SALT_ROUNDS);
@@ -31,7 +31,7 @@ const create = async (data) => {
         roleId:   data.roleId
     });
 
-}
+};
 
 const search = async ({ fullName, document, email, roleId }) => {
     const where = {};
@@ -42,11 +42,11 @@ const search = async ({ fullName, document, email, roleId }) => {
     if (roleId)   where.roleId   = roleId;
 
     return await User.findAll({ where, order: [['id', 'ASC']] });
-}
+};
 
 const deleteById = async (id) => {
     return await User.destroy({ where: { id } });
-}
+};
 
 const update = async (data) => {
     return await User.update(
@@ -58,36 +58,36 @@ const update = async (data) => {
         },
         { where: { id: data.id } }
     );
-}
+};
 
 const existsByDocument = async (document) => {
     const result = await User.findOne({
         where: { document: document }
     });
-    console.log("RESULTADO: " + result)
+    console.log("RESULTADO: " + result);
     return result !== null;
-}
+};
 
 const existsByEmail = async (email) => {
     const result = await User.findOne({
         where: { email: email }
     });
     return result !== null;
-}
+};
 
 const existsByDocumentExcluding = async (document, excludeId) => {
     const result = await User.findOne({
         where: { document: document, id: { [Op.ne]: excludeId } }
     });
     return result !== null;
-}
+};
 
 const existsByEmailExcluding = async (email, excludeId) => {
     const result = await User.findOne({
         where: { email: email, id: { [Op.ne]: excludeId } }
     });
     return result !== null;
-}
+};
 
 
-module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail, existsByDocumentExcluding, existsByEmailExcluding }
+module.exports = { User, getAll, getById, create, update, deleteById, search, existsByDocument, existsByEmail, existsByDocumentExcluding, existsByEmailExcluding };
