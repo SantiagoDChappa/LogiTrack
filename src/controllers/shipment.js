@@ -88,7 +88,7 @@ const getUpdateShipment = async (req, res) => {
 
 const updateShipment = async (req, res) => {
   try {
-    const body = req.body;
+    const body = { ...req.body, id: req.params.id };
     await shipmentModel.update(body);
 
     res.redirect('/shipment?success=2');
