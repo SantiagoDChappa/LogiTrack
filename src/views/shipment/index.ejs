@@ -113,9 +113,6 @@
                                     <a href="/shipment/detail/<%= shipment.id %>" class="action-btn detalle" data-tooltip="Detalle">
                                         <span class="material-symbols-outlined">info</span>
                                     </a>
-                                    <a href="/shipment/delete/<%= shipment.id %>" class="action-btn eliminar" data-tooltip="Eliminar">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </a>
                                 </td>
                             </tr>
                         <% }); %>
@@ -161,18 +158,6 @@
             Swal.fire({
                 icon: 'success',
                 title: '¡Envío modificado con éxito!',
-                confirmButtonText: 'Aceptar',
-                confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
-                background: isDark ? '#1e293b' : '#ffffff',
-                color: isDark ? '#f1f5f9' : '#1e293b',
-            }).then(() => {
-                history.replaceState(null, '', '/shipments');
-            });
-        }else if(new URLSearchParams(window.location.search).get('success') === '3'){
-             const isDark = (localStorage.getItem('theme') ?? 'light') === 'dark';
-            Swal.fire({
-                icon: 'success',
-                title: '¡Envío eliminado con éxito!',
                 confirmButtonText: 'Aceptar',
                 confirmButtonColor: isDark ? '#3b82f6' : '#2563eb',
                 background: isDark ? '#1e293b' : '#ffffff',
