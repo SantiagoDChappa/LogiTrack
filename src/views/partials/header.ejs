@@ -32,9 +32,9 @@
         </a>
         <i><span class="material-symbols-outlined">notifications</span></i>
         <div class="user">
-            <img src="/images/user.png" alt="">
-            <span class="user-name">Santiago Chappa</span>
-            <span class="user-role">Operador</span>
+            <div class="user-avatar"><%= currentUser.fullName.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase() %></div>
+            <span class="user-name"><%= currentUser.fullName %></span>
+            <span class="user-role"><%= currentUser.roleId == 1 ? "Supervisor" : "Operador" %></span>
             <span class="material-symbols-outlined">keyboard_arrow_down</span>
         </div>
         <div class="user-dropdown" id="user-dropdown">
