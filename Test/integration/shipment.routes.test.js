@@ -10,7 +10,6 @@ jest.mock('../../src/models/shipment', () => ({
     getAll:           jest.fn(),
     getById:          jest.fn(),
     create:           jest.fn(),
-
     search:           jest.fn(),
     existsByDocument: jest.fn().mockResolvedValue(false),
     updateStatus:     jest.fn(),
@@ -259,6 +258,5 @@ describe('Rutas /shipment', () => {
             expect(shipmentModel.updateStatus).toHaveBeenCalledWith('1', 2);
         });
     });
-
 
 });

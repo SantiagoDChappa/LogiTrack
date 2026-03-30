@@ -15,7 +15,6 @@ jest.mock('../../src/database/connection', () => {
                 findAll:  jest.fn(),
                 create:   jest.fn(),
                 update:   jest.fn(),
-
                 belongsTo: jest.fn(),
             };
             return instances[name];
