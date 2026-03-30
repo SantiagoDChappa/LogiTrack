@@ -26,7 +26,7 @@ LogiTrack es una aplicación web que permite a los operadores logísticos regist
 
 El sistema está disponible en línea, sin necesidad de instalar nada. Ingresá desde cualquier navegador web a través del siguiente enlace:
 
-**`[URL del sistema — completar cuando esté disponible]`**
+**`https://logitrack-89b1.onrender.com/`**
 
 ---
 
