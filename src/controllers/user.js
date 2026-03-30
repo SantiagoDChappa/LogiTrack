@@ -49,4 +49,24 @@ const getCreateUserForm = (req, res) => {
     res.render('user/new', { body: {}, errors: [], roleTypes: Object.values(RoleType) });
 };
 
-module.exports = { getIndex, searchUsers, getCreateUserForm, createUser };
+const getUpdateUser  = async (req, res) => {
+  const { id }    = req.params;
+  const user = await userModel.getById(id);
+
+  res.render('user/update', { errors: [], user, RoleType });
+};
+
+
+const updateUser = async (req, res) => {
+  try {
+    const body = { ...req.body, id: req.params.id };
+    await userModel.update(body);
+
+    res.redirect('/user?success=2');
+  } catch (err) {
+    console.error('ERROR updateuser:', err.message);
+    res.status(500).send(err.message);
+  }
+};
+
+module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, getUpdateUser, updateUser };
