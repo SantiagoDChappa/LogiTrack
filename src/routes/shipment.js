@@ -13,4 +13,4 @@ router.post('/update/:id', updateShipment)
 router.post('/update/:id/status', updateShipmentStatus)
 router.get('/delete/:id', deleteShipment)
 
-module.exports = router
+module.exports = router;

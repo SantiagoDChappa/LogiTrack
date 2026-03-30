@@ -1,19 +1,18 @@
-const shipmentModel        = require('../models/shipment')
-const personModel          = require('../models/person')
-const provinceModel        = require('../models/province')
-const addressModel         = require('../models/address')
-const statusModel          = require('../models/status')
-const shipmentHistoryModel = require('../models/shipmentHistory')
-const { PersonType } = require('../constants/enums')
+const shipmentModel        = require('../models/shipment');
+const personModel          = require('../models/person');
+const provinceModel        = require('../models/province');
+const addressModel         = require('../models/address');
+const statusModel          = require('../models/status');
+const shipmentHistoryModel = require('../models/shipmentHistory');
+const { PersonType } = require('../constants/enums');
 
 
-const home = async (req, res) => {
-    const shipments = await shipmentModel.getAll()
-    res.render('shipment/index', { shipments, query: {} })
-}
+const home = (req, res) => {
+    res.render('shipment/index', { shipments: [], query: {} });
+};
 
 const searchShipments = async (req, res) => {
-    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument } = req.query
+    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument } = req.query;
     const query = {
         trackingId,
         role,
@@ -23,16 +22,16 @@ const searchShipments = async (req, res) => {
         senderDocument:    senderDocument?.trim(),
         recipientName:     recipientName?.trim(),
         recipientDocument: recipientDocument?.trim()
-    }
-    const shipments = await shipmentModel.search(query)
-    res.render('shipment/index', { shipments, query })
-}
+    };
+    const shipments = await shipmentModel.search(query);
+    res.render('shipment/index', { shipments, query });
+};
 
 const getDetail = async (req, res) => {
-    const { id } = req.params
-    const shipment = await shipmentModel.getById(id)
-    res.render('shipment/detail', { shipment })
-}
+    const { id } = req.params;
+    const shipment = await shipmentModel.getById(id);
+    res.render('shipment/detail', { shipment });
+};
 
 const getNewShipmentForm = async (req, res) => {
     const provinces = await provinceModel.getAll()    
@@ -73,10 +72,10 @@ const createShipment = async (req, res) => {
     
     res.redirect('/shipment?success=1')
   } catch (err) {
-    console.error('ERROR createShipment:', err.message)
-    res.status(500).send(err.message)
+    console.error('ERROR createShipment:', err.message);
+    res.status(500).send(err.message);
   }
-}
+};
 
 const getUpdateShipment = async (req, res) => {
   const { id }    = req.params
@@ -87,7 +86,7 @@ const getUpdateShipment = async (req, res) => {
   res.render('shipment/update', { errors: [], shipment, provinces, statuses, history })
 }
 
-const updateShipment = async (req, res) => {
+const deleteShipment = async (req, res) => {
   try {
     const body = req.body;
     //Creo el envio
@@ -95,7 +94,7 @@ const updateShipment = async (req, res) => {
     
     res.redirect('/shipment?success=2')
   } catch (err) {
-    console.error('ERROR updateShipment:', err.message)
+    console.error('ERROR eliminar envio:', err.message)
     res.status(500).send(err.message)
   }
 }
@@ -114,9 +113,9 @@ const deleteShipment = async (req, res) => {
 
 const updateShipmentStatus = async (req, res) => {
   try {
-    const { id }                   = req.params
-    const { newStatusId, comment } = req.body
-    const shipment                 = await shipmentModel.getById(id)
+    const { id }                   = req.params;
+    const { newStatusId, comment } = req.body;
+    const shipment                 = await shipmentModel.getById(id);
 
     await shipmentHistoryModel.create({
         shipmentId:   id,
@@ -129,9 +128,9 @@ const updateShipmentStatus = async (req, res) => {
 
     res.redirect(`/shipment/update/${id}`)
   } catch (err) {
-    console.error('ERROR updateShipmentStatus:', err.message)
-    res.status(500).send(err.message)
+    console.error('ERROR updateShipmentStatus:', err.message);
+    res.status(500).send(err.message);
   }
-}
+};
 
 module.exports = { home, getDetail, getNewShipmentForm, getUpdateShipment, createShipment, updateShipment, updateShipmentStatus, deleteShipment, searchShipments }
