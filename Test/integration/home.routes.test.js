@@ -27,6 +27,10 @@ function buildApp() {
     app.set('views', path.resolve(__dirname, '../../src/views'));
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
+    app.use((req, res, next) => {
+        res.locals.currentUser = { id: 1, fullName: 'Test User', email: 'test@test.com', roleId: 1 };
+        next();
+    });
     app.use('/', require('../../src/routes/home'));
     return app;
 }
