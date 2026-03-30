@@ -70,4 +70,14 @@ const updateUser = async (req, res) => {
 };
 
 
-module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, getUpdateUser, updateUser };
+const deleteUser = async (req, res) => {
+  try {
+    await userModel.deleteById(req.params.id);
+    res.redirect('/user?success=3');
+  } catch (err) {
+    console.error('ERROR deleteUser:', err.message);
+    res.status(500).send(err.message);
+  }
+};
+
+module.exports = { getIndex, searchUsers, getCreateUserForm, createUser, getUpdateUser, updateUser, deleteUser };
