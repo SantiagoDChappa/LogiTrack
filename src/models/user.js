@@ -1,6 +1,5 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('../database/connection');
-const { body } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const SALT_ROUNDS = 12;
 

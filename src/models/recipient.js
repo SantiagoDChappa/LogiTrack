@@ -1,9 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const dataPath = path.join(__dirname, '../data/shipments.json');
 
 // Defino la tabla envio
 const Shipment = sequelize.define('shipment', {
