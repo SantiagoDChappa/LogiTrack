@@ -105,12 +105,6 @@ const search = async ({ trackingId, role, name, document, senderName, senderDocu
     });
 };
 
-const deleteById = async (id) => {
-    return await Shipment.destroy({
-        where: { id }
-    });
-};
-
 const existsByDocument = async (document) => {
     if (!document) return false;
 
@@ -133,4 +127,4 @@ const updateStatus = async (id, newStatusId) => {
     return await Shipment.update({ statusId: newStatusId }, { where: { id } });
 };
 
-module.exports = { Shipment, getAll, getById, create, deleteById, search, existsByDocument, updateStatus };
+module.exports = { Shipment, getAll, getById, create, search, existsByDocument, updateStatus };
