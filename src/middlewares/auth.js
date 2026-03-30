@@ -1,6 +1,7 @@
 const JWT = require('jsonwebtoken');
+const userModel = require('../models/user');
 
-const requireAuth = (req, res, next) => {
+const requireAuth = async (req, res, next) => {
     const token = req.cookies.token;
 
     if(!token){
@@ -10,6 +11,7 @@ const requireAuth = (req, res, next) => {
     try {
         const payload = JWT.verify(token, process.env.JWT_SECRET);
         req.user = payload;
+        res.locals.currentUser = await userModel.getById(payload.id);
         next();
     } catch (err) {
         res.clearCookie('token');
