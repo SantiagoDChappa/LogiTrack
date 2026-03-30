@@ -98,18 +98,6 @@ const updateShipment = async (req, res) => {
   }
 };
 
-const deleteShipment = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await shipmentModel.deleteById(id);
-    
-    res.redirect('/shipment?success=3');
-  } catch (err) {
-    console.error('ERROR eliminar envio:', err.message);
-    res.status(500).send(err.message);
-  }
-};
-
 const updateShipmentStatus = async (req, res) => {
   try {
     const { id }                   = req.params;
@@ -132,4 +120,4 @@ const updateShipmentStatus = async (req, res) => {
   }
 };
 
-module.exports = { home, getDetail, getNewShipmentForm, getUpdateShipment, createShipment, updateShipment, updateShipmentStatus, deleteShipment, searchShipments };
+module.exports = { home, getDetail, getNewShipmentForm, getUpdateShipment, createShipment, updateShipment, updateShipmentStatus, searchShipments };
