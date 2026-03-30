@@ -15,4 +15,9 @@ const getIndex = async (req, res) => {
     res.render('dashboard', { activeShipments, deliveriesToday, delayAlerts, newRecords, lastActivity })
 }
 
-module.exports = { getIndex };
+const getLogin = (req, res) => {
+    res.render('login', {errors: []})
+}
+
+
+module.exports = { getIndex, getLogin }

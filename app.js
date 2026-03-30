@@ -21,6 +21,7 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', homeRoutes);
 app.use('/shipment', shipmentRoutes);
+app.use('/user', userRoutes);
 
 app.listen(port, () => {
     console.log(`LogiTrack running at http://localhost:${port}`);
