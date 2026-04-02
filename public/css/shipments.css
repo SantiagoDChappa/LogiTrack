@@ -250,8 +250,12 @@
   gap: var(--space-4) var(--space-6);
 }
 
-.form-new .usuario h3 {
+.form-new .usuario h3, sub {
   grid-column: 1 / -1;
+}
+.form-new .usuario sub{
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 
 .form-new h3 {
