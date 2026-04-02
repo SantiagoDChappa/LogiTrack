@@ -2,13 +2,31 @@ const { body, validationResult } = require("express-validator");
 const userModel = require("../models/user");
 const { RoleType } = require("../constants/enums");
 
-const validateUser = [
+
+const validateUserGeneral = [
     body('fullName').notEmpty().trim().withMessage('El nombre y apellido es obligatorio'),
-    body('email').isEmail().normalizeEmail().withMessage('El email es inválido'),
-    body('document').isInt({ min: 1000000 }).withMessage('El documento es inválido'),
-    body('password').notEmpty().withMessage('La contraseña es obligatoria'),
+    body('email')
+        .notEmpty().withMessage('El email es obligatorio')
+        .bail()
+        .isEmail().withMessage('El email es inválido')
+        .bail()
+        .normalizeEmail(),
+    body('document')
+        .notEmpty().withMessage('El documento es obligatorio')
+        .bail()
+        .isInt({ min: 1000000 }).withMessage('El documento es inválido'),
     body('roleId').notEmpty().withMessage('El rol es obligatorio'),
 ];
+const validateUser = [
+    body('password')
+        .notEmpty().withMessage('La contraseña es obligatoria')
+        .bail()
+        .isLength({ min: 10 }).withMessage('La contraseña debe tener al menos 10 caracteres')
+        .matches(/[A-Z]/).withMessage('Debe contener al menos una mayúscula')
+        .matches(/\d/).withMessage('Debe contener al menos un número')
+        .matches(/[^A-Za-z0-9]/).withMessage('Debe contener al menos un símbolo'),
+    ...validateUserGeneral
+    ];
 
 const handleValidationErrors = async (req, res, next) => {
     const errors = validationResult(req);
@@ -37,10 +55,7 @@ const handleValidationErrors = async (req, res, next) => {
 };
 
 const validateUpdateUser = [
-    body('fullName').notEmpty().trim().withMessage('El nombre y apellido es obligatorio'),
-    body('email').isEmail().normalizeEmail().withMessage('El email es inválido'),
-    body('document').isInt({ min: 1000000 }).withMessage('El documento es inválido'),
-    body('roleId').notEmpty().withMessage('El rol es obligatorio'),
+    validateUserGeneral
 ];
 
 const handleUpdateValidationErrors = async (req, res, next) => {
@@ -70,5 +85,7 @@ const handleUpdateValidationErrors = async (req, res, next) => {
 
     next();
 };
+
+
 
 module.exports = { validateUser, handleValidationErrors, validateUpdateUser, handleUpdateValidationErrors };
