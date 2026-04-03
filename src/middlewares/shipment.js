@@ -1,6 +1,8 @@
 const { body, validationResult } = require("express-validator");
-const provinceModel = require("../models/province");
-const shipmentModel = require("../models/shipment");
+const provinceModel        = require("../models/province");
+const shipmentModel        = require("../models/shipment");
+const statusModel          = require("../models/status");
+const shipmentHistoryModel = require("../models/shipmentHistory");
 
 const validateShipment = [
     body('senderName').notEmpty().trim().withMessage('El nombre del remitente es obligatorio'),
@@ -42,4 +44,37 @@ const handleValidationErrors = async (req, res, next) => {
     next();
 };
 
-module.exports = { validateShipment, handleValidationErrors };
+const validateUpdateShipment = [
+    body('recipientName').notEmpty().trim().withMessage('El nombre del destinatario es obligatorio'),
+    body('recipientEmail').isEmail().normalizeEmail().withMessage('Email del destinatario inválido'),
+    body('recipientPhone').isLength({ min: 8, max: 15 }).withMessage('Teléfono del destinatario inválido'),
+    body('recipientDocument').isLength({ min: 7, max: 11 }).withMessage('Documento del destinatario inválido'),
+
+    body('street').notEmpty().trim().withMessage('La calle es obligatoria'),
+    body('number').notEmpty().withMessage('La numeración es obligatoria'),
+    body('province').notEmpty().withMessage('La provincia es obligatoria'),
+    body('postalCode').notEmpty().withMessage('El código postal es obligatorio'),
+];
+
+const handleUpdateValidationErrors = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (errors.isEmpty()) return next();
+
+    const { id } = req.params;
+    const [provinces, statuses, shipment, history] = await Promise.all([
+        provinceModel.getAll(),
+        statusModel.getAll(),
+        shipmentModel.getById(id),
+        shipmentHistoryModel.getByShipmentId(id),
+    ]);
+
+    return res.render('shipment/update', {
+        errors: errors.array(),
+        shipment,
+        provinces,
+        statuses,
+        history,
+    });
+};
+
+module.exports = { validateShipment, handleValidationErrors, validateUpdateShipment, handleUpdateValidationErrors };
