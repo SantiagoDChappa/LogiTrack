@@ -55,7 +55,7 @@ const handleValidationErrors = async (req, res, next) => {
 };
 
 const validateUpdateUser = [
-    validateUserGeneral
+    ...validateUserGeneral
 ];
 
 const handleUpdateValidationErrors = async (req, res, next) => {
