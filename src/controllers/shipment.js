@@ -88,9 +88,21 @@ const getUpdateShipment = async (req, res) => {
 
 const updateShipment = async (req, res) => {
   try {
-    const body = { ...req.body, id: req.params.id };
-    await shipmentModel.update(body);
+    const { id } = req.params;
+    const body   = { ...req.body, id };
 
+    if (body.newStatusId) {
+      const shipment = await shipmentModel.getById(id);
+      await shipmentHistoryModel.create({
+        shipmentId:   id,
+        fromStatusId: shipment.statusId,
+        toStatusId:   Number(body.newStatusId),
+        comment:      body.statusComment || null
+      });
+      await shipmentModel.updateStatus(id, Number(body.newStatusId));
+    }
+
+    await shipmentModel.update(body);
     res.redirect('/shipment?success=2');
   } catch (err) {
     console.error('ERROR updateShipment:', err.message);
