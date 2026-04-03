@@ -1,13 +1,16 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
+const dbUrl = new URL(process.env.DATABASE_URL);
+dbUrl.searchParams.delete("sslmode");
+
+const sequelize = new Sequelize(dbUrl.toString(), {
     dialect: "postgres",
     logging: false,
     define: {
         schema: "logitrack",
         timestamps: false,
     },
-    dialectOptions: process.env.NODE_ENV === "production"
+    dialectOptions: dbUrl.hostname !== "localhost"
         ? { ssl: { require: true, rejectUnauthorized: false } }
         : {},
 });
