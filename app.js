@@ -13,6 +13,7 @@ const homeRoutes        = require('./src/routes/home');
 const shipmentRoutes    = require('./src/routes/shipment');
 const userRoutes        = require('./src/routes/user');
 const apiShipmentRoutes = require('./src/routes/api/shipments');
+const apiHealthRoutes = require('./src/routes/api/health');
 const authRoutes = require('./src/routes/auth');
 
 // Conecto la base de datos con el sistema
@@ -30,6 +31,9 @@ app.use(cookieParser());
 
 // Rutas Publicas
 app.use('/', authRoutes);
+
+
+app.use(apiHealthRoutes);
 
 // Rutas Protegidas
 app.use('/', requireAuth, homeRoutes);
