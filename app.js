@@ -42,6 +42,19 @@ app.use('/shipment',  requireAuth, shipmentRoutes);
 app.use('/api/shipments',  requireAuth, apiShipmentRoutes);
 app.use('/api-docs',  requireAuth, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.use((req, res) => {
+    const token = req.cookies?.token;
+    if (token) {
+        try {
+            require('jsonwebtoken').verify(token, process.env.JWT_SECRET);
+            return res.redirect('/');
+        } catch {
+            res.clearCookie('token');
+        }
+    }
+    res.redirect('/login');
+});
+
 app.listen(port, () => {
     console.log(`LogiTrack running at http://localhost:${port}`);
 });
