@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const JWT = require('jsonwebtoken');
 const userModel = require('../models/user');
+const enums = require('../constants/enums');
 
 const getLogin = async (req, res) => {
     return res.render('login',);
@@ -30,6 +31,10 @@ const login = async (req, res) => {
         cookieOptions.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 días
     }
     res.cookie('token', token, cookieOptions);
+    res.locals.currentUser.getAccess = false;
+    if (user.roleId === enums.RoleType.SUPERVISOR.id) {
+        res.locals.currentUser.getAccess = true;
+    }
 
     res.redirect('/');
 };
