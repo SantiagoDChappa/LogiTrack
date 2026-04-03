@@ -17,6 +17,8 @@
 
                 <!-- Columna izquierda: destinatario + dirección -->
                 <form id="main-update-form" class="update-left" action="/shipment/update/<%= shipment.id %>" method="post">
+                    <input type="hidden" name="newStatusId" id="hidden-new-status-id">
+                    <input type="hidden" name="statusComment" id="hidden-status-comment">
 
                     <div class="update-card">
                         <h3>Destinatario</h3>
@@ -115,14 +117,18 @@
                     <!-- Panel de confirmación (oculto por defecto) -->
                     <div id="status-confirm-panel" class="status-confirm-panel" style="display:none;">
                         <p class="confirm-title">Confirmar nuevo estado: <strong id="confirm-status-name"></strong></p>
-                        <form action="/shipment/update/<%= shipment.id %>/status" method="post">
-                            <input type="hidden" name="newStatusId" id="confirm-status-id">
-                            <textarea name="comment" placeholder="Describa el motivo del cambio de estado..." rows="3"></textarea>
-                            <div class="confirm-actions">
-                                <button type="button" id="btn-cancel-confirm" class="btn-secondary btn-sm">Cancelar</button>
-                                <button type="submit" class="btn-primary btn-sm">Confirmar cambio</button>
-                            </div>
-                        </form>
+                        <input type="hidden" id="confirm-status-id">
+                        <textarea id="status-comment-input" placeholder="Describa el motivo del cambio de estado..." rows="3"></textarea>
+                        <div class="confirm-actions">
+                            <button type="button" id="btn-cancel-confirm" class="btn-secondary btn-sm">Cancelar</button>
+                            <button type="button" id="btn-confirm-status" class="btn-primary btn-sm">Confirmar cambio</button>
+                        </div>
+                    </div>
+
+                    <!-- Badge de cambio de estado pendiente -->
+                    <div id="pending-status-badge" style="display:none;" class="pending-status-badge">
+                        Cambio de estado pendiente: <strong id="pending-status-name"></strong>
+                        <button type="button" id="btn-undo-status" class="btn-secondary btn-sm">Deshacer</button>
                     </div>
 
                     <!-- Historial de cambios -->
@@ -169,12 +175,32 @@
                 var panel = document.getElementById('status-confirm-panel');
                 document.getElementById('confirm-status-id').value = this.dataset.statusId;
                 document.getElementById('confirm-status-name').textContent = this.dataset.statusName;
+                document.getElementById('status-comment-input').value = '';
                 panel.style.display = 'flex';
             });
         });
 
         document.getElementById('btn-cancel-confirm').addEventListener('click', function() {
             document.getElementById('status-confirm-panel').style.display = 'none';
+        });
+
+        document.getElementById('btn-confirm-status').addEventListener('click', function() {
+            var statusId   = document.getElementById('confirm-status-id').value;
+            var statusName = document.getElementById('confirm-status-name').textContent;
+            var comment    = document.getElementById('status-comment-input').value;
+
+            document.getElementById('hidden-new-status-id').value  = statusId;
+            document.getElementById('hidden-status-comment').value = comment;
+
+            document.getElementById('pending-status-name').textContent = statusName;
+            document.getElementById('pending-status-badge').style.display = 'flex';
+            document.getElementById('status-confirm-panel').style.display = 'none';
+        });
+
+        document.getElementById('btn-undo-status').addEventListener('click', function() {
+            document.getElementById('hidden-new-status-id').value  = '';
+            document.getElementById('hidden-status-comment').value = '';
+            document.getElementById('pending-status-badge').style.display = 'none';
         });
     </script>
     <script src="/js/new_shipment_popup.js" defer></script>
