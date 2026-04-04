@@ -43,6 +43,29 @@
                     </div>
 
                     <div class="update-card">
+                        <h3>Información del paquete</h3>
+                        <div class="update-fields">
+                            <div class="field">
+                                <label for="shipment-type">Tipo de envío</label>
+                                <select id="shipment-type" name="shipmentTypeId">
+                                    <option value="">Seleccione un tipo</option>
+                                    <% typesShipment.forEach(type => { %>
+                                        <option value="<%= type.id %>" <%= shipment.shipmentTypeId == type.id ? 'selected' : '' %>><%= type.description %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="weight-kg">Peso (kg)</label>
+                                <input id="weight-kg" type="number" name="weightKg" min="0.1" max="999" step="0.1" value="<%= shipment.weightKg || '' %>">
+                            </div>
+                            <div class="field">
+                                <label for="package-qty">Cantidad de paquetes</label>
+                                <input id="package-qty" type="number" name="packageQty" min="1" max="999" step="1" value="<%= shipment.packageQty || '' %>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="update-card">
                         <h3>Dirección de entrega</h3>
                         <div class="update-fields">
                             <div class="field">
