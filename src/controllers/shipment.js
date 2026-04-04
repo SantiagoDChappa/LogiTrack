@@ -4,7 +4,7 @@ const provinceModel        = require('../models/province');
 const addressModel         = require('../models/address');
 const statusModel          = require('../models/status');
 const shipmentHistoryModel = require('../models/shipmentHistory');
-const typeShipmentModel = require('../models/typeShipment');
+const typeShipmentModel    = require('../models/typeShipment');
 const { PersonType } = require('../constants/enums');
 
 
@@ -35,9 +35,8 @@ const getDetail = async (req, res) => {
 };
 
 const getNewShipmentForm = async (req, res) => {
-    const provinces = await provinceModel.getAll();    
-    const typesShipment = await typeShipmentModel.getAll();    
-    console.log(typesShipment);
+    const provinces     = await provinceModel.getAll();
+    const typesShipment = await typeShipmentModel.getAll();
     res.render('shipment/new', { errors: [], body: {}, provinces, typesShipment });
 };
 
@@ -81,12 +80,13 @@ const createShipment = async (req, res) => {
 };
 
 const getUpdateShipment = async (req, res) => {
-  const { id }    = req.params;
-  const provinces = await provinceModel.getAll();
-  const statuses  = await statusModel.getAll();
-  const shipment  = await shipmentModel.getById(id);
-  const history   = await shipmentHistoryModel.getByShipmentId(id);
-  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history });
+  const { id }        = req.params;
+  const provinces     = await provinceModel.getAll();
+  const statuses      = await statusModel.getAll();
+  const shipment      = await shipmentModel.getById(id);
+  const history       = await shipmentHistoryModel.getByShipmentId(id);
+  const typesShipment = await typeShipmentModel.getAll();
+  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history, typesShipment });
 };
 
 const updateShipment = async (req, res) => {

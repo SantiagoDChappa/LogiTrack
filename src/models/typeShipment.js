@@ -1,14 +1,14 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/connection');
 
-const TypeShiment = sequelize.define('shipmentType', {
+const TypeShipment = sequelize.define('shipmentType', {
     id:          { type: DataTypes.INTEGER, primaryKey: true },
     description: { type: DataTypes.STRING }
 },
 { tableName: 'shipmentType', timestamps: false });
 
 const getAll = async () => {
-    return await TypeShiment.findAll();
+    return await TypeShipment.findAll({ order: [['id', 'ASC']] });
 };
 
-module.exports = { TypeShiment, getAll };
+module.exports = { TypeShipment, getAll };
