@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const JWT = require('jsonwebtoken');
 const userModel = require('../models/user');
-const enums = require('../constants/enums');
 
 const getLogin = async (req, res) => {
     return res.render('login',);
