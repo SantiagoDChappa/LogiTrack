@@ -1,4 +1,5 @@
 const { Sequelize } = require("sequelize");
+const { URL } = require("url");
 
 const dbUrl = new URL(process.env.DATABASE_URL);
 dbUrl.searchParams.delete("sslmode");
