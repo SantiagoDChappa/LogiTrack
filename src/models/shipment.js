@@ -10,12 +10,15 @@ const Shipment = sequelize.define('shipment', {
         primaryKey: true,
         autoIncrement: true,
     },
-    trackingId:  { type: DataTypes.STRING },
-    statusId:    { type: DataTypes.INTEGER },
-    createdAt:   { type: DataTypes.DATE },
-    senderId:    { type: DataTypes.INTEGER },
-    recipientId: { type: DataTypes.INTEGER },
-    addressId:   { type: DataTypes.INTEGER }
+    trackingId:      { type: DataTypes.STRING },
+    statusId:        { type: DataTypes.INTEGER },
+    createdAt:       { type: DataTypes.DATE },
+    senderId:        { type: DataTypes.INTEGER },
+    recipientId:     { type: DataTypes.INTEGER },
+    addressId:       { type: DataTypes.INTEGER },
+    shipmentTypeId:  { type: DataTypes.INTEGER },
+    weightKg:        { type: DataTypes.DECIMAL(8, 2) },
+    packageQty:      { type: DataTypes.INTEGER }
 },
 { timestamps: true, tableName: 'shipment' });
 
@@ -135,6 +138,15 @@ const update = async (data) => {
     await Address.update(
         { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment },
         { where: { id: shipment.addressId } }
+    );
+
+    await Shipment.update(
+        {
+            shipmentTypeId: data.shipmentTypeId || null,
+            weightKg:       data.weightKg       || null,
+            packageQty:     data.packageQty      || null,
+        },
+        { where: { id: data.id } }
     );
 
     return shipment;

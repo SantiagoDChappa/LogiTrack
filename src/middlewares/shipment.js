@@ -20,13 +20,6 @@ const validateShipment = [
     body('province').notEmpty().withMessage('La provincia es obligatoria'),
     body('postalCode').notEmpty().withMessage('El código postal es obligatorio'),
 
-    body('shipmentTypeId').notEmpty().withMessage('El tipo de envío es obligatorio'),
-    body('weightKg')
-        .notEmpty().withMessage('El peso es obligatorio')
-        .isFloat({ min: 0.1, max: 999 }).withMessage('El peso debe ser entre 0.1 y 999 kg'),
-    body('packageQty')
-        .notEmpty().withMessage('La cantidad de paquetes es obligatoria')
-        .isInt({ min: 1, max: 999 }).withMessage('La cantidad debe ser entre 1 y 999'),
 ];
 
 const handleValidationErrors = async (req, res, next) => {
