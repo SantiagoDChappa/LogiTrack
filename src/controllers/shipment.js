@@ -4,6 +4,7 @@ const provinceModel        = require('../models/province');
 const addressModel         = require('../models/address');
 const statusModel          = require('../models/status');
 const shipmentHistoryModel = require('../models/shipmentHistory');
+const typeShipmentModel = require('../models/typeShipment');
 const { PersonType } = require('../constants/enums');
 
 
@@ -35,7 +36,9 @@ const getDetail = async (req, res) => {
 
 const getNewShipmentForm = async (req, res) => {
     const provinces = await provinceModel.getAll();    
-    res.render('shipment/new', { errors: [], body: {}, provinces });
+    const typesShipment = await typeShipmentModel.getAll();    
+    console.log(typesShipment);
+    res.render('shipment/new', { errors: [], body: {}, provinces, typesShipment });
 };
 
 const createShipment = async (req, res) => {
