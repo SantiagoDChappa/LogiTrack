@@ -31,7 +31,8 @@ const searchShipments = async (req, res) => {
 const getDetail = async (req, res) => {
     const { id } = req.params;
     const shipment = await shipmentModel.getById(id);
-    res.render('shipment/detail', { shipment });
+    const history  = await shipmentHistoryModel.getByShipmentId(id);
+    res.render('shipment/detail', { shipment, history });
 };
 
 const getNewShipmentForm = async (req, res) => {

@@ -525,6 +525,11 @@
   white-space: nowrap;
 }
 
+.status-badge--sm {
+  padding: 0.15rem 0.5rem;
+  font-size: var(--font-size-xs);
+}
+
 .status-badge.pendiente    { background-color: var(--badge-pending-bg);   color: var(--badge-pending-text);   }
 .status-badge.en_transito,
 .status-badge.en-transito  { background-color: var(--badge-transit-bg);    color: var(--badge-transit-text);    }
@@ -630,6 +635,19 @@
 
 @media (max-width: 600px) {
   .detail-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail-bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .detail-bottom-row {
     grid-template-columns: 1fr;
   }
 }
