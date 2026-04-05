@@ -1,8 +1,9 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('../database/connection');
-const { Person }  = require('./person');
-const { Status }  = require('./status');
-const { Address } = require('./address');
+const { Person }       = require('./person');
+const { Status }       = require('./status');
+const { Address }      = require('./address');
+const { TypeShipment } = require('./typeShipment');
 
 const Shipment = sequelize.define('shipment', {
     id: {
@@ -22,16 +23,18 @@ const Shipment = sequelize.define('shipment', {
 },
 { timestamps: true, tableName: 'shipment' });
 
-Shipment.belongsTo(Person,  { as: 'sender',    foreignKey: 'senderId'    });
-Shipment.belongsTo(Person,  { as: 'recipient', foreignKey: 'recipientId' });
-Shipment.belongsTo(Status,  { as: 'status',    foreignKey: 'statusId'    });
-Shipment.belongsTo(Address, { as: 'address',   foreignKey: 'addressId'   });
+Shipment.belongsTo(Person,       { as: 'sender',       foreignKey: 'senderId'       });
+Shipment.belongsTo(Person,       { as: 'recipient',    foreignKey: 'recipientId'    });
+Shipment.belongsTo(Status,       { as: 'status',       foreignKey: 'statusId'       });
+Shipment.belongsTo(Address,      { as: 'address',      foreignKey: 'addressId'      });
+Shipment.belongsTo(TypeShipment, { as: 'shipmentType', foreignKey: 'shipmentTypeId' });
 
 const defaultIncludes = [
-    { model: Person,  as: 'sender'    },
-    { model: Person,  as: 'recipient' },
-    { model: Status,  as: 'status'    },
-    { model: Address, as: 'address'   },
+    { model: Person,       as: 'sender'       },
+    { model: Person,       as: 'recipient'    },
+    { model: Status,       as: 'status'       },
+    { model: Address,      as: 'address'      },
+    { model: TypeShipment, as: 'shipmentType' },
 ];
 
 const getAll = async () => {
