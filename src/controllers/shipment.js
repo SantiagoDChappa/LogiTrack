@@ -8,12 +8,13 @@ const typeShipmentModel    = require('../models/typeShipment');
 const { PersonType } = require('../constants/enums');
 
 
-const home = (req, res) => {
-    res.render('shipment/index', { shipments: [], query: {} });
+const home = async (req, res) => {
+    const statuses = await statusModel.getAll();
+    res.render('shipment/index', { shipments: [], query: {}, statuses });
 };
 
 const searchShipments = async (req, res) => {
-    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument } = req.query;
+    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument, statusIds } = req.query;
     const query = {
         trackingId,
         role,
@@ -22,10 +23,14 @@ const searchShipments = async (req, res) => {
         senderName:        senderName?.trim(),
         senderDocument:    senderDocument?.trim(),
         recipientName:     recipientName?.trim(),
-        recipientDocument: recipientDocument?.trim()
+        recipientDocument: recipientDocument?.trim(),
+        statusIds:         statusIds ? [].concat(statusIds) : []
     };
-    const shipments = await shipmentModel.search(query);
-    res.render('shipment/index', { shipments, query });
+    const [shipments, statuses] = await Promise.all([
+        shipmentModel.search(query),
+        statusModel.getAll()
+    ]);
+    res.render('shipment/index', { shipments, query, statuses });
 };
 
 const getDetail = async (req, res) => {
