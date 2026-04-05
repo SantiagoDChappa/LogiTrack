@@ -63,10 +63,14 @@ const create = async (data) => {
     });
 };
 
-const search = async ({ trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument }) => {
+const search = async ({ trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument, statusIds }) => {
     const shipmentWhere  = {};
     const senderWhere    = {};
     const recipientWhere = {};
+
+    if (statusIds && statusIds.length > 0) {
+        shipmentWhere.statusId = { [Op.in]: statusIds.map(Number) };
+    }
 
     if (trackingId) shipmentWhere.trackingId = { [Op.iLike]: `%${trackingId}%` };
 
