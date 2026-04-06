@@ -16,13 +16,16 @@ CREATE TABLE "logitrack"."user" (
 );
 
 CREATE TABLE "logitrack"."shipment" (
-    "id"          SERIAL,
-    "trackingId"  varchar,
-    "statusId"    int,
-    "createdAt"   date,
-    "senderId"    int,
-    "recipientId" int,
-    "addressId"   int,
+    "id"             SERIAL,
+    "trackingId"     varchar,
+    "statusId"       int,
+    "createdAt"      date,
+    "senderId"       int,
+    "recipientId"    int,
+    "addressId"      int,
+    "shipmentTypeId" int,
+    "weightKg"       decimal(8,2),
+    "packageQty"     int,
     PRIMARY KEY ("id")
 );
 
@@ -70,6 +73,12 @@ CREATE TABLE "logitrack"."roleType" (
     PRIMARY KEY ("id")
 );
 
+CREATE TABLE "logitrack"."shipmentType" (
+    "id"          int NOT NULL,
+    "description" varchar NOT NULL,
+    PRIMARY KEY ("id")
+);
+
 -- ============================================================
 -- FK
 -- ============================================================
@@ -101,6 +110,10 @@ ALTER TABLE "logitrack"."shipment"
 ALTER TABLE "logitrack"."shipment"
     ADD CONSTRAINT "fk_shipment_addressId_address_id"
     FOREIGN KEY ("addressId") REFERENCES "logitrack"."address" ("id");
+
+ALTER TABLE "logitrack"."shipment"
+    ADD CONSTRAINT "fk_shipment_shipmentTypeId_shipmentType_id"
+    FOREIGN KEY ("shipmentTypeId") REFERENCES "logitrack"."shipmentType" ("id");
 
 CREATE TABLE "logitrack"."shipment_history" (
     "id"           SERIAL,
