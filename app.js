@@ -7,7 +7,7 @@ const port    = process.env.PORT || 3000;
 
 const sequelize = require('./src/database/connection');
 const swaggerSpec = require('./src/docs/swagger');
-const { requireAuth } = require('./src/middlewares/auth');
+const { requireAuth, requireSupervisor } = require('./src/middlewares/auth');
 
 const homeRoutes        = require('./src/routes/home');
 const shipmentRoutes    = require('./src/routes/shipment');
@@ -37,10 +37,23 @@ app.use(apiHealthRoutes);
 
 // Rutas Protegidas
 app.use('/', requireAuth, homeRoutes);
-app.use('/user', requireAuth, userRoutes);
+app.use('/user', requireAuth, requireSupervisor, userRoutes);
 app.use('/shipment',  requireAuth, shipmentRoutes);
-app.use('/api/shipments',  requireAuth, apiShipmentRoutes);
-app.use('/api-docs',  requireAuth, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api/shipments',  requireAuth, requireSupervisor, apiShipmentRoutes);
+app.use('/api-docs',  requireAuth, requireSupervisor, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use((req, res) => {
+    const token = req.cookies?.token;
+    if (token) {
+        try {
+            require('jsonwebtoken').verify(token, process.env.JWT_SECRET);
+            return res.redirect('/');
+        } catch {
+            res.clearCookie('token');
+        }
+    }
+    res.redirect('/login');
+});
 
 app.listen(port, () => {
     console.log(`LogiTrack running at http://localhost:${port}`);

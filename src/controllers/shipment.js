@@ -4,15 +4,17 @@ const provinceModel        = require('../models/province');
 const addressModel         = require('../models/address');
 const statusModel          = require('../models/status');
 const shipmentHistoryModel = require('../models/shipmentHistory');
+const typeShipmentModel    = require('../models/typeShipment');
 const { PersonType } = require('../constants/enums');
 
 
-const home = (req, res) => {
-    res.render('shipment/index', { shipments: [], query: {} });
+const home = async (req, res) => {
+    const statuses = await statusModel.getAll();
+    res.render('shipment/index', { shipments: [], query: {}, statuses });
 };
 
 const searchShipments = async (req, res) => {
-    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument } = req.query;
+    const { trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument, statusIds } = req.query;
     const query = {
         trackingId,
         role,
@@ -21,21 +23,27 @@ const searchShipments = async (req, res) => {
         senderName:        senderName?.trim(),
         senderDocument:    senderDocument?.trim(),
         recipientName:     recipientName?.trim(),
-        recipientDocument: recipientDocument?.trim()
+        recipientDocument: recipientDocument?.trim(),
+        statusIds:         statusIds ? [].concat(statusIds) : []
     };
-    const shipments = await shipmentModel.search(query);
-    res.render('shipment/index', { shipments, query });
+    const [shipments, statuses] = await Promise.all([
+        shipmentModel.search(query),
+        statusModel.getAll()
+    ]);
+    res.render('shipment/index', { shipments, query, statuses });
 };
 
 const getDetail = async (req, res) => {
     const { id } = req.params;
     const shipment = await shipmentModel.getById(id);
-    res.render('shipment/detail', { shipment });
+    const history  = await shipmentHistoryModel.getByShipmentId(id);
+    res.render('shipment/detail', { shipment, history });
 };
 
 const getNewShipmentForm = async (req, res) => {
-    const provinces = await provinceModel.getAll();    
-    res.render('shipment/new', { errors: [], body: {}, provinces });
+    const provinces     = await provinceModel.getAll();
+    const typesShipment = await typeShipmentModel.getAll();
+    res.render('shipment/new', { errors: [], body: {}, provinces, typesShipment });
 };
 
 const createShipment = async (req, res) => {
@@ -78,19 +86,32 @@ const createShipment = async (req, res) => {
 };
 
 const getUpdateShipment = async (req, res) => {
-  const { id }    = req.params;
-  const provinces = await provinceModel.getAll();
-  const statuses  = await statusModel.getAll();
-  const shipment  = await shipmentModel.getById(id);
-  const history   = await shipmentHistoryModel.getByShipmentId(id);
-  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history });
+  const { id }        = req.params;
+  const provinces     = await provinceModel.getAll();
+  const statuses      = await statusModel.getAll();
+  const shipment      = await shipmentModel.getById(id);
+  const history       = await shipmentHistoryModel.getByShipmentId(id);
+  const typesShipment = await typeShipmentModel.getAll();
+  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history, typesShipment });
 };
 
 const updateShipment = async (req, res) => {
   try {
-    const body = { ...req.body, id: req.params.id };
-    await shipmentModel.update(body);
+    const { id } = req.params;
+    const body   = { ...req.body, id };
 
+    if (body.newStatusId) {
+      const shipment = await shipmentModel.getById(id);
+      await shipmentHistoryModel.create({
+        shipmentId:   id,
+        fromStatusId: shipment.statusId,
+        toStatusId:   Number(body.newStatusId),
+        comment:      body.statusComment || null
+      });
+      await shipmentModel.updateStatus(id, Number(body.newStatusId));
+    }
+
+    await shipmentModel.update(body);
     res.redirect('/shipment?success=2');
   } catch (err) {
     console.error('ERROR updateShipment:', err.message);

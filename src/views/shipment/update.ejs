@@ -17,6 +17,8 @@
 
                 <!-- Columna izquierda: destinatario + dirección -->
                 <form id="main-update-form" class="update-left" action="/shipment/update/<%= shipment.id %>" method="post">
+                    <input type="hidden" name="newStatusId" id="hidden-new-status-id">
+                    <input type="hidden" name="statusComment" id="hidden-status-comment">
 
                     <div class="update-card">
                         <h3>Destinatario</h3>
@@ -36,6 +38,29 @@
                             <div class="field">
                                 <label for="recipient-email">Email</label>
                                 <input id="recipient-email" type="email" name="recipientEmail" value="<%= shipment.recipient.email || '' %>">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="update-card">
+                        <h3>Información del paquete</h3>
+                        <div class="update-fields">
+                            <div class="field">
+                                <label for="shipment-type">Tipo de envío</label>
+                                <select id="shipment-type" name="shipmentTypeId">
+                                    <option value="">Seleccione un tipo</option>
+                                    <% typesShipment.forEach(type => { %>
+                                        <option value="<%= type.id %>" <%= shipment.shipmentTypeId == type.id ? 'selected' : '' %>><%= type.description %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="weight-kg">Peso (kg)</label>
+                                <input id="weight-kg" type="number" name="weightKg" min="0.1" max="999" step="0.1" value="<%= shipment.weightKg || '' %>">
+                            </div>
+                            <div class="field">
+                                <label for="package-qty">Cantidad de paquetes</label>
+                                <input id="package-qty" type="number" name="packageQty" min="1" max="999" step="1" value="<%= shipment.packageQty || '' %>">
                             </div>
                         </div>
                     </div>
@@ -115,14 +140,18 @@
                     <!-- Panel de confirmación (oculto por defecto) -->
                     <div id="status-confirm-panel" class="status-confirm-panel" style="display:none;">
                         <p class="confirm-title">Confirmar nuevo estado: <strong id="confirm-status-name"></strong></p>
-                        <form action="/shipment/update/<%= shipment.id %>/status" method="post">
-                            <input type="hidden" name="newStatusId" id="confirm-status-id">
-                            <textarea name="comment" placeholder="Describa el motivo del cambio de estado..." rows="3"></textarea>
-                            <div class="confirm-actions">
-                                <button type="button" id="btn-cancel-confirm" class="btn-secondary btn-sm">Cancelar</button>
-                                <button type="submit" class="btn-primary btn-sm">Confirmar cambio</button>
-                            </div>
-                        </form>
+                        <input type="hidden" id="confirm-status-id">
+                        <textarea id="status-comment-input" placeholder="Describa el motivo del cambio de estado..." rows="3"></textarea>
+                        <div class="confirm-actions">
+                            <button type="button" id="btn-cancel-confirm" class="btn-secondary btn-sm">Cancelar</button>
+                            <button type="button" id="btn-confirm-status" class="btn-primary btn-sm">Confirmar cambio</button>
+                        </div>
+                    </div>
+
+                    <!-- Badge de cambio de estado pendiente -->
+                    <div id="pending-status-badge" style="display:none;" class="pending-status-badge">
+                        Cambio de estado pendiente: <strong id="pending-status-name"></strong>
+                        <button type="button" id="btn-undo-status" class="btn-secondary btn-sm">Deshacer</button>
                     </div>
 
                     <!-- Historial de cambios -->
@@ -131,15 +160,27 @@
                         <% if (history.length === 0) { %>
                             <p class="historial-empty">Sin cambios registrados.</p>
                         <% } else { %>
+                            <%
+                                const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'};
+                                function _sk(desc) { return desc.toLowerCase().replace(/[\s-]+/g, '_'); }
+                            %>
                             <ul class="historial-list">
                                 <% history.forEach(function(h) { %>
+                                    <%
+                                        const _fk = h.fromStatus ? _sk(h.fromStatus.description) : 'inicial';
+                                        const _fl = h.fromStatus ? (_sl[_fk] || h.fromStatus.description) : 'Inicial';
+                                        const _tk = _sk(h.toStatus.description);
+                                        const _tl = _sl[_tk] || h.toStatus.description;
+                                    %>
                                     <li class="historial-item">
                                         <span class="historial-fecha">
                                             <%= new Date(h.changedAt).toLocaleDateString('es-AR') %> -
                                             <%= new Date(h.changedAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) %>
                                         </span>
                                         <span class="historial-estados">
-                                            <%= h.fromStatus ? h.fromStatus.description : 'Inicial' %> → <%= h.toStatus.description %>
+                                            <span class="status-badge status-badge--sm <%= _fk %>"><%= _fl %></span>
+                                            →
+                                            <span class="status-badge status-badge--sm <%= _tk %>"><%= _tl %></span>
                                         </span>
                                         <% if (h.comment) { %>
                                             <span class="historial-motivo">Motivo: <%= h.comment %></span>
@@ -169,12 +210,32 @@
                 var panel = document.getElementById('status-confirm-panel');
                 document.getElementById('confirm-status-id').value = this.dataset.statusId;
                 document.getElementById('confirm-status-name').textContent = this.dataset.statusName;
+                document.getElementById('status-comment-input').value = '';
                 panel.style.display = 'flex';
             });
         });
 
         document.getElementById('btn-cancel-confirm').addEventListener('click', function() {
             document.getElementById('status-confirm-panel').style.display = 'none';
+        });
+
+        document.getElementById('btn-confirm-status').addEventListener('click', function() {
+            var statusId   = document.getElementById('confirm-status-id').value;
+            var statusName = document.getElementById('confirm-status-name').textContent;
+            var comment    = document.getElementById('status-comment-input').value;
+
+            document.getElementById('hidden-new-status-id').value  = statusId;
+            document.getElementById('hidden-status-comment').value = comment;
+
+            document.getElementById('pending-status-name').textContent = statusName;
+            document.getElementById('pending-status-badge').style.display = 'flex';
+            document.getElementById('status-confirm-panel').style.display = 'none';
+        });
+
+        document.getElementById('btn-undo-status').addEventListener('click', function() {
+            document.getElementById('hidden-new-status-id').value  = '';
+            document.getElementById('hidden-status-comment').value = '';
+            document.getElementById('pending-status-badge').style.display = 'none';
         });
     </script>
     <script src="/js/new_shipment_popup.js" defer></script>

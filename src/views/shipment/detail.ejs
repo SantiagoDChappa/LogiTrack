@@ -84,6 +84,61 @@
                         <span class="detail-value"><%= shipment.address.postalCode %></span>
                     </div>
                 </div>
+
+            </div>
+
+            <div class="detail-bottom-row">
+                <div class="detail-card">
+                    <h3>Información del paquete</h3>
+                    <div class="detail-field">
+                        <span class="detail-label">Tipo de envío</span>
+                        <span class="detail-value"><%= shipment.shipmentType ? shipment.shipmentType.description : '-' %></span>
+                    </div>
+                    <div class="detail-field">
+                        <span class="detail-label">Peso (kg)</span>
+                        <span class="detail-value"><%= shipment.weightKg != null ? shipment.weightKg + ' kg' : '-' %></span>
+                    </div>
+                    <div class="detail-field">
+                        <span class="detail-label">Cantidad de paquetes</span>
+                        <span class="detail-value"><%= shipment.packageQty != null ? shipment.packageQty : '-' %></span>
+                    </div>
+                </div>
+
+                <div class="estado-historial detail-card">
+                    <h4>Historial de cambios de estado</h4>
+                    <% if (history.length === 0) { %>
+                        <p class="historial-empty">Sin cambios registrados.</p>
+                    <% } else { %>
+                        <%
+                            const _sl = {pendiente:'Pendiente',en_transito:'En Tránsito',entregado:'Entregado',cancelado:'Cancelado',cancelada:'Cancelada',retrasado:'Retrasado',en_sucursal:'En Sucursal',inicial:'Inicial'};
+                            function _sk(desc) { return desc.toLowerCase().replace(/[\s-]+/g, '_'); }
+                        %>
+                        <ul class="historial-list">
+                            <% history.forEach(function(h) { %>
+                                <%
+                                    const _fk = h.fromStatus ? _sk(h.fromStatus.description) : 'inicial';
+                                    const _fl = h.fromStatus ? (_sl[_fk] || h.fromStatus.description) : 'Inicial';
+                                    const _tk = _sk(h.toStatus.description);
+                                    const _tl = _sl[_tk] || h.toStatus.description;
+                                %>
+                                <li class="historial-item">
+                                    <span class="historial-fecha">
+                                        <%= new Date(h.changedAt).toLocaleDateString('es-AR') %> -
+                                        <%= new Date(h.changedAt).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }) %>
+                                    </span>
+                                    <span class="historial-estados">
+                                        <span class="status-badge status-badge--sm <%= _fk %>"><%= _fl %></span>
+                                        →
+                                        <span class="status-badge status-badge--sm <%= _tk %>"><%= _tl %></span>
+                                    </span>
+                                    <% if (h.comment) { %>
+                                        <span class="historial-motivo">Motivo: <%= h.comment %></span>
+                                    <% } %>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } %>
+                </div>
             </div>
 
         </div>
