@@ -54,7 +54,7 @@ Los modelos se entrenan con un dataset sintético de envíos argentinos y toman 
 
 El sistema está disponible en línea, sin necesidad de instalar nada. Ingresá desde cualquier navegador web:
 
-**`https://logitrack-89b1.onrender.com/`**
+**`[https://logitrack-89b1.onrender.com/](https://logitrack-prototipo.onrender.com/)`**
 
 ---
 
