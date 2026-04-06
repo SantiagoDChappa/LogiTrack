@@ -11,4 +11,8 @@ const getAll = async () => {
     return await Status.findAll({ order: [['id', 'ASC']] });
 };
 
-module.exports = { Status, getAll };
+const getById = async (id) => {
+    return await Status.findOne({ where: { id } });
+};
+
+module.exports = { Status, getAll, getById };

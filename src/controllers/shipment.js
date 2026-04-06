@@ -5,7 +5,10 @@ const addressModel         = require('../models/address');
 const statusModel          = require('../models/status');
 const shipmentHistoryModel = require('../models/shipmentHistory');
 const typeShipmentModel    = require('../models/typeShipment');
-const { PersonType } = require('../constants/enums');
+const settingModel         = require('../models/setting');
+const { PersonType }       = require('../constants/enums');
+const { PROVINCES }        = require('../utils/provinces');
+const { notifyStatusChange } = require('../utils/notifications');
 
 
 const home = async (req, res) => {
@@ -35,9 +38,31 @@ const searchShipments = async (req, res) => {
 
 const getDetail = async (req, res) => {
     const { id } = req.params;
-    const shipment = await shipmentModel.getById(id);
-    const history  = await shipmentHistoryModel.getByShipmentId(id);
-    res.render('shipment/detail', { shipment, history });
+    const [shipment, history, originLat, originLng, originStreet, originNumber] = await Promise.all([
+        shipmentModel.getById(id),
+        shipmentHistoryModel.getByShipmentId(id),
+        settingModel.get('origin_lat'),
+        settingModel.get('origin_lng'),
+        settingModel.get('origin_street'),
+        settingModel.get('origin_number'),
+    ]);
+
+    const destProv = PROVINCES[shipment.address.provinceId];
+    const mapData = {
+        origin: {
+            lat:   parseFloat(originLat)  || -34.6037,
+            lng:   parseFloat(originLng)  || -58.3816,
+            label: [originStreet, originNumber].filter(Boolean).join(' ') || 'Origen',
+        },
+        destination: destProv ? {
+            lat:   destProv.lat,
+            lng:   destProv.lng,
+            label: [shipment.address.street, shipment.address.number].filter(Boolean).join(' ')
+                   || destProv.name,
+        } : null,
+    };
+
+    res.render('shipment/detail', { shipment, history, mapData });
 };
 
 const getNewShipmentForm = async (req, res) => {
@@ -76,7 +101,14 @@ const createShipment = async (req, res) => {
     });
 
     //Creo el envio
-    await shipmentModel.create({ senderId: sender.id, recipientId: recipient.id, addressId: address.id });
+    await shipmentModel.create({
+        senderId:       sender.id,
+        recipientId:    recipient.id,
+        addressId:      address.id,
+        shipmentTypeId: body.shipmentTypeId || null,
+        weightKg:       body.weightKg       || null,
+        packageQty:     body.packageQty      || null,
+    });
     
     res.redirect('/shipment?success=1');
   } catch (err) {
@@ -86,13 +118,34 @@ const createShipment = async (req, res) => {
 };
 
 const getUpdateShipment = async (req, res) => {
-  const { id }        = req.params;
-  const provinces     = await provinceModel.getAll();
-  const statuses      = await statusModel.getAll();
-  const shipment      = await shipmentModel.getById(id);
-  const history       = await shipmentHistoryModel.getByShipmentId(id);
-  const typesShipment = await typeShipmentModel.getAll();
-  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history, typesShipment });
+  const { id } = req.params;
+  const [provinces, statuses, shipment, history, typesShipment, originLat, originLng, originStreet, originNumber] = await Promise.all([
+      provinceModel.getAll(),
+      statusModel.getAll(),
+      shipmentModel.getById(id),
+      shipmentHistoryModel.getByShipmentId(id),
+      typeShipmentModel.getAll(),
+      settingModel.get('origin_lat'),
+      settingModel.get('origin_lng'),
+      settingModel.get('origin_street'),
+      settingModel.get('origin_number'),
+  ]);
+
+  const destProv = PROVINCES[shipment.address.provinceId];
+  const mapData = {
+      origin: {
+          lat:   parseFloat(originLat)  || -34.6037,
+          lng:   parseFloat(originLng)  || -58.3816,
+          label: [originStreet, originNumber].filter(Boolean).join(' ') || 'Origen',
+      },
+      destination: destProv ? {
+          lat:   destProv.lat,
+          lng:   destProv.lng,
+          label: [shipment.address.street, shipment.address.number].filter(Boolean).join(' ') || destProv.name,
+      } : null,
+  };
+
+  res.render('shipment/update', { errors: [], shipment, provinces, statuses, history, typesShipment, mapData });
 };
 
 const updateShipment = async (req, res) => {
@@ -101,7 +154,10 @@ const updateShipment = async (req, res) => {
     const body   = { ...req.body, id };
 
     if (body.newStatusId) {
-      const shipment = await shipmentModel.getById(id);
+      const [shipment, newStatus] = await Promise.all([
+          shipmentModel.getById(id),
+          statusModel.getById(Number(body.newStatusId)),
+      ]);
       await shipmentHistoryModel.create({
         shipmentId:   id,
         fromStatusId: shipment.statusId,
@@ -109,6 +165,7 @@ const updateShipment = async (req, res) => {
         comment:      body.statusComment || null
       });
       await shipmentModel.updateStatus(id, Number(body.newStatusId));
+      if (newStatus) notifyStatusChange(shipment, newStatus.description);
     }
 
     await shipmentModel.update(body);
@@ -123,7 +180,10 @@ const updateShipmentStatus = async (req, res) => {
   try {
     const { id }                   = req.params;
     const { newStatusId, comment } = req.body;
-    const shipment                 = await shipmentModel.getById(id);
+    const [shipment, newStatus]    = await Promise.all([
+        shipmentModel.getById(id),
+        statusModel.getById(Number(newStatusId)),
+    ]);
 
     await shipmentHistoryModel.create({
         shipmentId:   id,
@@ -133,6 +193,7 @@ const updateShipmentStatus = async (req, res) => {
     });
 
     await shipmentModel.updateStatus(id, Number(newStatusId));
+    if (newStatus) notifyStatusChange(shipment, newStatus.description);
 
     res.redirect(`/shipment/update/${id}`);
   } catch (err) {
