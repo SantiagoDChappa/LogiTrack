@@ -18,19 +18,19 @@
                     <h3>Remitente</h3>
                     <div class="field">
                         <label for="sender-name">Nombre y Apellido <span class="req">*</span></label>
-                        <input id="sender-name" type="text" name="senderName" value="<%= body.senderName || '' %>">
+                        <input id="sender-name" type="text" name="senderName" value="<%= body.senderName || '' %>" placeholder="Ej: Juan Pérez">
                     </div>
                     <div class="field">
                         <label for="sender-document">Documento <span class="req">*</span></label>
-                        <input id="sender-document" type="text" name="senderDocument" value="<%= body.senderDocument || '' %>">
+                        <input id="sender-document" type="text" name="senderDocument" value="<%= body.senderDocument || '' %>" placeholder="Ej: 12.345.678" data-doc-format maxlength="11">
                     </div>
                     <div class="field">
                         <label for="sender-phone">Teléfono</label>
-                        <input id="sender-phone" type="tel" name="senderPhone" maxlength="10" value="<%= body.senderPhone || '' %>">
+                        <input id="sender-phone" type="tel" name="senderPhone" maxlength="10" value="<%= body.senderPhone || '' %>" placeholder="Ej: 1123456789">
                     </div>
                     <div class="field">
                         <label for="sender-email">Email</label>
-                        <input id="sender-email" type="email" name="senderEmail" value="<%= body.senderEmail || '' %>">
+                        <input id="sender-email" type="email" name="senderEmail" value="<%= body.senderEmail || '' %>" placeholder="Ej: juan@email.com">
                     </div>
                 </div>
 
@@ -38,19 +38,19 @@
                     <h3>Destinatario</h3>
                     <div class="field">
                         <label for="recipient-name">Nombre y Apellido <span class="req">*</span></label>
-                        <input id="recipient-name" type="text" name="recipientName" value="<%= body.recipientName || '' %>">
+                        <input id="recipient-name" type="text" name="recipientName" value="<%= body.recipientName || '' %>" placeholder="Ej: María García">
                     </div>
                     <div class="field">
                         <label for="recipient-document">Documento <span class="req">*</span></label>
-                        <input id="recipient-document" type="text" name="recipientDocument" value="<%= body.recipientDocument || '' %>">
+                        <input id="recipient-document" type="text" name="recipientDocument" value="<%= body.recipientDocument || '' %>" placeholder="Ej: 12.345.678" data-doc-format maxlength="11">
                     </div>
                     <div class="field">
                         <label for="recipient-phone">Teléfono</label>
-                        <input id="recipient-phone" type="tel" name="recipientPhone" maxlength="10" value="<%= body.recipientPhone || '' %>">
+                        <input id="recipient-phone" type="tel" name="recipientPhone" maxlength="10" value="<%= body.recipientPhone || '' %>" placeholder="Ej: 1123456789">
                     </div>
                     <div class="field">
                         <label for="recipient-email">Email</label>
-                        <input id="recipient-email" type="email" name="recipientEmail" value="<%= body.recipientEmail || '' %>">
+                        <input id="recipient-email" type="email" name="recipientEmail" value="<%= body.recipientEmail || '' %>" placeholder="Ej: maria@email.com">
                     </div>
                 </div>
 
@@ -88,7 +88,7 @@
                     <!-- Piso/depto — siempre visible, posición fija -->
                     <div class="field">
                         <label for="floor-apartment">Piso y/o Depto <span style="font-weight:400;color:var(--color-text-secondary)">(opcional)</span></label>
-                        <input id="floor-apartment" type="text" name="floorApartment" value="<%= body.floorApartment || '' %>">
+                        <input id="floor-apartment" type="text" name="floorApartment" value="<%= body.floorApartment || '' %>" placeholder="Ej: 3° B">
                     </div>
                 </div>
 
@@ -105,11 +105,11 @@
                     </div>
                     <div class="field">
                         <label for="weight-kg">Peso (kg) <span class="req">*</span></label>
-                        <input id="weight-kg" type="number" name="weightKg" min="0.1" max="999" step="0.1" value="<%= body.weightKg || '' %>">
+                        <input id="weight-kg" type="number" name="weightKg" min="0.1" max="999" step="0.1" value="<%= body.weightKg || '' %>" placeholder="Ej: 1.5">
                     </div>
                     <div class="field">
                         <label for="package-qty">Cantidad de paquetes <span class="req">*</span></label>
-                        <input id="package-qty" type="number" name="packageQty" min="1" max="999" step="1" value="<%= body.packageQty || '' %>">
+                        <input id="package-qty" type="number" name="packageQty" min="1" max="999" step="1" value="<%= body.packageQty || '' %>" placeholder="Ej: 3">
                     </div>
                 </div>
 
@@ -134,5 +134,6 @@
     <script src="/js/prediction.js" defer></script>
     <script src="/js/address-validation.js" defer></script>
     <script src="/js/address-autocomplete.js" defer></script>
+    <script src="/js/document-format.js" defer></script>
 </body>
 </html>
