@@ -62,7 +62,7 @@ CREATE TABLE "logitrack"."address" (
     "street"         varchar NOT NULL,
     "number"         int     NOT NULL,
     "provinceId"     int     NOT NULL,
-    "postalCode"     int     NOT NULL,
+    "postalCode"     varchar NOT NULL,
     "floorApartment" varchar,
     PRIMARY KEY ("id")
 );

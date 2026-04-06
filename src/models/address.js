@@ -11,7 +11,7 @@ const Address = sequelize.define('address', {
     street:         { type: DataTypes.STRING },
     number:         { type: DataTypes.INTEGER },
     provinceId:     { type: DataTypes.INTEGER },
-    postalCode:     { type: DataTypes.INTEGER },
+    postalCode:     { type: DataTypes.STRING },
     floorApartment: { type: DataTypes.STRING },
 },
 { tableName: 'address' });
