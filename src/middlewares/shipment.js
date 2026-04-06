@@ -18,7 +18,7 @@ const validateShipment = [
     body('street').notEmpty().withMessage('La calle es obligatoria'),
     body('number').notEmpty().withMessage('La numeración es obligatoria'),
     body('province').notEmpty().withMessage('La provincia es obligatoria'),
-    body('postalCode').optional({ checkFalsy: true }),
+    body('postalCode').notEmpty().withMessage('El código postal es obligatorio'),
 
 ];
 
@@ -55,7 +55,7 @@ const validateUpdateShipment = [
     body('street').notEmpty().trim().withMessage('La calle es obligatoria'),
     body('number').notEmpty().withMessage('La numeración es obligatoria'),
     body('province').notEmpty().withMessage('La provincia es obligatoria'),
-    body('postalCode').optional({ checkFalsy: true }),
+    body('postalCode').notEmpty().withMessage('El código postal es obligatorio'),
 
     body('shipmentTypeId').notEmpty().withMessage('El tipo de envío es obligatorio'),
     body('weightKg')

@@ -143,37 +143,31 @@ router.get('/', async (req, res) => {
         georefItems = await searchGeoref(street, province.indec, null);
     }
 
-    try {
+    const seen    = new Set();
+    const results = [];
 
-        // 4. Merge: Georef primero, Nominatim completa si hay pocos resultados
-        const seen    = new Set();
-        const results = [];
+    const addResult = (r) => {
+        if (!r.street) return;
+        const key = `${r.street.toLowerCase()}|${r.number}|${r.city.toLowerCase()}|${r.province_id}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        results.push(r);
+    };
 
-        const addResult = (r) => {
-            if (!r.street) return;
-            const key = `${r.street.toLowerCase()}|${r.number}|${r.city.toLowerCase()}|${r.province_id}`;
-            if (seen.has(key)) return;
-            seen.add(key);
-            results.push(r);
-        };
+    georefItems.slice(0, 6).forEach(i => addResult(mapGeorefItem(i)));
 
-        georefItems.slice(0, 6).forEach(i => addResult(mapGeorefItem(i)));
-
-        // Completa con Nominatim hasta 6 resultados totales
-        if (results.length < 4) {
-            nominatimItems.forEach(i => {
-                if (results.length >= 6) return;
-                addResult(mapNominatimItem(i));
-            });
-        }
-
-        // Completa CP faltantes en resultados Georef usando reverse geocode
-        await fillPostalCodes(results);
-
-        res.json(results);
-    } catch {
-        res.json([]);
+    // Completa con Nominatim hasta 6 resultados totales
+    if (results.length < 4) {
+        nominatimItems.forEach(i => {
+            if (results.length >= 6) return;
+            addResult(mapNominatimItem(i));
+        });
     }
+
+    // Completa CP faltantes en resultados Georef usando reverse geocode
+    await fillPostalCodes(results);
+
+    res.json(results);
 });
 
 module.exports = router;
