@@ -22,6 +22,9 @@
     }
 
     async function validateAddress() {
+        // Si el autocomplete ya confirmó la dirección, no re-validar
+        if (window.addrValid) return;
+
         const { street, number, provinceId } = getFields();
 
         if (!street || !number || !provinceId) {
@@ -70,8 +73,15 @@
         ['street', 'number', 'province'].forEach(function (id) {
             const el = document.getElementById(id);
             if (!el) return;
-            el.addEventListener('change', schedule);
-            if (el.tagName === 'INPUT') el.addEventListener('input', schedule);
+            el.addEventListener('change', function () {
+                // Si el cambio viene de tipeo manual (no del autocomplete), invalidar selección previa
+                if (el.type !== 'hidden') window.addrValid = false;
+                schedule();
+            });
+            if (el.tagName === 'INPUT') el.addEventListener('input', function () {
+                if (el.type !== 'hidden') window.addrValid = false;
+                schedule();
+            });
         });
 
         // Estado inicial
