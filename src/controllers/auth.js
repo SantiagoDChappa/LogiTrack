@@ -30,7 +30,6 @@ const login = async (req, res) => {
         cookieOptions.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 días
     }
     res.cookie('token', token, cookieOptions);
-
     res.redirect('/');
 };
 

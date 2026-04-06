@@ -1,8 +1,10 @@
 const { DataTypes, Op } = require('sequelize');
 const sequelize = require('../database/connection');
-const { Person }  = require('./person');
-const { Status }  = require('./status');
-const { Address } = require('./address');
+const { Person }       = require('./person');
+const { Status }       = require('./status');
+const { Address }      = require('./address');
+const { Province }     = require('./province');
+const { TypeShipment } = require('./typeShipment');
 
 const Shipment = sequelize.define('shipment', {
     id: {
@@ -10,25 +12,30 @@ const Shipment = sequelize.define('shipment', {
         primaryKey: true,
         autoIncrement: true,
     },
-    trackingId:  { type: DataTypes.STRING },
-    statusId:    { type: DataTypes.INTEGER },
-    createdAt:   { type: DataTypes.DATE },
-    senderId:    { type: DataTypes.INTEGER },
-    recipientId: { type: DataTypes.INTEGER },
-    addressId:   { type: DataTypes.INTEGER }
+    trackingId:      { type: DataTypes.STRING },
+    statusId:        { type: DataTypes.INTEGER },
+    createdAt:       { type: DataTypes.DATE },
+    senderId:        { type: DataTypes.INTEGER },
+    recipientId:     { type: DataTypes.INTEGER },
+    addressId:       { type: DataTypes.INTEGER },
+    shipmentTypeId:  { type: DataTypes.INTEGER },
+    weightKg:        { type: DataTypes.DECIMAL(8, 2) },
+    packageQty:      { type: DataTypes.INTEGER }
 },
 { timestamps: true, tableName: 'shipment' });
 
-Shipment.belongsTo(Person,  { as: 'sender',    foreignKey: 'senderId'    });
-Shipment.belongsTo(Person,  { as: 'recipient', foreignKey: 'recipientId' });
-Shipment.belongsTo(Status,  { as: 'status',    foreignKey: 'statusId'    });
-Shipment.belongsTo(Address, { as: 'address',   foreignKey: 'addressId'   });
+Shipment.belongsTo(Person,       { as: 'sender',       foreignKey: 'senderId'       });
+Shipment.belongsTo(Person,       { as: 'recipient',    foreignKey: 'recipientId'    });
+Shipment.belongsTo(Status,       { as: 'status',       foreignKey: 'statusId'       });
+Shipment.belongsTo(Address,      { as: 'address',      foreignKey: 'addressId'      });
+Shipment.belongsTo(TypeShipment, { as: 'shipmentType', foreignKey: 'shipmentTypeId' });
 
 const defaultIncludes = [
-    { model: Person,  as: 'sender'    },
-    { model: Person,  as: 'recipient' },
-    { model: Status,  as: 'status'    },
-    { model: Address, as: 'address'   },
+    { model: Person,       as: 'sender'       },
+    { model: Person,       as: 'recipient'    },
+    { model: Status,       as: 'status'       },
+    { model: Address,      as: 'address',      include: [{ model: Province, as: 'province' }] },
+    { model: TypeShipment, as: 'shipmentType' },
 ];
 
 const getAll = async () => {
@@ -52,18 +59,25 @@ const create = async (data) => {
     const trackingId = await generateTrackingId();
     return await Shipment.create({
         trackingId,
-        statusId:    1,
-        senderId:    data.senderId,
-        recipientId: data.recipientId,
-        addressId:   data.addressId,
-        createdAt:   new Date().toISOString().split('T')[0]
+        statusId:       1,
+        senderId:       data.senderId,
+        recipientId:    data.recipientId,
+        addressId:      data.addressId,
+        shipmentTypeId: data.shipmentTypeId || null,
+        weightKg:       data.weightKg       || null,
+        packageQty:     data.packageQty      || null,
+        createdAt:      new Date().toISOString().split('T')[0]
     });
 };
 
-const search = async ({ trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument }) => {
+const search = async ({ trackingId, role, name, document, senderName, senderDocument, recipientName, recipientDocument, statusIds }) => {
     const shipmentWhere  = {};
     const senderWhere    = {};
     const recipientWhere = {};
+
+    if (statusIds && statusIds.length > 0) {
+        shipmentWhere.statusId = { [Op.in]: statusIds.map(Number) };
+    }
 
     if (trackingId) shipmentWhere.trackingId = { [Op.iLike]: `%${trackingId}%` };
 
@@ -135,6 +149,15 @@ const update = async (data) => {
     await Address.update(
         { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment },
         { where: { id: shipment.addressId } }
+    );
+
+    await Shipment.update(
+        {
+            shipmentTypeId: data.shipmentTypeId || null,
+            weightKg:       data.weightKg       || null,
+            packageQty:     data.packageQty      || null,
+        },
+        { where: { id: data.id } }
     );
 
     return shipment;

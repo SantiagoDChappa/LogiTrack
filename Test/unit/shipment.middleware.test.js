@@ -5,6 +5,11 @@
  * Se mockean los modelos para evitar conexiones a la BD.
  */
 
+jest.mock('../../src/models/typeShipment', () => ({
+    TypeShipment: {},
+    getAll: jest.fn().mockResolvedValue([]),
+}));
+
 jest.mock('../../src/models/province', () => ({
     Province: {},
     getAll: jest.fn().mockResolvedValue([
@@ -37,8 +42,9 @@ function buildApp() {
     app.post('/test', validateShipment, handleValidationErrors, (req, res) => {
         res.status(200).json({ ok: true });
     });
-    // El middleware renderiza shipment/new en caso de errores, lo reemplazamos
+    // El middleware renderiza shipment/new en caso de errores
     app.set('view engine', 'ejs');
+    app.set('views', require('path').resolve(__dirname, '../../src/views'));
     app.use((err, req, res, next) => res.status(500).json({ error: err.message }));
     return app;
 }
