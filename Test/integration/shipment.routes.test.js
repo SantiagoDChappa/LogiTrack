@@ -34,7 +34,20 @@ jest.mock('../../src/models/address', () => ({
 
 jest.mock('../../src/models/status', () => ({
     Status: {},
+    getAll:  jest.fn().mockResolvedValue([]),
+    getById: jest.fn().mockResolvedValue({ id: 2, description: 'En Tránsito' }),
+}));
+
+jest.mock('../../src/models/typeShipment', () => ({
+    TypeShipment: {},
     getAll: jest.fn().mockResolvedValue([]),
+}));
+
+jest.mock('../../src/models/setting', () => ({
+    Setting: {},
+    get:    jest.fn().mockResolvedValue(null),
+    set:    jest.fn(),
+    getAll: jest.fn().mockResolvedValue({}),
 }));
 
 jest.mock('../../src/models/shipmentHistory', () => ({

@@ -30,7 +30,8 @@
     "testMatch": [
       "**/Test/**/*.test.js"
     ],
-    "clearMocks": true
+    "clearMocks": true,
+    "setupFiles": ["./jest.setup.js"]
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
