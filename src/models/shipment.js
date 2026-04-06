@@ -3,6 +3,7 @@ const sequelize = require('../database/connection');
 const { Person }       = require('./person');
 const { Status }       = require('./status');
 const { Address }      = require('./address');
+const { Province }     = require('./province');
 const { TypeShipment } = require('./typeShipment');
 
 const Shipment = sequelize.define('shipment', {
@@ -33,7 +34,7 @@ const defaultIncludes = [
     { model: Person,       as: 'sender'       },
     { model: Person,       as: 'recipient'    },
     { model: Status,       as: 'status'       },
-    { model: Address,      as: 'address'      },
+    { model: Address,      as: 'address',      include: [{ model: Province, as: 'province' }] },
     { model: TypeShipment, as: 'shipmentType' },
 ];
 
@@ -58,11 +59,14 @@ const create = async (data) => {
     const trackingId = await generateTrackingId();
     return await Shipment.create({
         trackingId,
-        statusId:    1,
-        senderId:    data.senderId,
-        recipientId: data.recipientId,
-        addressId:   data.addressId,
-        createdAt:   new Date().toISOString().split('T')[0]
+        statusId:       1,
+        senderId:       data.senderId,
+        recipientId:    data.recipientId,
+        addressId:      data.addressId,
+        shipmentTypeId: data.shipmentTypeId || null,
+        weightKg:       data.weightKg       || null,
+        packageQty:     data.packageQty      || null,
+        createdAt:      new Date().toISOString().split('T')[0]
     });
 };
 
