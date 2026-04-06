@@ -120,6 +120,8 @@
         setHidden('number',      r.number);
         setHidden('province',    r.province_id || '');
         setHidden('postal-code', r.postal || '');
+        setHidden('address-lat', r.lat != null ? String(r.lat) : '');
+        setHidden('address-lng', r.lng != null ? String(r.lng) : '');
 
         // Muestra el chip usando la nomenclatura limpia del servidor
         const parts   = r.display_name.split(',').map(s => s.trim()).filter(Boolean);
@@ -161,7 +163,7 @@
     }
 
     function clearHidden() {
-        ['street', 'number', 'province', 'postal-code'].forEach(function (id) {
+        ['street', 'number', 'province', 'postal-code', 'address-lat', 'address-lng'].forEach(function (id) {
             setHidden(id, '');
         });
     }

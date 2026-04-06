@@ -48,17 +48,19 @@ const getDetail = async (req, res) => {
     ]);
 
     const destProv = PROVINCES[shipment.address.provinceId];
+    const destLat  = shipment.address.lat  || (destProv ? destProv.lat  : null);
+    const destLng  = shipment.address.lng  || (destProv ? destProv.lng  : null);
     const mapData = {
         origin: {
             lat:   parseFloat(originLat)  || -34.6037,
             lng:   parseFloat(originLng)  || -58.3816,
             label: [originStreet, originNumber].filter(Boolean).join(' ') || 'Origen',
         },
-        destination: destProv ? {
-            lat:   destProv.lat,
-            lng:   destProv.lng,
+        destination: destLat ? {
+            lat:   destLat,
+            lng:   destLng,
             label: [shipment.address.street, shipment.address.number].filter(Boolean).join(' ')
-                   || destProv.name,
+                   || (destProv ? destProv.name : ''),
         } : null,
     };
 
@@ -97,7 +99,9 @@ const createShipment = async (req, res) => {
         number:         body.number,
         provinceId:     body.province,
         postalCode:     body.postalCode,
-        floorApartment: body.floorApartment
+        floorApartment: body.floorApartment,
+        lat:            body.addressLat ? parseFloat(body.addressLat) : null,
+        lng:            body.addressLng ? parseFloat(body.addressLng) : null,
     });
 
     //Creo el envio
@@ -132,16 +136,18 @@ const getUpdateShipment = async (req, res) => {
   ]);
 
   const destProv = PROVINCES[shipment.address.provinceId];
+  const destLat  = shipment.address.lat  || (destProv ? destProv.lat  : null);
+  const destLng  = shipment.address.lng  || (destProv ? destProv.lng  : null);
   const mapData = {
       origin: {
           lat:   parseFloat(originLat)  || -34.6037,
           lng:   parseFloat(originLng)  || -58.3816,
           label: [originStreet, originNumber].filter(Boolean).join(' ') || 'Origen',
       },
-      destination: destProv ? {
-          lat:   destProv.lat,
-          lng:   destProv.lng,
-          label: [shipment.address.street, shipment.address.number].filter(Boolean).join(' ') || destProv.name,
+      destination: destLat ? {
+          lat:   destLat,
+          lng:   destLng,
+          label: [shipment.address.street, shipment.address.number].filter(Boolean).join(' ') || (destProv ? destProv.name : ''),
       } : null,
   };
 

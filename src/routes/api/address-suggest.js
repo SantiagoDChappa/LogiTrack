@@ -36,7 +36,7 @@ function parseQuery(q) {
 async function searchGeoref(streetQuery, provinceIndec, locality) {
     try {
         const fullQuery = locality ? `${streetQuery}, ${locality}` : streetQuery;
-        let url = `${GEOREF}/direcciones?direccion=${encodeURIComponent(fullQuery)}&max=10&campos=estandar`;
+        let url = `${GEOREF}/direcciones?direccion=${encodeURIComponent(fullQuery)}&max=20&campos=estandar`;
         if (provinceIndec) url += `&provincia=${provinceIndec}`;
 
         const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
@@ -154,12 +154,12 @@ router.get('/', async (req, res) => {
         results.push(r);
     };
 
-    georefItems.slice(0, 6).forEach(i => addResult(mapGeorefItem(i)));
+    georefItems.slice(0, 10).forEach(i => addResult(mapGeorefItem(i)));
 
-    // Completa con Nominatim hasta 6 resultados totales
-    if (results.length < 4) {
+    // Completa con Nominatim hasta 10 resultados totales
+    if (results.length < 6) {
         nominatimItems.forEach(i => {
-            if (results.length >= 6) return;
+            if (results.length >= 10) return;
             addResult(mapNominatimItem(i));
         });
     }

@@ -32,6 +32,9 @@
 
         try {
             // 1. Calcular distancia (Nominatim + Haversine)
+            const addrLat = document.getElementById('address-lat')?.value || null;
+            const addrLng = document.getElementById('address-lng')?.value || null;
+
             const distRes = await fetch('/api/distance', {
                 method:  'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -39,6 +42,8 @@
                     destinationProvinceId: parseInt(provinceId),
                     destinationStreet:     street,
                     destinationNumber:     number,
+                    destinationLat:        addrLat ? parseFloat(addrLat) : undefined,
+                    destinationLng:        addrLng ? parseFloat(addrLng) : undefined,
                 }),
             });
             const distData = await distRes.json();

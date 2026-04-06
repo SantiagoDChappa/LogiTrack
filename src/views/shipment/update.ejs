@@ -188,6 +188,8 @@
                         <input type="hidden" id="number"      name="number"     value="<%= shipment.address.number || '' %>">
                         <input type="hidden" id="province"    name="province"   value="<%= shipment.address.provinceId || '' %>">
                         <input type="hidden" id="postal-code" name="postalCode" value="<%= shipment.address.postalCode || '' %>">
+                        <input type="hidden" id="address-lat" name="addressLat" value="<%= shipment.address.lat || '' %>">
+                        <input type="hidden" id="address-lng" name="addressLng" value="<%= shipment.address.lng || '' %>">
 
                         <div class="update-fields" style="display:flex;flex-direction:column;gap:var(--space-3);">
 

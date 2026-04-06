@@ -147,7 +147,7 @@ const update = async (data) => {
     );
 
     await Address.update(
-        { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment },
+        { street: data.street, number: data.number, provinceId: data.province, postalCode: data.postalCode, floorApartment: data.floorApartment, lat: data.addressLat || null, lng: data.addressLng || null },
         { where: { id: shipment.addressId } }
     );
 

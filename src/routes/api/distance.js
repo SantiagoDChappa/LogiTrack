@@ -20,7 +20,7 @@ async function geocodeWithGeoref(street, number, province) {
 }
 
 router.post('/', async (req, res) => {
-    const { destinationProvinceId, destinationStreet, destinationNumber } = req.body;
+    const { destinationProvinceId, destinationStreet, destinationNumber, destinationLat, destinationLng } = req.body;
 
     const destProvince = PROVINCES[parseInt(destinationProvinceId)];
     if (!destProvince) return res.status(400).json({ error: 'Provincia inválida' });
@@ -35,11 +35,14 @@ router.post('/', async (req, res) => {
     const oLng     = parseFloat(originLng     || '-58.3816');
     const originMl = originProvinceMl         || 'CABA';
 
-    // Geocodifica el destino con la API del gobierno argentino
+    // Usa lat/lng exactos si vienen del autocomplete; si no, geocodifica con Georef
     let dLat = destProvince.lat;
     let dLng = destProvince.lng;
 
-    if (destinationStreet && destinationNumber) {
+    if (destinationLat && destinationLng) {
+        dLat = parseFloat(destinationLat);
+        dLng = parseFloat(destinationLng);
+    } else if (destinationStreet && destinationNumber) {
         const coords = await geocodeWithGeoref(destinationStreet, destinationNumber, destProvince);
         if (coords) { dLat = coords.lat; dLng = coords.lng; }
     }
