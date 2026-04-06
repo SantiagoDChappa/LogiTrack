@@ -12,9 +12,14 @@ const { requireAuth, requireSupervisor } = require('./src/middlewares/auth');
 const homeRoutes        = require('./src/routes/home');
 const shipmentRoutes    = require('./src/routes/shipment');
 const userRoutes        = require('./src/routes/user');
+const settingRoutes     = require('./src/routes/setting');
 const apiShipmentRoutes = require('./src/routes/api/shipments');
-const apiHealthRoutes = require('./src/routes/api/health');
-const authRoutes = require('./src/routes/auth');
+const apiHealthRoutes   = require('./src/routes/api/health');
+const apiPredictRoutes  = require('./src/routes/api/predict');
+const apiDistanceRoutes        = require('./src/routes/api/distance');
+const apiValidateAddressRoutes = require('./src/routes/api/validate-address');
+const apiAddressSuggestRoutes  = require('./src/routes/api/address-suggest');
+const authRoutes        = require('./src/routes/auth');
 
 // Conecto la base de datos con el sistema
 sequelize.sync({ alter: true }) 
@@ -37,10 +42,15 @@ app.use(apiHealthRoutes);
 
 // Rutas Protegidas
 app.use('/', requireAuth, homeRoutes);
-app.use('/user', requireAuth, requireSupervisor, userRoutes);
-app.use('/shipment',  requireAuth, shipmentRoutes);
-app.use('/api/shipments',  requireAuth, requireSupervisor, apiShipmentRoutes);
-app.use('/api-docs',  requireAuth, requireSupervisor, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/user',          requireAuth, requireSupervisor, userRoutes);
+app.use('/shipment',      requireAuth, shipmentRoutes);
+app.use('/setting',       requireAuth, requireSupervisor, settingRoutes);
+app.use('/api/shipments', requireAuth, requireSupervisor, apiShipmentRoutes);
+app.use('/api/predict',   requireAuth, apiPredictRoutes);
+app.use('/api/distance',         requireAuth, apiDistanceRoutes);
+app.use('/api/validate-address',  requireAuth, apiValidateAddressRoutes);
+app.use('/api/address-suggest',   requireAuth, apiAddressSuggestRoutes);
+app.use('/api-docs',      requireAuth, requireSupervisor, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use((req, res) => {
     const token = req.cookies?.token;
