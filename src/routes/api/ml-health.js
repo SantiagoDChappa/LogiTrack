@@ -20,9 +20,8 @@ router.get('/', (req, res) => {
 
     // 2. ¿Se pueden importar las dependencias?
     const checkImports = spawn(PYTHON, ['-c', 'import pandas, joblib, sklearn, numpy; print("OK")']);
-    let importOut = '';
     let importErr = '';
-    checkImports.stdout.on('data', d => { importOut += d; });
+    checkImports.stdout.on('data', () => {});
     checkImports.stderr.on('data', d => { importErr += d; });
     checkImports.on('close', code => {
         info.imports = code === 0 ? 'OK' : `FAIL (code ${code}): ${importErr.trim()}`;

@@ -1,6 +1,6 @@
 const express = require('express');
 const router  = express.Router();
-const { PROVINCES, findProvinceByIndec } = require('../../utils/provinces');
+const { PROVINCES } = require('../../utils/provinces');
 
 const GEOREF = 'https://apis.datos.gob.ar/georef/api';
 

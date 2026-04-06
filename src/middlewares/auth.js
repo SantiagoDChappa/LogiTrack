@@ -16,7 +16,7 @@ const requireAuth = async (req, res, next) => {
         res.locals.currentUser.getAccess = res.locals.currentUser.roleId === enums.RoleType.SUPERVISOR.id;
         res.setHeader('Cache-Control', 'no-store');
         next();
-    } catch (err) {
+    } catch (_err) {
         res.clearCookie('token');
         res.redirect('/login');
     }
@@ -30,7 +30,7 @@ const requireAuth = async (req, res, next) => {
 
       try {
           next();
-      } catch (err) {
+      } catch (_err) {
           res.redirect('/');
       }
   };

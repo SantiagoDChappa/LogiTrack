@@ -7,7 +7,7 @@
       try {
           await sequelize.authenticate();
           res.json({ status: 'ok' });
-      } catch (err) {
+      } catch (_err) {
           res.status(500).json({ status: 'error' });
       }
   });
