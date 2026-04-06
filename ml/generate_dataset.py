@@ -32,33 +32,65 @@ def calculate_distance(origin, destination):
     return max(50, base + noise)
 
 def calculate_delay(distance, weight, quantity, ship_type, day, month):
-    probability = 0.20
+    # ── Probabilidad base muy diferente según tipo de envío ──────────────────
+    # Express: prioridad alta, manejo especial → mucho menos riesgo de demora
+    # Standard: procesamiento normal → riesgo base mayor
+    if ship_type == 0:   # Express
+        probability = 0.05
+    else:                # Standard
+        probability = 0.35
 
-    if distance > 1000:    probability += 0.25
-    if weight > 20:        probability += 0.15
-    if quantity > 10:      probability += 0.10
-    if ship_type == 1:     probability += 0.10
-    if day in (0, 4):      probability += 0.10
-    if month in (11, 12):  probability += 0.20
+    # ── Factores de riesgo — impacto diferente según tipo ────────────────────
+    if distance > 1500:
+        probability += 0.30 if ship_type == 1 else 0.08
+    elif distance > 800:
+        probability += 0.18 if ship_type == 1 else 0.04
+    elif distance > 400:
+        probability += 0.08 if ship_type == 1 else 0.02
 
-    probability = min(probability, 1.0)
-    return 1 if random.random() < probability else 0
+    if weight > 30:
+        probability += 0.15 if ship_type == 1 else 0.05
+    elif weight > 15:
+        probability += 0.08 if ship_type == 1 else 0.02
+
+    if quantity > 15:
+        probability += 0.12 if ship_type == 1 else 0.04
+    elif quantity > 7:
+        probability += 0.06 if ship_type == 1 else 0.01
+
+    # Días de alta demanda
+    if day in (0, 4):
+        probability += 0.12 if ship_type == 1 else 0.02
+
+    # Temporada alta (noviembre-diciembre)
+    if month in (11, 12):
+        probability += 0.20 if ship_type == 1 else 0.05
+
+    return 1 if random.random() < min(probability, 1.0) else 0
 
 def calculate_delivery_days(distance, ship_type, delayed):
-    if distance <= 200:
-        base_days = 1
-    elif distance <= 500:
-        base_days = 2
-    elif distance <= 1000:
-        base_days = 4
-    else:
-        base_days = 7
+    # ── Días base según tipo y distancia — diferencia muy marcada ────────────
+    if ship_type == 0:   # Express: entregas rápidas garantizadas
+        if distance <= 150:    base_days = 1
+        elif distance <= 400:  base_days = 1
+        elif distance <= 800:  base_days = 2
+        elif distance <= 1500: base_days = 2
+        elif distance <= 2500: base_days = 3
+        else:                  base_days = 4
+    else:                # Standard: procesamiento normal
+        if distance <= 150:    base_days = 3
+        elif distance <= 400:  base_days = 5
+        elif distance <= 800:  base_days = 7
+        elif distance <= 1500: base_days = 10
+        elif distance <= 2500: base_days = 14
+        else:                  base_days = 18
 
-    if ship_type == 0:
-        base_days = max(1, base_days - 1)
-
+    # ── Penalidad por demora — Standard sufre mucho más ─────────────────────
     if delayed == 1:
-        base_days += random.randint(1, 5)
+        if ship_type == 0:
+            base_days += random.randint(1, 2)   # Express: demora moderada
+        else:
+            base_days += random.randint(2, 8)   # Standard: demora significativa
 
     return base_days
 
@@ -101,10 +133,13 @@ if __name__ == '__main__':
     df = generate_dataset()
     df.to_csv('dataset/shipments.csv', index=False, encoding='utf-8')
 
-    print(f'Dataset generated: dataset/shipments.csv')
-    print(f'  Total rows    : {len(df)}')
-    print(f'  Delayed       : {df["delayed"].sum()} ({df["delayed"].mean()*100:.1f}%)')
-    print(f'  On time       : {(df["delayed"] == 0).sum()} ({(1 - df["delayed"].mean())*100:.1f}%)')
-    print(f'  Avg days      : {df["delivery_days"].mean():.1f}')
+    express  = df[df['ship_type'] == 0]
+    standard = df[df['ship_type'] == 1]
+
+    print(f'Dataset generado: dataset/shipments.csv')
+    print(f'  Total filas     : {len(df)}')
+    print()
+    print(f'  EXPRESS  — Demora: {express["delayed"].mean()*100:.1f}%  | Días prom: {express["delivery_days"].mean():.1f}')
+    print(f'  STANDARD — Demora: {standard["delayed"].mean()*100:.1f}%  | Días prom: {standard["delivery_days"].mean():.1f}')
     print()
     print(df.head(5).to_string(index=False))
