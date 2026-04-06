@@ -34,13 +34,17 @@ function parseQuery(q) {
 
 // ── Georef ────────────────────────────────────────────────────────────────────
 async function searchGeoref(streetQuery, provinceIndec, locality) {
-    const fullQuery = locality ? `${streetQuery}, ${locality}` : streetQuery;
-    let url = `${GEOREF}/direcciones?direccion=${encodeURIComponent(fullQuery)}&max=10&campos=estandar`;
-    if (provinceIndec) url += `&provincia=${provinceIndec}`;
+    try {
+        const fullQuery = locality ? `${streetQuery}, ${locality}` : streetQuery;
+        let url = `${GEOREF}/direcciones?direccion=${encodeURIComponent(fullQuery)}&max=10&campos=estandar`;
+        if (provinceIndec) url += `&provincia=${provinceIndec}`;
 
-    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
-    const data     = await response.json();
-    return data.direcciones || [];
+        const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+        const data     = await response.json();
+        return data.direcciones || [];
+    } catch {
+        return [];
+    }
 }
 
 function mapGeorefItem(item) {
@@ -66,13 +70,17 @@ function mapGeorefItem(item) {
 
 // ── Nominatim (OpenStreetMap) ─────────────────────────────────────────────────
 async function searchNominatim(q) {
-    const url = `${NOMINATIM}/search?q=${encodeURIComponent(q)}&countrycodes=ar&addressdetails=1&limit=8&format=json`;
-    const response = await fetch(url, {
-        signal:  AbortSignal.timeout(5000),
-        headers: { 'User-Agent': 'LogiTrack/1.0' },
-    });
-    const data = await response.json();
-    return Array.isArray(data) ? data : [];
+    try {
+        const url = `${NOMINATIM}/search?q=${encodeURIComponent(q)}&countrycodes=ar&addressdetails=1&limit=8&format=json`;
+        const response = await fetch(url, {
+            signal:  AbortSignal.timeout(5000),
+            headers: { 'User-Agent': 'LogiTrack/1.0' },
+        });
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
+    } catch {
+        return [];
+    }
 }
 
 function mapNominatimItem(item) {
@@ -121,19 +129,21 @@ router.get('/', async (req, res) => {
     const q = (req.query.q || '').trim();
     if (q.length < 3) return res.json([]);
 
+    const { street, locality, province } = parseQuery(q);
+
+    // Georef y Nominatim en paralelo — si uno falla el otro igual responde
+    const [georefRaw, nominatimItems] = await Promise.all([
+        searchGeoref(street, province?.indec, locality),
+        searchNominatim(q + ', Argentina'),
+    ]);
+
+    // Si Georef con localidad no da resultados, reintenta solo con provincia
+    let georefItems = georefRaw;
+    if (georefItems.length < 2 && locality && province) {
+        georefItems = await searchGeoref(street, province.indec, null);
+    }
+
     try {
-        const { street, locality, province } = parseQuery(q);
-
-        // 1. Georef con filtros
-        let georefItems = await searchGeoref(street, province?.indec, locality);
-
-        // 2. Si Georef devuelve poco, reintenta sin localidad
-        if (georefItems.length < 2 && locality && province) {
-            georefItems = await searchGeoref(street, province.indec, null);
-        }
-
-        // 3. Nominatim siempre en paralelo con la query completa
-        const nominatimItems = await searchNominatim(q + ', Argentina');
 
         // 4. Merge: Georef primero, Nominatim completa si hay pocos resultados
         const seen    = new Set();
