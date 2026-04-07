@@ -9,8 +9,8 @@ router.get('/search', searchShipments);
 router.get('/new', getNewShipmentForm);
 router.post('/new', validateShipment, handleValidationErrors, createShipment);
 router.get('/detail/:id', getDetail);
-router.get('/update/:id', requireSupervisor, getUpdateShipment);
-router.post('/update/:id', requireSupervisor, validateUpdateShipment, handleUpdateValidationErrors, updateShipment);
-router.post('/update/:id/status', requireSupervisor, updateShipmentStatus);
+router.get('/update/:id', getUpdateShipment);
+router.post('/update/:id', validateUpdateShipment, handleUpdateValidationErrors, updateShipment);
+router.post('/update/:id/status', updateShipmentStatus);
 
 module.exports = router;
