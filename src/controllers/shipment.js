@@ -160,6 +160,14 @@ const updateShipment = async (req, res) => {
     const body   = { ...req.body, id };
 
     if (body.newStatusId) {
+      // Solo supervisores pueden cambiar el estado
+      const currentUser = res.locals.currentUser;
+      const { RoleType } = require('../constants/enums');
+      
+      if (currentUser.roleId !== RoleType.SUPERVISOR.id) {
+        return res.status(403).send('Solo los supervisores pueden cambiar el estado del envío');
+      }
+
       const [shipment, newStatus] = await Promise.all([
           shipmentModel.getById(id),
           statusModel.getById(Number(body.newStatusId)),

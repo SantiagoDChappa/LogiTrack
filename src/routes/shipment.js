@@ -11,6 +11,6 @@ router.post('/new', validateShipment, handleValidationErrors, createShipment);
 router.get('/detail/:id', getDetail);
 router.get('/update/:id', getUpdateShipment);
 router.post('/update/:id', validateUpdateShipment, handleUpdateValidationErrors, updateShipment);
-router.post('/update/:id/status', updateShipmentStatus);
+router.post('/update/:id/status', requireSupervisor, updateShipmentStatus);
 
 module.exports = router;

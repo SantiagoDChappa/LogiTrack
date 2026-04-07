@@ -233,14 +233,17 @@
 
                     <div class="timeline-track">
                         <% const currentId = shipment.statusId; %>
+                        <% const isSupervisor = currentUser.getAccess; %>
                         <% statuses.forEach(function(s, idx) { %>
                             <%
                                 var isDone      = s.id < currentId && currentId !== 5;
                                 var isCurrent   = s.id === currentId;
                                 var isCancel    = s.id === 5;
                                 var isFilled    = (currentId !== 5 && s.id <= currentId) || (currentId === 5 && s.id === 5);
-                                var isClickable = (!isCancel && s.id === currentId + 1 && currentId < 4 && currentId !== 5) ||
-                                                  (isCancel && currentId >= 1 && currentId <= 3);
+                                var isClickable = isSupervisor && (
+                                    (!isCancel && s.id === currentId + 1 && currentId < 4 && currentId !== 5) ||
+                                    (isCancel && currentId >= 1 && currentId <= 3)
+                                );
                                 var stateClass  = isDone ? 'done' : (isCurrent ? 'active' : 'pending');
                             %>
                             <% if (idx > 0) { %>
@@ -270,6 +273,13 @@
                             <button type="button" id="btn-confirm-status" class="btn-primary btn-sm">Confirmar cambio</button>
                         </div>
                     </div>
+
+                    <% if (!currentUser.getAccess) { %>
+                    <div class="status-info-message" style="background-color:var(--color-warning-bg,#fef3c7);border:1px solid var(--color-warning,#f59e0b);border-radius:4px;padding:12px;margin-top:16px;color:var(--color-warning-text,#92400e);font-size:0.9rem;">
+                        <span class="material-symbols-outlined" style="vertical-align:text-bottom;margin-right:8px;">info</span>
+                        Solo los supervisores pueden cambiar el estado del envío.
+                    </div>
+                    <% } %>
 
                     <div id="pending-status-badge" style="display:none;" class="pending-status-badge">
                         Cambio de estado pendiente: <strong id="pending-status-name"></strong>
