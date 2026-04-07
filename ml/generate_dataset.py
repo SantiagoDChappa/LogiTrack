@@ -66,7 +66,11 @@ def calculate_delay(distance, weight, quantity, ship_type, day, month):
     if month in (11, 12):
         probability += 0.20 if ship_type == 1 else 0.05
 
-    return 1 if random.random() < min(probability, 1.0) else 0
+    # Envío simple y cercano: reduce demora (corta distancia + liviano + pocos paquetes)
+    if distance <= 300 and weight <= 10 and quantity <= 3:
+        probability -= 0.18 if ship_type == 1 else 0.03
+
+    return 1 if random.random() < min(max(probability, 0.0), 1.0) else 0
 
 def calculate_delivery_days(distance, ship_type, delayed):
     # ── Días base según tipo y distancia — diferencia muy marcada ────────────
@@ -85,12 +89,17 @@ def calculate_delivery_days(distance, ship_type, delayed):
         elif distance <= 2500: base_days = 14
         else:                  base_days = 18
 
-    # ── Penalidad por demora — Standard sufre mucho más ─────────────────────
+    # ── Penalidad por demora — acotada según distancia ──────────────────────
     if delayed == 1:
         if ship_type == 0:
             base_days += random.randint(1, 2)   # Express: demora moderada
         else:
-            base_days += random.randint(2, 8)   # Standard: demora significativa
+            if distance <= 300:
+                base_days += random.randint(1, 3)   # Standard cercano: demora leve
+            elif distance <= 800:
+                base_days += random.randint(2, 5)   # Standard medio: demora moderada
+            else:
+                base_days += random.randint(3, 8)   # Standard lejano: demora significativa
 
     return base_days
 
