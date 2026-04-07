@@ -164,14 +164,17 @@ const updateShipment = async (req, res) => {
           shipmentModel.getById(id),
           statusModel.getById(Number(body.newStatusId)),
       ]);
-      await shipmentHistoryModel.create({
-        shipmentId:   id,
-        fromStatusId: shipment.statusId,
-        toStatusId:   Number(body.newStatusId),
-        comment:      body.statusComment || null
-      });
-      await shipmentModel.updateStatus(id, Number(body.newStatusId));
-      if (newStatus) notifyStatusChange(shipment, newStatus.description);
+      // Solo registrar si realmente cambia de estado (evita duplicados por doble submit)
+      if (shipment.statusId !== Number(body.newStatusId)) {
+        await shipmentHistoryModel.create({
+          shipmentId:   id,
+          fromStatusId: shipment.statusId,
+          toStatusId:   Number(body.newStatusId),
+          comment:      body.statusComment || null
+        });
+        await shipmentModel.updateStatus(id, Number(body.newStatusId));
+        if (newStatus) notifyStatusChange(shipment, newStatus.description);
+      }
     }
 
     await shipmentModel.update(body);

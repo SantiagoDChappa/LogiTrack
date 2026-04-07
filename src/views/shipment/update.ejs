@@ -282,7 +282,7 @@
 
             <div class="update-form-actions">
                 <a href="/shipment" class="btn-secondary">Cancelar</a>
-                <button type="submit" form="main-update-form" class="btn-primary">Guardar cambios</button>
+                <button type="submit" form="main-update-form" class="btn-primary" id="btn-save-changes">Guardar cambios</button>
             </div>
 
         </div>
@@ -320,6 +320,12 @@
             document.getElementById('hidden-new-status-id').value  = '';
             document.getElementById('hidden-status-comment').value = '';
             document.getElementById('pending-status-badge').style.display = 'none';
+        });
+
+        // Prevenir doble submit
+        document.getElementById('main-update-form').addEventListener('submit', function() {
+            var btn = document.getElementById('btn-save-changes');
+            if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
         });
     </script>
 

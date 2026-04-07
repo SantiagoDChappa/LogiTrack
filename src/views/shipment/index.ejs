@@ -139,11 +139,9 @@
                                     </span>
                                 </td>
                                 <td class="col-actions">
-                                    <% if (currentUser.getAccess) { %>
-                                        <a href="/shipment/update/<%= shipment.id %>" class="action-btn modificar" data-tooltip="Modificar">
-                                            <span class="material-symbols-outlined">edit</span>
-                                        </a>
-                                    <% } %>
+                                    <a href="/shipment/update/<%= shipment.id %>" class="action-btn modificar" data-tooltip="Modificar">
+                                        <span class="material-symbols-outlined">edit</span>
+                                    </a>
                                     <a href="/shipment/detail/<%= shipment.id %>" class="action-btn detalle" data-tooltip="Detalle">
                                         <span class="material-symbols-outlined">info</span>
                                     </a>
