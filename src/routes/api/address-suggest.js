@@ -154,13 +154,27 @@ router.get('/', async (req, res) => {
         results.push(r);
     };
 
-    georefItems.slice(0, 10).forEach(i => addResult(mapGeorefItem(i)));
+    const mappedNominatim = nominatimItems.map(mapNominatimItem);
+
+    georefItems.slice(0, 10).forEach(i => {
+        const r = mapGeorefItem(i);
+        // Si Georef no trajo coordenadas, buscar en Nominatim un resultado de la misma ciudad
+        if ((r.lat == null || r.lng == null) && r.city) {
+            const match = mappedNominatim.find(n =>
+                n.street.toLowerCase().includes(r.street.toLowerCase().split(' ')[0]) &&
+                n.city.toLowerCase().includes(r.city.toLowerCase().split(' ')[0]) &&
+                n.lat != null
+            );
+            if (match) { r.lat = match.lat; r.lng = match.lng; }
+        }
+        addResult(r);
+    });
 
     // Completa con Nominatim hasta 10 resultados totales
     if (results.length < 6) {
-        nominatimItems.forEach(i => {
+        mappedNominatim.forEach(i => {
             if (results.length >= 10) return;
-            addResult(mapNominatimItem(i));
+            addResult(i);
         });
     }
 

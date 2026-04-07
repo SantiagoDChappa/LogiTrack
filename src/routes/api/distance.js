@@ -3,7 +3,8 @@ const router       = express.Router();
 const { PROVINCES, haversine } = require('../../utils/provinces');
 const settingModel = require('../../models/setting');
 
-const GEOREF = 'https://apis.datos.gob.ar/georef/api';
+const GEOREF    = 'https://apis.datos.gob.ar/georef/api';
+const NOMINATIM = 'https://nominatim.openstreetmap.org';
 
 async function geocodeWithGeoref(street, number, province) {
     try {
@@ -15,7 +16,23 @@ async function geocodeWithGeoref(street, number, province) {
         if (item?.ubicacion?.lat) {
             return { lat: item.ubicacion.lat, lng: item.ubicacion.lon };
         }
-    } catch { /* usa centroide como fallback */ }
+    } catch { /* continúa con Nominatim */ }
+    return null;
+}
+
+async function geocodeWithNominatim(street, number, province) {
+    try {
+        const query = `${street} ${number}, ${province.name}, Argentina`;
+        const url   = `${NOMINATIM}/search?q=${encodeURIComponent(query)}&countrycodes=ar&limit=1&format=json`;
+        const res   = await fetch(url, {
+            signal:  AbortSignal.timeout(5000),
+            headers: { 'User-Agent': 'LogiTrack/1.0' },
+        });
+        const data = await res.json();
+        if (data[0]?.lat) {
+            return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+        }
+    } catch { /* usa centroide como último fallback */ }
     return null;
 }
 
@@ -43,7 +60,8 @@ router.post('/', async (req, res) => {
         dLat = parseFloat(destinationLat);
         dLng = parseFloat(destinationLng);
     } else if (destinationStreet && destinationNumber) {
-        const coords = await geocodeWithGeoref(destinationStreet, destinationNumber, destProvince);
+        const coords = await geocodeWithGeoref(destinationStreet, destinationNumber, destProvince)
+                    || await geocodeWithNominatim(destinationStreet, destinationNumber, destProvince);
         if (coords) { dLat = coords.lat; dLng = coords.lng; }
     }
 
